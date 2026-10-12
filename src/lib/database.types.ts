@@ -23,7 +23,79 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "clients": {
+            "checklist_items": {
+                  Row: {
+                    "completed_at": string | null,"id": string,"is_completed": boolean,"organization_id": string,"sort_order": number,"task_id": string,"title": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "completed_at"?: string | null,"id"?: string,"is_completed"?: boolean,"organization_id": string,"sort_order"?: number,"task_id": string,"title": string
+                  }
+                  Update: {
+                    "completed_at"?: string | null,"id"?: string,"is_completed"?: boolean,"organization_id"?: string,"sort_order"?: number,"task_id"?: string,"title"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "checklist_items_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "checklist_items_organization_id_task_id_fkey"
+      columns: ["organization_id","task_id"]
+isOneToOne: false
+      referencedRelation: "tasks"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"checklist_template_items": {
+                  Row: {
+                    "id": string,"organization_id": string,"sort_order": number,"template_id": string,"title": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "id"?: string,"organization_id": string,"sort_order"?: number,"template_id": string,"title": string
+                  }
+                  Update: {
+                    "id"?: string,"organization_id"?: string,"sort_order"?: number,"template_id"?: string,"title"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "checklist_template_items_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "checklist_template_items_organization_id_template_id_fkey"
+      columns: ["organization_id","template_id"]
+isOneToOne: false
+      referencedRelation: "checklist_templates"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"checklist_templates": {
+                  Row: {
+                    "category": string | null,"created_at": string,"description": string | null,"id": string,"name": string,"organization_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "category"?: string | null,"created_at"?: string,"description"?: string | null,"id"?: string,"name": string,"organization_id": string
+                  }
+                  Update: {
+                    "category"?: string | null,"created_at"?: string,"description"?: string | null,"id"?: string,"name"?: string,"organization_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "checklist_templates_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"clients": {
                   Row: {
                     "archived_at": string | null,"company_name": string | null,"created_at": string,"email": string | null,"id": string,"name": string,"notes": string | null,"organization_id": string,"phone": string | null,"status": string,"updated_at": string
                   }
@@ -141,6 +213,76 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "organizations"
       referencedColumns: ["id"]
+    }
+                  ]
+                },"task_plans": {
+                  Row: {
+                    "created_at": string,"id": string,"organization_id": string,"planned_date": string,"sort_order": number,"status": string,"task_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"id"?: string,"organization_id": string,"planned_date": string,"sort_order"?: number,"status"?: string,"task_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"id"?: string,"organization_id"?: string,"planned_date"?: string,"sort_order"?: number,"status"?: string,"task_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "task_plans_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "task_plans_organization_id_task_id_fkey"
+      columns: ["organization_id","task_id"]
+isOneToOne: false
+      referencedRelation: "tasks"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"tasks": {
+                  Row: {
+                    "assigned_to": string | null,"client_id": string | null,"completed_at": string | null,"created_at": string,"description": string | null,"due_at": string | null,"due_date": string | null,"estimated_minutes": number | null,"id": string,"organization_id": string,"parent_task_id": string | null,"priority": string,"project_id": string | null,"status": string,"title": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"organization_id": string,"parent_task_id"?: string | null,"priority"?: string,"project_id"?: string | null,"status"?: string,"title": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"organization_id"?: string,"parent_task_id"?: string | null,"priority"?: string,"project_id"?: string | null,"status"?: string,"title"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "tasks_organization_id_assigned_to_fkey"
+      columns: ["organization_id","assigned_to"]
+isOneToOne: false
+      referencedRelation: "organization_members"
+      referencedColumns: ["organization_id","user_id"]
+    },{
+      foreignKeyName: "tasks_organization_id_client_id_fkey"
+      columns: ["organization_id","client_id"]
+isOneToOne: false
+      referencedRelation: "clients"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "tasks_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "tasks_organization_id_parent_task_id_fkey"
+      columns: ["organization_id","parent_task_id"]
+isOneToOne: false
+      referencedRelation: "tasks"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "tasks_organization_id_project_id_fkey"
+      columns: ["organization_id","project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["organization_id","id"]
     }
                   ]
                 }

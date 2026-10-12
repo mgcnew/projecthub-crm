@@ -5,13 +5,15 @@ import { cn } from '@/lib/utils'
 
 const items = [
   { to: '/app', label: 'Início', end: true },
+  { to: '/app/meu-dia', label: 'Meu dia', end: false },
+  { to: '/app/tarefas', label: 'Tarefas', end: false },
   { to: '/app/clientes', label: 'Clientes', end: false },
   { to: '/app/projetos', label: 'Projetos', end: false },
 ]
 
 function link({ isActive }: { isActive: boolean }) {
   return cn(
-    'flex min-h-11 items-center rounded-md px-3 text-sm font-medium',
+    'flex min-h-11 items-center rounded-md px-3 text-sm font-medium max-lg:px-1 max-lg:text-xs',
     isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
   )
 }
@@ -40,7 +42,7 @@ export function AppShell() {
 
       <nav
         aria-label="Principal"
-        className="fixed inset-x-0 bottom-0 grid grid-cols-3 border-t border-border bg-card p-1 lg:hidden"
+        className="fixed inset-x-0 bottom-0 grid grid-cols-5 border-t border-border bg-card p-1 lg:hidden"
       >
         {items.map((i) => (
           <NavLink key={i.to} to={i.to} end={i.end} className={(s) => cn(link(s), 'justify-center')}>

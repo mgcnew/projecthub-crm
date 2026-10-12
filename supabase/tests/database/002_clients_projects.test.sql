@@ -21,6 +21,7 @@ select (select id from public.organizations where created_by = 'aaaaaaaa-0000-00
        (select id from public.organizations where created_by = 'bbbbbbbb-0000-0000-0000-000000000002') as org_b;
 grant select on ctx to authenticated;
 
+-- Dados do tenant B (inseridos como superusuário).
 insert into public.clients (id, organization_id, name)
   select 'bbbbbbbb-1111-0000-0000-000000000001', org_b, 'Cliente de B' from ctx;
 insert into public.projects (id, organization_id, name, client_id)
@@ -56,7 +57,7 @@ select throws_ok($$insert into public.projects (organization_id, name)
 select is(public.t_rowcount($$update public.clients set name = 'x'
   where id = 'bbbbbbbb-1111-0000-0000-000000000001'$$), 0, 'A não altera cliente de B');
 select throws_ok($$update public.clients set organization_id = (select org_b from ctx)
-  where name = 'Cliente A'$$, '42501', null, 'organization_id do cliente é imutável');
+  where name = 'Cliente A'$$, '42501', null, 'organization_id é imutável');
 select throws_ok($$update public.projects set organization_id = (select org_b from ctx)
   where name = 'Projeto sem cliente'$$, '42501', null, 'organization_id do projeto é imutável');
 select throws_ok($$delete from public.clients$$, '42501', null, 'cliente não apaga clientes');
@@ -68,6 +69,7 @@ select is((select count(*)::int from public.projects where client_id is not null
 select lives_ok($$update public.projects set archived_at = now() where name = 'Projeto com cliente'$$,
   'owner arquiva projeto');
 
+-- CHECKs
 select throws_ok($$insert into public.projects (organization_id, name, status)
   select org_a, 'p', 'inexistente' from ctx$$, '23514', null, 'status de projeto inválido');
 select throws_ok($$insert into public.projects (organization_id, name, started_on, target_date)
@@ -77,6 +79,7 @@ select throws_ok($$insert into public.clients (organization_id, name)
 select throws_ok($$insert into public.clients (organization_id, name, email)
   select org_a, 'x', 'sem-arroba' from ctx$$, '23514', null, 'e-mail inválido é rejeitado');
 
+-- Logs de projeto
 select lives_ok($$insert into public.project_logs (organization_id, project_id, author_id, title, content)
   select org_a, p.id, 'aaaaaaaa-0000-0000-0000-000000000001', 'Kickoff', 'ok'
     from ctx, public.projects p where p.name = 'Projeto sem cliente'$$, 'owner registra histórico como autor');

@@ -42,3 +42,14 @@ Ao alterar uma decisão, registrar data, motivo, impacto em banco/API/UI e migra
 - D030: histórico do projeto = `project_logs` (anotações do autor, editáveis só por ele, sem exclusão). `activity_logs` de auditoria segue previsto para a migração 008.
 - D031: listas com busca, filtros, arquivados e paginação no servidor (20/página). Formulários com aviso de alterações não salvas.
 - Pendente (não bloqueia Fase 3): atribuição/transferência entre membros e visibilidade de perfis de co-membros.
+
+## Decisões da Fase 3 — tarefas e checklists (2026-10-12)
+- D032 (fecha pendência do DATABASE_SPEC): `due_date` e `due_at` são **mutuamente exclusivos** (`num_nonnulls(due_date, due_at) <= 1`): prazo de dia inteiro OU com hora. O front envia só um dos dois.
+- D033: subtarefas por `parent_task_id` com FK composta; ciclos e auto-referência rejeitados por trigger (percurso da árvore com advisory lock por organização, profundidade máx. 100). A UI lista só filhos diretos.
+- D034: aplicar modelo de checklist **copia** os itens em um único INSERT (atômico, sem RPC); `checklist_items` não guarda vínculo com o modelo, logo alterações no modelo nunca são retroativas.
+- D035: `completed_at` (tarefa e item de checklist) é derivado por trigger do status; o cliente não tem grant na coluna e `done ⇔ completed_at` é CHECK.
+- D036: `task_plans` — único plano `planned` por (tarefa, dia); mover/remover plano nunca toca em `tasks.due_*`. Sem reordenação por arrastar (apenas `sort_order` de inserção).
+- D037: `tasks` sem DELETE para o cliente (cancela-se); `task_plans`, `checklist_*` e modelos podem ser removidos (sem histórico de negócio).
+- D038: `assigned_to` usa FK composta para `organization_members(organization_id, user_id)`; na UI do MVP pessoal não há atribuição (campo existe no banco, fecha parcialmente a pendência 3).
+- D039: `meeting_id` e `recurrence_rule_id` de `tasks` entram na Fase 4 (tabelas referenciadas ainda não existem). Rota `/app/tarefas/modelos` adicionada (modelos não constavam no mapa de rotas do UI_UX_SPEC) e `/app/meu-dia` implementada.
+- Observação operacional: `supabase migration new` bloqueia lendo stdin fora de terminal; criar arquivos de migração diretamente com timestamp.

@@ -142,3 +142,21 @@ export function useAddProjectLog(orgId: string | undefined, projectId: string, a
     onSuccess: () => qc.invalidateQueries({ queryKey: ['project-logs', projectId] }),
   })
 }
+
+/** Projetos não arquivados para seletores. */
+export function useProjectOptions(enabled: boolean) {
+  return useQuery({
+    queryKey: ['projects', 'options'],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('id, name')
+        .is('archived_at', null)
+        .order('name')
+        .limit(500)
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}

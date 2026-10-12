@@ -9,6 +9,10 @@ import { ClientsPage } from '@/features/clients/ClientsPage'
 import { ProjectDetailPage } from '@/features/projects/ProjectDetailPage'
 import { ProjectNewPage } from '@/features/projects/ProjectNewPage'
 import { ProjectsPage } from '@/features/projects/ProjectsPage'
+import { MyDayPage } from '@/features/tasks/MyDayPage'
+import { TaskDetailPage } from '@/features/tasks/TaskDetailPage'
+import { TasksPage } from '@/features/tasks/TasksPage'
+import { TemplatesPage } from '@/features/tasks/TemplatesPage'
 import { AppHomePage } from '@/pages/AppHomePage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 
@@ -30,6 +34,10 @@ export const routes: RouteObject[] = [
             element: <AppShell />,
             children: [
               { path: '/app', element: <AppHomePage /> },
+              { path: '/app/meu-dia', element: <MyDayPage /> },
+              { path: '/app/tarefas', element: <TasksPage /> },
+              { path: '/app/tarefas/modelos', element: <TemplatesPage /> },
+              { path: '/app/tarefas/:id', element: <TaskDetailPage /> },
               { path: '/app/clientes', element: <ClientsPage /> },
               { path: '/app/clientes/novo', element: <ClientNewPage /> },
               { path: '/app/clientes/:id', element: <ClientDetailPage /> },
