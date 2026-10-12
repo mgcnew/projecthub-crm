@@ -33,3 +33,12 @@ Ao alterar uma decisão, registrar data, motivo, impacto em banco/API/UI e migra
 - D024: UI da Fase 1 só tem login/logout (sem cadastro público). Usuário de seed local em `supabase/seed.sql`. Antes da publicação (Fase 6), desabilitar `enable_signup` no projeto hospedado.
 - D025: migrações da Fase 1 agrupadas em 2 arquivos (`identity` com tabelas+helpers+RLS+grants; `identity_bootstrap`), em vez das 001–003 lógicas do DATABASE_SPEC; RLS vai junto das tabelas, sem janela pública.
 - Testes: pgTAP (`supabase/tests/database`, 43 asserts) + integração com JWT real (`tests/integration`, 8 testes). Pendente: política de senha/MFA e rate limit do Auth em ambiente hospedado.
+
+## Decisões da Fase 2 — clientes e projetos (2026-10-12)
+- D026 (fecha parcialmente D010): arquivamento por `archived_at`; **o cliente da API não tem DELETE** em `clients`, `projects` nem `project_logs`. Arquivar cliente não arquiva nem altera seus projetos. Exclusão definitiva fica para fluxo privilegiado futuro.
+- D027: `projects.client_id` usa FK composta `(organization_id, client_id)` → `clients(organization_id, id)`, sem cascata; `client_id` nulo = projeto sem cliente. Reapontar para cliente de outra organização é rejeitado (23503).
+- D028: escrita somente de `owner` ativo (D018); leitura por qualquer membro ativo. `organization_id` é imutável (grant por coluna), `author_id` de `project_logs` é forçado a `auth.uid()` pela política e é imutável.
+- D029: enums do MVP — cliente: `active|inactive`; projeto: `planning|active|on_hold|completed|cancelled`, prioridade `low|medium|high|urgent`. Alterações exigem migração.
+- D030: histórico do projeto = `project_logs` (anotações do autor, editáveis só por ele, sem exclusão). `activity_logs` de auditoria segue previsto para a migração 008.
+- D031: listas com busca, filtros, arquivados e paginação no servidor (20/página). Formulários com aviso de alterações não salvas.
+- Pendente (não bloqueia Fase 3): atribuição/transferência entre membros e visibilidade de perfis de co-membros.

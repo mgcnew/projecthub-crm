@@ -23,7 +23,27 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "organization_members": {
+            "clients": {
+                  Row: {
+                    "archived_at": string | null,"company_name": string | null,"created_at": string,"email": string | null,"id": string,"name": string,"notes": string | null,"organization_id": string,"phone": string | null,"status": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "archived_at"?: string | null,"company_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"name": string,"notes"?: string | null,"organization_id": string,"phone"?: string | null,"status"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "archived_at"?: string | null,"company_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"name"?: string,"notes"?: string | null,"organization_id"?: string,"phone"?: string | null,"status"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "clients_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"organization_members": {
                   Row: {
                     "joined_at": string,"organization_id": string,"role": string,"status": string,"user_id": string
                   }
@@ -70,6 +90,58 @@ isOneToOne: false
                   }
                   Relationships: [
                     
+                  ]
+                },"project_logs": {
+                  Row: {
+                    "author_id": string,"content": string,"created_at": string,"id": string,"organization_id": string,"project_id": string,"title": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "author_id": string,"content"?: string,"created_at"?: string,"id"?: string,"organization_id": string,"project_id": string,"title": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "author_id"?: string,"content"?: string,"created_at"?: string,"id"?: string,"organization_id"?: string,"project_id"?: string,"title"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "project_logs_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_logs_organization_id_project_id_fkey"
+      columns: ["organization_id","project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"projects": {
+                  Row: {
+                    "archived_at": string | null,"client_id": string | null,"created_at": string,"description": string | null,"id": string,"name": string,"organization_id": string,"priority": string,"started_on": string | null,"status": string,"target_date": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "archived_at"?: string | null,"client_id"?: string | null,"created_at"?: string,"description"?: string | null,"id"?: string,"name": string,"organization_id": string,"priority"?: string,"started_on"?: string | null,"status"?: string,"target_date"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "archived_at"?: string | null,"client_id"?: string | null,"created_at"?: string,"description"?: string | null,"id"?: string,"name"?: string,"organization_id"?: string,"priority"?: string,"started_on"?: string | null,"status"?: string,"target_date"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "projects_organization_id_client_id_fkey"
+      columns: ["organization_id","client_id"]
+isOneToOne: false
+      referencedRelation: "clients"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "projects_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
                   ]
                 }
           }

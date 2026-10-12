@@ -1,0 +1,115 @@
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+import { Button } from '@/components/ui/button'
+import { Field } from '@/components/form'
+import { controlClass, textareaClass } from '@/components/form-styles'
+import { useUnsavedChangesGuard } from '@/lib/unsaved'
+import { useClientOptions } from '@/features/clients/api'
+import {
+  projectDefaults,
+  projectFormSchema,
+  projectPriorities,
+  projectStatuses,
+  type ProjectFormValues,
+} from './schema'
+
+export function ProjectForm({
+  initial = projectDefaults,
+  readOnly,
+  submitLabel,
+  serverError,
+  onSubmit,
+}: {
+  initial?: ProjectFormValues
+  readOnly?: boolean
+  submitLabel: string
+  serverError?: string | null
+  onSubmit: (values: ProjectFormValues) => Promise<void>
+}) {
+  const clients = useClientOptions(true)
+  const {
+    register,
+    handleSubmit,
+    reset,
+    formState: { errors, isDirty, isSubmitting },
+  } = useForm<ProjectFormValues>({ resolver: zodResolver(projectFormSchema), defaultValues: initial })
+
+  useUnsavedChangesGuard(isDirty && !isSubmitting)
+
+  const submit = handleSubmit(async (values) => {
+    await onSubmit(values)
+    reset(values)
+  })
+  const err = (k: keyof ProjectFormValues) => errors[k]?.message
+  const inv = (k: keyof ProjectFormValues) => (errors[k] ? true : undefined)
+  // Mantém o cliente atual mesmo que esteja arquivado (não está nas opções ativas).
+  const options = clients.data ?? []
+  const missingCurrent = initial.client_id && !options.some((c) => c.id === initial.client_id)
+
+  return (
+    <form onSubmit={submit} noValidate className="space-y-4">
+      <fieldset disabled={readOnly || isSubmitting} className="space-y-4">
+        <Field id="name" label="Nome *" error={err('name')}>
+          <input id="name" className={controlClass} aria-invalid={inv('name')} {...register('name')} />
+        </Field>
+        <Field id="client_id" label="Cliente" hint="Projetos podem existir sem cliente.">
+          <select id="client_id" className={controlClass} {...register('client_id')}>
+            <option value="">Sem cliente</option>
+            {missingCurrent && <option value={initial.client_id}>Cliente atual (arquivado)</option>}
+            {options.map((c) => (
+              <option key={c.id} value={c.id}>
+                {c.name}
+              </option>
+            ))}
+          </select>
+        </Field>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <Field id="status" label="Situação">
+            <select id="status" className={controlClass} {...register('status')}>
+              {Object.entries(projectStatuses).map(([v, l]) => (
+                <option key={v} value={v}>
+                  {l}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field id="priority" label="Prioridade">
+            <select id="priority" className={controlClass} {...register('priority')}>
+              {Object.entries(projectPriorities).map(([v, l]) => (
+                <option key={v} value={v}>
+                  {l}
+                </option>
+              ))}
+            </select>
+          </Field>
+          <Field id="started_on" label="Início" error={err('started_on')}>
+            <input id="started_on" type="date" className={controlClass} {...register('started_on')} />
+          </Field>
+          <Field id="target_date" label="Prazo" error={err('target_date')}>
+            <input
+              id="target_date"
+              type="date"
+              className={controlClass}
+              aria-invalid={inv('target_date')}
+              {...register('target_date')}
+            />
+          </Field>
+        </div>
+        <Field id="description" label="Descrição" error={err('description')}>
+          <textarea id="description" className={textareaClass} {...register('description')} />
+        </Field>
+      </fieldset>
+
+      {serverError && (
+        <p role="alert" className="text-sm text-destructive">
+          {serverError}
+        </p>
+      )}
+      {!readOnly && (
+        <Button type="submit" className="h-11" disabled={isSubmitting}>
+          {isSubmitting ? 'Salvando…' : submitLabel}
+        </Button>
+      )}
+    </form>
+  )
+}

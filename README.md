@@ -34,4 +34,4 @@ npm run test:integration     # JWT reais contra o Supabase local
 Usuário de desenvolvimento local: ver `supabase/seed.sql`.
 
 ## Status
-**Fase 0 e Fase 1 concluídas** (tooling; identidade, organização pessoal e RLS no Supabase local). Tabelas de negócio ainda não existem.
+**Fases 0, 1 e 2 concluídas** (tooling; identidade e RLS; clientes, projetos e histórico). Tarefas, agenda e lembretes ainda não existem.
