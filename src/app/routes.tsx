@@ -3,6 +3,11 @@ import { AppShell } from '@/components/layout/AppShell'
 import { AuthProvider } from '@/features/auth/AuthProvider'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { RequireAuth } from '@/features/auth/RequireAuth'
+import { AgendaPage } from '@/features/calendar/AgendaPage'
+import { EventDetailPage } from '@/features/calendar/EventDetailPage'
+import { EventNewPage } from '@/features/calendar/EventNewPage'
+import { MeetingDetailPage } from '@/features/calendar/MeetingDetailPage'
+import { MeetingsPage } from '@/features/calendar/MeetingsPage'
 import { ClientDetailPage } from '@/features/clients/ClientDetailPage'
 import { ClientNewPage } from '@/features/clients/ClientNewPage'
 import { ClientsPage } from '@/features/clients/ClientsPage'
@@ -35,6 +40,11 @@ export const routes: RouteObject[] = [
             children: [
               { path: '/app', element: <AppHomePage /> },
               { path: '/app/meu-dia', element: <MyDayPage /> },
+              { path: '/app/agenda', element: <AgendaPage /> },
+              { path: '/app/agenda/novo', element: <EventNewPage /> },
+              { path: '/app/agenda/:id', element: <EventDetailPage /> },
+              { path: '/app/reunioes', element: <MeetingsPage /> },
+              { path: '/app/reunioes/:eventId', element: <MeetingDetailPage /> },
               { path: '/app/tarefas', element: <TasksPage /> },
               { path: '/app/tarefas/modelos', element: <TemplatesPage /> },
               { path: '/app/tarefas/:id', element: <TaskDetailPage /> },

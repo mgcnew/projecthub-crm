@@ -23,7 +23,51 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "checklist_items": {
+            "calendar_events": {
+                  Row: {
+                    "client_id": string | null,"created_at": string,"description": string | null,"ends_at": string,"event_type": string,"id": string,"organization_id": string,"project_id": string | null,"recurrence_rule_id": string | null,"starts_at": string,"status": string,"task_id": string | null,"timezone": string,"title": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "client_id"?: string | null,"created_at"?: string,"description"?: string | null,"ends_at": string,"event_type"?: string,"id"?: string,"organization_id": string,"project_id"?: string | null,"recurrence_rule_id"?: string | null,"starts_at": string,"status"?: string,"task_id"?: string | null,"timezone": string,"title": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "client_id"?: string | null,"created_at"?: string,"description"?: string | null,"ends_at"?: string,"event_type"?: string,"id"?: string,"organization_id"?: string,"project_id"?: string | null,"recurrence_rule_id"?: string | null,"starts_at"?: string,"status"?: string,"task_id"?: string | null,"timezone"?: string,"title"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "calendar_events_organization_id_client_id_fkey"
+      columns: ["organization_id","client_id"]
+isOneToOne: false
+      referencedRelation: "clients"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "calendar_events_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "calendar_events_organization_id_project_id_fkey"
+      columns: ["organization_id","project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "calendar_events_organization_id_recurrence_rule_id_fkey"
+      columns: ["organization_id","recurrence_rule_id"]
+isOneToOne: false
+      referencedRelation: "recurrence_rules"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "calendar_events_organization_id_task_id_fkey"
+      columns: ["organization_id","task_id"]
+isOneToOne: false
+      referencedRelation: "tasks"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"checklist_items": {
                   Row: {
                     "completed_at": string | null,"id": string,"is_completed": boolean,"organization_id": string,"sort_order": number,"task_id": string,"title": string
                   }
@@ -109,6 +153,32 @@ isOneToOne: false
                   Relationships: [
                     {
       foreignKeyName: "clients_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"meetings": {
+                  Row: {
+                    "agenda": string | null,"calendar_event_id": string,"created_at": string,"decisions": string | null,"id": string,"notes": string | null,"organization_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "agenda"?: string | null,"calendar_event_id": string,"created_at"?: string,"decisions"?: string | null,"id"?: string,"notes"?: string | null,"organization_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "agenda"?: string | null,"calendar_event_id"?: string,"created_at"?: string,"decisions"?: string | null,"id"?: string,"notes"?: string | null,"organization_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "meetings_organization_id_calendar_event_id_fkey"
+      columns: ["organization_id","calendar_event_id"]
+isOneToOne: false
+      referencedRelation: "calendar_events"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "meetings_organization_id_fkey"
       columns: ["organization_id"]
 isOneToOne: false
       referencedRelation: "organizations"
@@ -215,6 +285,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"recurrence_rules": {
+                  Row: {
+                    "by_weekday": (number)[],"created_at": string,"ends_on": string | null,"frequency": string,"id": string,"interval_value": number,"is_active": boolean,"occurrence_limit": number | null,"organization_id": string,"starts_on": string,"timezone": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "by_weekday"?: (number)[],"created_at"?: string,"ends_on"?: string | null,"frequency": string,"id"?: string,"interval_value"?: number,"is_active"?: boolean,"occurrence_limit"?: number | null,"organization_id": string,"starts_on": string,"timezone": string
+                  }
+                  Update: {
+                    "by_weekday"?: (number)[],"created_at"?: string,"ends_on"?: string | null,"frequency"?: string,"id"?: string,"interval_value"?: number,"is_active"?: boolean,"occurrence_limit"?: number | null,"organization_id"?: string,"starts_on"?: string,"timezone"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "recurrence_rules_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"task_plans": {
                   Row: {
                     "created_at": string,"id": string,"organization_id": string,"planned_date": string,"sort_order": number,"status": string,"task_id": string,"updated_at": string
@@ -243,14 +333,14 @@ isOneToOne: false
                   ]
                 },"tasks": {
                   Row: {
-                    "assigned_to": string | null,"client_id": string | null,"completed_at": string | null,"created_at": string,"description": string | null,"due_at": string | null,"due_date": string | null,"estimated_minutes": number | null,"id": string,"organization_id": string,"parent_task_id": string | null,"priority": string,"project_id": string | null,"status": string,"title": string,"updated_at": string
+                    "assigned_to": string | null,"client_id": string | null,"completed_at": string | null,"created_at": string,"description": string | null,"due_at": string | null,"due_date": string | null,"estimated_minutes": number | null,"id": string,"meeting_id": string | null,"organization_id": string,"parent_task_id": string | null,"priority": string,"project_id": string | null,"status": string,"title": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"organization_id": string,"parent_task_id"?: string | null,"priority"?: string,"project_id"?: string | null,"status"?: string,"title": string,"updated_at"?: string
+                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"meeting_id"?: string | null,"organization_id": string,"parent_task_id"?: string | null,"priority"?: string,"project_id"?: string | null,"status"?: string,"title": string,"updated_at"?: string
                   }
                   Update: {
-                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"organization_id"?: string,"parent_task_id"?: string | null,"priority"?: string,"project_id"?: string | null,"status"?: string,"title"?: string,"updated_at"?: string
+                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"meeting_id"?: string | null,"organization_id"?: string,"parent_task_id"?: string | null,"priority"?: string,"project_id"?: string | null,"status"?: string,"title"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -272,6 +362,12 @@ isOneToOne: false
       referencedRelation: "organizations"
       referencedColumns: ["id"]
     },{
+      foreignKeyName: "tasks_organization_id_meeting_id_fkey"
+      columns: ["organization_id","meeting_id"]
+isOneToOne: false
+      referencedRelation: "meetings"
+      referencedColumns: ["organization_id","id"]
+    },{
       foreignKeyName: "tasks_organization_id_parent_task_id_fkey"
       columns: ["organization_id","parent_task_id"]
 isOneToOne: false
@@ -291,7 +387,11 @@ isOneToOne: false
             [_ in never]: never
           }
           Functions: {
-            [_ in never]: never
+            "list_calendar_occurrences":
+{ Args: { "p_from": string,"p_to": string }; Returns: {
+              "client_id": string,"event_id": string,"event_type": string,"is_recurring": boolean,"occurrence_date": string,"occurrence_end": string,"occurrence_start": string,"project_id": string,"status": string,"task_id": string,"timezone": string,"title": string
+            }[]
+                           }
           }
           Enums: {
             [_ in never]: never

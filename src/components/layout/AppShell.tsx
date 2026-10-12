@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/features/auth/auth-context'
@@ -6,20 +7,26 @@ import { cn } from '@/lib/utils'
 const items = [
   { to: '/app', label: 'Início', end: true },
   { to: '/app/meu-dia', label: 'Meu dia', end: false },
+  { to: '/app/agenda', label: 'Agenda', end: false },
   { to: '/app/tarefas', label: 'Tarefas', end: false },
-  { to: '/app/clientes', label: 'Clientes', end: false },
+  { to: '/app/reunioes', label: 'Reuniões', end: false },
   { to: '/app/projetos', label: 'Projetos', end: false },
+  { to: '/app/clientes', label: 'Clientes', end: false },
 ]
+const primaryMobile = items.slice(0, 4)
+const moreMobile = items.slice(4)
 
 function link({ isActive }: { isActive: boolean }) {
   return cn(
-    'flex min-h-11 items-center rounded-md px-3 text-sm font-medium max-lg:px-1 max-lg:text-xs',
+    'flex min-h-11 items-center rounded-md px-3 text-sm font-medium',
     isActive ? 'bg-primary/10 text-primary' : 'text-muted-foreground hover:bg-muted',
   )
 }
 
 export function AppShell() {
   const { signOut } = useAuth()
+  const [moreOpen, setMoreOpen] = useState(false)
+
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[15rem_1fr]">
       <aside className="hidden border-r border-border bg-card p-3 lg:flex lg:flex-col lg:gap-1">
@@ -40,15 +47,47 @@ export function AppShell() {
         <Outlet />
       </main>
 
+      {moreOpen && (
+        <div className="fixed inset-x-0 bottom-14 border-t border-border bg-card p-2 shadow-lg lg:hidden">
+          <nav aria-label="Mais opções" className="grid gap-1">
+            {moreMobile.map((i) => (
+              <NavLink key={i.to} to={i.to} className={link} onClick={() => setMoreOpen(false)}>
+                {i.label}
+              </NavLink>
+            ))}
+            <Button variant="ghost" className="justify-start" onClick={() => void signOut()}>
+              Sair
+            </Button>
+          </nav>
+        </div>
+      )}
+
       <nav
         aria-label="Principal"
         className="fixed inset-x-0 bottom-0 grid grid-cols-5 border-t border-border bg-card p-1 lg:hidden"
       >
-        {items.map((i) => (
-          <NavLink key={i.to} to={i.to} end={i.end} className={(s) => cn(link(s), 'justify-center')}>
+        {primaryMobile.map((i) => (
+          <NavLink
+            key={i.to}
+            to={i.to}
+            end={i.end}
+            className={(s) => cn(link(s), 'justify-center px-1 text-xs')}
+            onClick={() => setMoreOpen(false)}
+          >
             {i.label}
           </NavLink>
         ))}
+        <button
+          type="button"
+          aria-expanded={moreOpen}
+          className={cn(
+            'flex min-h-11 items-center justify-center rounded-md px-1 text-xs font-medium',
+            moreOpen ? 'bg-primary/10 text-primary' : 'text-muted-foreground',
+          )}
+          onClick={() => setMoreOpen((o) => !o)}
+        >
+          Mais
+        </button>
       </nav>
     </div>
   )
