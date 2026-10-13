@@ -5,6 +5,7 @@ import { controlClass } from '@/components/form-styles'
 import { PageHeader } from '@/components/states'
 import { useAuth } from '@/features/auth/auth-context'
 import { activeTimezone, browserTimezone } from '@/lib/format'
+import { SecuritySection } from './SecuritySection'
 import { useSaveTimezone } from './api'
 
 const SAVED_KEY = 'projecthub:timezone-saved'
@@ -87,6 +88,7 @@ export function SettingsPage() {
         {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
         {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
       </section>
+      <SecuritySection />
     </>
   )
 }

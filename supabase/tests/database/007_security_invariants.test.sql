@@ -79,7 +79,7 @@ select is(
   (select coalesce(string_agg(n.nspname || '.' || p.proname, ', ' order by n.nspname, p.proname), '')
      from pg_proc p join pg_namespace n on n.oid = p.pronamespace
     where n.nspname in ('public', 'private') and has_function_privilege('authenticated', p.oid, 'EXECUTE')),
-  'private.is_active_member, private.is_active_owner, public.list_calendar_occurrences',
+  'private.is_active_member, private.is_active_owner, private.mfa_satisfied, public.list_calendar_occurrences',
   'authenticated executa só os helpers de RLS e a expansão da agenda');
 
 -- 10) Multitenancy: FKs entre tabelas de tenant incluem organization_id (FK composta)

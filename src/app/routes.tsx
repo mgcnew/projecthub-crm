@@ -3,6 +3,8 @@ import { AppShell } from '@/components/layout/AppShell'
 import { RouteError } from '@/components/RouteError'
 import { AuthProvider } from '@/features/auth/AuthProvider'
 import { LoginPage } from '@/features/auth/LoginPage'
+import { RecoverPasswordPage } from '@/features/auth/RecoverPasswordPage'
+import { ResetPasswordPage } from '@/features/auth/ResetPasswordPage'
 import { RequireAuth } from '@/features/auth/RequireAuth'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { appRoutes } from './appRoutes'
@@ -19,6 +21,8 @@ export const routes: RouteObject[] = [
     children: [
       { path: '/', element: <Navigate to="/app" replace /> },
       { path: '/login', element: <LoginPage /> },
+      { path: '/recuperar-senha', element: <RecoverPasswordPage /> },
+      { path: '/redefinir-senha', element: <ResetPasswordPage /> },
       {
         element: <RequireAuth />,
         children: [

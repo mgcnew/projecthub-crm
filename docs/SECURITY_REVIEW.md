@@ -51,7 +51,7 @@ Nenhuma política de RLS foi relaxada e nenhum dado foi alterado (critério de p
 - **`list_calendar_occurrences` e o worker** expandem séries sob demanda; janela máxima de 93 dias e série limitada a
   3660 dias contêm o custo (D041), mas não há teste de carga.
 - **Perfis de co-membros** continuam invisíveis (D023): a trilha de atividade mostra "Outro membro".
-- **MFA:** não habilitado. Recomendado (TOTP) assim que houver segundo usuário ou dados sensíveis.
+- **MFA (D082–D084):** TOTP disponível em Configurações e **imposto no banco** quando ativado (política restritiva `mfa_required` + aal2). Residual: sem códigos de recuperação (perda do aplicativo exige remoção do fator pelo administrador, ver RUNBOOK) e sem limite de tentativas próprio além do rate limit do Auth.
 - **Não coberto:** pentest externo, testes de carga/DoS, revisão de Edge Functions (não há), integração com
   provedores externos (não há), cadeia de suprimentos além do `npm audit`.
 

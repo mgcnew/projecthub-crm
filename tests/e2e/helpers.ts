@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from '@supabase/supabase-js'
 import { expect, type Page } from '@playwright/test'
 import { randomUUID } from 'node:crypto'
+import { totp } from '../support/totp'
 
 const url = process.env.SUPABASE_URL
 const key = process.env.SUPABASE_PUBLISHABLE_KEY
@@ -61,3 +62,17 @@ export function localInput(date: Date, tz = 'America/Sao_Paulo') {
  * continua no DOM com os mesmos rótulos; por isso os specs de desktop miram sempre dentro do diálogo.
  */
 export const panel = (page: Page) => page.getByRole('dialog').first()
+
+/** Ativa o TOTP do usuário direto pela API (sem a tela) e devolve o segredo para gerar códigos. */
+export async function enableMfa(user: TestUser): Promise<string> {
+  const client = api()
+  const login = await client.auth.signInWithPassword(user)
+  if (login.error) throw login.error
+  const enroll = await client.auth.mfa.enroll({ factorType: 'totp', friendlyName: 'e2e' })
+  if (enroll.error) throw enroll.error
+  const ch = await client.auth.mfa.challenge({ factorId: enroll.data.id })
+  if (ch.error) throw ch.error
+  const ok = await client.auth.mfa.verify({ factorId: enroll.data.id, challengeId: ch.data.id, code: totp(enroll.data.totp.secret) })
+  if (ok.error) throw ok.error
+  return enroll.data.totp.secret
+}

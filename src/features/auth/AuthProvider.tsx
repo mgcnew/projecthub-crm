@@ -2,6 +2,7 @@ import type { Session } from '@supabase/supabase-js'
 import { useEffect, useMemo, useState, type ReactNode } from 'react'
 import { supabase } from '@/lib/supabase'
 import { AuthContext } from './auth-context'
+import { needsSecondFactor } from './mfa'
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null)
@@ -28,6 +29,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     () => ({
       session,
       loading,
+      needsSecondFactor: needsSecondFactor(session),
       signOut: async () => {
         await supabase.auth.signOut()
       },

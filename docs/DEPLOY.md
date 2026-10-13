@@ -30,8 +30,9 @@ você pode fazer (contas, chaves, domínio). Eu nunca uso nem peço senhas ou ch
 
 ## 1. Supabase hospedado (você)
 
-> **Já feito em 2026-10-13 (passos 1 a 3):** projeto `gnissqsrpzadthapdpue` (sa-east-1) com as 10 migrações
-> aplicadas, `pg_cron` ativo com o job `process-due-reminders` e histórico registrado em
+> **Já feito em 2026-10-13 (passos 1 a 3):** projeto `gnissqsrpzadthapdpue` (sa-east-1) com as 11 migrações
+> aplicadas (a 11ª, `mfa_enforcement`, também conferida por hash e por teste de fumaça: leitura e escrita em aal1
+> bloqueadas com fator verificado), `pg_cron` ativo com o job `process-due-reminders` e histórico registrado em
 > `supabase_migrations.schema_migrations`. As migrações foram aplicadas por SQL via MCP (a CLI deste ambiente
 > está logada em outra conta e não tinha a senha do banco). A paridade foi conferida contra o banco local:
 > colunas, políticas, privilégios por coluna, índices, constraints, gatilhos e RLS com hashes idênticos, e as
@@ -64,8 +65,13 @@ você pode fazer (contas, chaves, domínio). Eu nunca uso nem peço senhas ou ch
    - **Desligar o cadastro público** ("Allow new users to sign up" = off). É a decisão D024.
    - Política de senha: mínimo de 12 caracteres, com maiúscula, minúscula e dígito.
    - *URL Configuration*: **Site URL** = o domínio final (passo 3.4); **Redirect URLs** = só esse domínio.
-   - SMTP próprio, se for usar "esqueci a senha" (o SMTP padrão tem limite baixo).
-   - MFA (TOTP): recomendado ligar, mesmo com um único usuário.
+   - **"Esqueci a senha" já existe no app** (`/recuperar-senha`): depende de *Redirect URLs* conter
+     `https://SEU_DOMINIO/redefinir-senha` e de um e-mail que chegue. O SMTP padrão do Supabase tem limite baixo
+     e só entrega a membros da equipe do projeto; para uso real, configure SMTP próprio.
+   - **MFA (TOTP):** o app tem a tela em *Configurações → Verificação em duas etapas*. Confirme em
+     *Authentication → Multi-Factor* que TOTP está habilitado (inscrição e verificação). Depois de ativar pela tela,
+     o banco passa a exigir o código (D082). **Guarde o segredo** num gerenciador de senhas: não há códigos de
+     recuperação (RUNBOOK, "Perdi o autenticador").
 5. **Data API** (*Settings → API*): deixe exposto só o schema `public` (remova `graphql_public`).
 6. **Criar seu usuário**: *Authentication → Users → Add user* (e-mail e senha, "Auto Confirm User"). O banco
    provisiona perfil e organização pessoal sozinho.

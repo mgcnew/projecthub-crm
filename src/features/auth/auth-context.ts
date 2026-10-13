@@ -5,6 +5,8 @@ export type AuthState = {
   session: Session | null
   /** true até a primeira leitura da sessão persistida terminar. */
   loading: boolean
+  /** Senha aceita, mas falta o código do autenticador (aal1 com fator verificado). */
+  needsSecondFactor: boolean
   signOut: () => Promise<void>
 }
 

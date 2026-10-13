@@ -72,6 +72,21 @@ compatível com o dump (colunas). Prefira restaurar com o mesmo conjunto de migr
 |---|---|---|---|
 | 2026-10-13 | Supabase local (PG 17.11) | 21 tabelas, 733 linhas, 192 KB | Restauração verificada: contagens iguais, 51 políticas, FKs sem órfãos, RLS idêntica. Negativos: manifesto adulterado e dump corrompido reprovados; 0 bancos de teste remanescentes |
 
+## Perdi o autenticador (MFA)
+
+O Auth não oferece códigos de recuperação e o banco exige aal2 de quem tem fator verificado (D082). Sem o
+aplicativo, a conta fica sem acesso aos dados. Quem administra o projeto remove o fator (o usuário continua com a
+senha e pode ativar de novo em Configurações):
+
+```sql
+-- SQL Editor do Supabase (ou MCP execute_sql). Confira o e-mail antes de rodar.
+delete from auth.mfa_factors
+ where user_id = (select id from auth.users where email = 'voce@exemplo.com');
+```
+
+Depois, entre só com a senha e reative a verificação em duas etapas, guardando o segredo no gerenciador de senhas.
+Esta operação é a única forma de "desligar" o MFA sem o código; registre quando for feita.
+
 ## Falhas conhecidas / pontos de atenção
 
 - O dump emite avisos de FKs circulares (`tasks`, `meetings`, `calendar_events`): esperado; o `--disable-triggers`

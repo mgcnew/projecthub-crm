@@ -1,18 +1,19 @@
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
-import { Navigate, useLocation, useNavigate } from 'react-router-dom'
+import { Link, Navigate, useLocation } from 'react-router-dom'
 import { controlClass } from '@/components/form-styles'
 import { Button } from '@/components/ui/button'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from './auth-context'
+import { AuthLayout } from './AuthLayout'
 import { loginSchema, type LoginValues } from './loginSchema'
-
+import { SecondFactorForm } from './SecondFactorForm'
 
 export function LoginPage() {
-  const { session, loading } = useAuth()
-  const navigate = useNavigate()
+  const { session, loading, needsSecondFactor } = useAuth()
   const location = useLocation()
+  const state = location.state as { from?: string; notice?: string } | null
   const [formError, setFormError] = useState<string | null>(null)
   const {
     register,
@@ -20,55 +21,34 @@ export function LoginPage() {
     formState: { errors, isSubmitting },
   } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) })
 
-  if (!loading && session) return <Navigate to="/app" replace />
+  // Com sessão completa (aal2, ou sem MFA) segue para o app; a navegação sai do próprio estado de sessão.
+  if (!loading && session && !needsSecondFactor) {
+    const from = state?.from
+    return <Navigate to={from && from.startsWith('/app') ? from : '/app'} replace />
+  }
+
+  if (!loading && session && needsSecondFactor) {
+    return (
+      <AuthLayout title="Verificação em duas etapas" subtitle="Falta só o código do seu aplicativo autenticador.">
+        <SecondFactorForm />
+      </AuthLayout>
+    )
+  }
 
   const onSubmit = handleSubmit(async (values) => {
     setFormError(null)
     const { error } = await supabase.auth.signInWithPassword(values)
-    if (error) {
-      // Mensagem genérica: não revela se o e-mail existe.
-      setFormError('E-mail ou senha incorretos.')
-      return
-    }
-    const from = (location.state as { from?: string } | null)?.from
-    navigate(from && from.startsWith('/app') ? from : '/app', { replace: true })
+    // Mensagem genérica: não revela se o e-mail existe.
+    if (error) setFormError('E-mail ou senha incorretos.')
   })
 
   return (
-    <div className="grid min-h-dvh bg-background lg:grid-cols-[minmax(0,1fr)_minmax(26rem,32rem)]">
-      {/* Painel de marca (desktop): o dia como diagrama de linhas; decorativo. */}
-      <aside aria-hidden="true" className="relative hidden overflow-hidden bg-foreground text-card lg:flex lg:flex-col lg:justify-between lg:p-12">
-        <p className="flex items-center gap-3 text-xl font-bold tracking-[-0.01em]">
-          <span className="inline-flex size-8 items-center justify-center bg-card text-base text-foreground">P</span>
-          ProjectHub
+    <AuthLayout title="Entrar" subtitle="Acesse sua central de projetos e clientes.">
+      {state?.notice && (
+        <p role="status" className="border border-border bg-card px-3 py-2 text-sm font-medium">
+          {state.notice}
         </p>
-        <div className="relative h-64">
-          <span className="absolute top-[42%] left-0 h-2.5 w-full bg-[#0455a1]" />
-          <span className="absolute top-[22%] left-[38%] h-2.5 w-[62%] bg-[#007e5e]" />
-          <span className="absolute top-[22%] left-[38%] h-[calc(20%+0.625rem)] w-2.5 bg-[#007e5e]" />
-          <span className="absolute top-[62%] left-[18%] h-2.5 w-[82%] bg-[#ffd400]" />
-          <span className="absolute top-[42%] left-[18%] h-[calc(20%+0.625rem)] w-2.5 bg-[#ffd400]" />
-          {[18, 38, 64, 86].map((x) => (
-            <span key={x} className="absolute top-[42%] size-7 -translate-x-1/2 -translate-y-[0.6rem] rounded-full border-[6px] border-card bg-foreground" style={{ left: `${x}%` }} />
-          ))}
-          <span className="absolute top-[42%] left-[64%] size-7 -translate-x-1/2 -translate-y-[0.6rem] rounded-full border-[6px] border-[#ee372f] bg-foreground" />
-        </div>
-        <div className="max-w-md space-y-2">
-          <p className="text-3xl leading-tight font-bold tracking-[-0.02em]">Seu dia, estação por estação.</p>
-          <p className="text-[#c4cad0]">Clientes, projetos, reuniões e tarefas na mesma linha.</p>
-        </div>
-      </aside>
-
-      <main className="flex flex-col justify-center gap-8 px-5 py-10 sm:px-10">
-        <p className="flex items-center gap-2.5 text-lg font-bold tracking-[-0.01em] lg:hidden">
-          <span aria-hidden="true" className="inline-flex size-7 items-center justify-center bg-foreground text-sm text-card">P</span>
-          ProjectHub
-        </p>
-        <header className="space-y-1 border-b-2 border-rule-strong pb-4">
-          <h1 className="text-[1.875rem] leading-tight font-bold tracking-[-0.02em]">Entrar</h1>
-          <p className="text-muted-foreground">Acesse sua central de projetos e clientes.</p>
-        </header>
-
+      )}
       <form onSubmit={onSubmit} noValidate className="space-y-4">
         <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-semibold">
@@ -119,8 +99,12 @@ export function LoginPage() {
         <Button type="submit" className="h-11 w-full" disabled={isSubmitting}>
           {isSubmitting ? 'Entrando…' : 'Entrar'}
         </Button>
+        <p className="text-sm">
+          <Link to="/recuperar-senha" className="inline-block py-2.5 font-semibold text-primary-strong underline">
+            Esqueci a senha
+          </Link>
+        </p>
       </form>
-      </main>
-    </div>
+    </AuthLayout>
   )
 }

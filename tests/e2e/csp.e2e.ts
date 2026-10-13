@@ -31,6 +31,9 @@ test('o build de produção funciona sob CSP estrita, sem violações', async ({
   expect(h['referrer-policy']).toBe('strict-origin-when-cross-origin')
   expect(h['x-frame-options']).toBe('DENY')
 
+  await page.goto('/recuperar-senha')
+  await expect(page.getByRole('heading', { name: 'Recuperar senha' })).toBeVisible()
+
   await login(page, user)
   for (const [path, heading] of [
     ['/app/meu-dia', 'Meu dia'],
@@ -44,6 +47,14 @@ test('o build de produção funciona sob CSP estrita, sem violações', async ({
     // páginas têm h1; registros abrem em painel (diálogo) com h2
     await expect(page.getByRole('heading', { name: heading }).first()).toBeVisible()
   }
+
+  // QR code do autenticador: imagem data: SVG vinda do Auth precisa carregar sob `img-src 'self' data:`.
+  await page.goto('/app/configuracoes')
+  await page.getByRole('button', { name: 'Ativar verificação em duas etapas' }).click()
+  const qr = page.getByAltText('QR code para o aplicativo autenticador')
+  await expect(qr).toBeVisible()
+  await expect.poll(() => qr.evaluate((img: HTMLImageElement) => img.complete && img.naturalWidth > 0)).toBe(true)
+  await page.getByRole('button', { name: 'Cancelar' }).click()
 
   // Fluxo com escrita: o app continua funcional (fetch ao Supabase permitido pelo connect-src).
   await page.goto('/app/meu-dia')
