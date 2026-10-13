@@ -66,7 +66,7 @@ export function DayLine({
           </span>
         ))}
         {now !== null && (
-          <span className="absolute top-10 h-[3.25rem] w-0.5 -translate-x-1/2 bg-now" style={{ left: `${now}%` }} />
+          <span className="absolute top-[3.1rem] h-[2.2rem] w-0.5 -translate-x-1/2 bg-now" style={{ left: `${now}%` }} />
         )}
       </div>
 
@@ -76,7 +76,7 @@ export function DayLine({
           'relative grid gap-0',
           // Vertical: trilho à esquerda das estações.
           'before:absolute before:top-4 before:bottom-4 before:left-[4.69rem] before:w-1.5 before:bg-[#d3d9de] md:before:hidden',
-          'md:block md:h-[8.75rem]',
+          'md:block md:h-[10.25rem]',
         )}
       >
         {placed.map((p, i) => {
@@ -125,7 +125,7 @@ export function DayLine({
               aria-hidden="true"
               className="relative z-10 size-5 rounded-full border-[5px] border-now bg-card md:absolute md:top-[3.3rem] md:left-0 md:size-[1.375rem] md:-translate-x-1/2"
             />
-            <span className="text-sm font-semibold text-destructive md:absolute md:top-[6.1rem] md:left-0 md:w-max md:-translate-x-1/2 md:bg-card md:px-1">
+            <span className="text-sm font-semibold text-destructive md:absolute md:top-[8.55rem] md:left-0 md:w-max md:-translate-x-1/2 md:border-t-2 md:border-now md:bg-card md:px-1.5 md:pt-0.5">
               Agora<span className="hidden md:inline"> {nowText}</span>
             </span>
           </li>

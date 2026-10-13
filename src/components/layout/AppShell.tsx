@@ -182,7 +182,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
               id="conteudo"
               ref={main}
               tabIndex={-1}
-              className="mx-auto w-full max-w-[72rem] space-y-6 px-4 pt-5 pb-28 outline-none sm:px-6 lg:px-8 lg:pt-7 lg:pb-10"
+              className="mx-auto w-full max-w-[100rem] space-y-6 px-4 pt-5 pb-28 outline-none sm:px-5 lg:px-6 lg:pt-6 lg:pb-8"
             >
               {page}
             </main>

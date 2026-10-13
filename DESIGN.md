@@ -234,7 +234,7 @@ Neutros frios de sinalização, tinta como primária e uma paleta de linhas que 
 
 ## Layout
 
-Desktop (a partir de 1024px): rail branco fixo de 236px à esquerda com borda direita em Régua Fina; conteúdo centralizado com largura máxima de 1152px e respiro lateral de 32px. Abaixo de 1024px o rail some e a navegação vira barra inferior fixa. O conteúdo empilha placas com 24px entre elas.
+Desktop (a partir de 1024px): rail branco fixo de 236px à esquerda com borda direita em Régua Fina; conteúdo ocupando a largura útil, com respiro lateral de 24px e largura máxima de 1600px (só em monitores muito largos o conteúdo centraliza). Abaixo de 1024px o rail some e a navegação vira barra inferior fixa. O conteúdo empilha placas com 24px entre elas.
 
 Cada página abre com o cabeçalho: título à esquerda, ações à direita, filete de 2px em tinta embaixo. Placas têm 16px de respiro lateral no celular e 20px a partir de 640px. Na Central do dia, a Linha do dia ocupa a largura toda; abaixo vêm duas colunas (tabela planejada e prazos).
 
