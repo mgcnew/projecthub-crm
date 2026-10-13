@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { RowCheckbox } from '@/components/RowCheckbox'
 import { controlClass } from '@/components/form-styles'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -128,10 +129,8 @@ export function MyDayPage() {
             const done = t.status === 'done'
             return (
               <li key={r.id} className="flex flex-wrap items-center gap-3 px-4 py-2">
-                <input
-                  type="checkbox"
-                  className="size-5"
-                  aria-label={`Concluir ${t.title}`}
+                <RowCheckbox
+                  label={`Concluir ${t.title}`}
                   checked={done}
                   disabled={!canWrite}
                   onChange={() => setStatus.mutate({ id: t.id, status: done ? 'todo' : 'done' })}

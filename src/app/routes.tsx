@@ -1,5 +1,6 @@
 import { Navigate, Outlet, type RouteObject } from 'react-router-dom'
 import { AppShell } from '@/components/layout/AppShell'
+import { RouteError } from '@/components/RouteError'
 import { AuthProvider } from '@/features/auth/AuthProvider'
 import { LoginPage } from '@/features/auth/LoginPage'
 import { RequireAuth } from '@/features/auth/RequireAuth'
@@ -31,6 +32,7 @@ export const routes: RouteObject[] = [
         <Outlet />
       </AuthProvider>
     ),
+    errorElement: <RouteError />,
     children: [
       { path: '/', element: <Navigate to="/app" replace /> },
       { path: '/login', element: <LoginPage /> },

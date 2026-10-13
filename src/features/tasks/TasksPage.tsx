@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { RowCheckbox } from '@/components/RowCheckbox'
 import { controlClass } from '@/components/form-styles'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useProjectOptions } from '@/features/projects/api'
@@ -107,10 +108,8 @@ export function TasksPage() {
               const done = t.status === 'done'
               return (
                 <li key={t.id} className="flex items-center gap-3 px-4 py-2">
-                  <input
-                    type="checkbox"
-                    aria-label={`Concluir ${t.title}`}
-                    className="size-5"
+                  <RowCheckbox
+                    label={`Concluir ${t.title}`}
                     checked={done}
                     disabled={!canWrite || setStatus.isPending}
                     onChange={() => setStatus.mutate({ id: t.id, status: done ? 'todo' : 'done' })}

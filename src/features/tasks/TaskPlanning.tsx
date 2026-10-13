@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { controlClass } from '@/components/form-styles'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -27,8 +28,13 @@ export function TaskPlanning({ taskId }: { taskId: string }) {
             <li key={p.id} className="flex items-center gap-1 rounded-full border border-border bg-card py-1 pl-3 pr-1 text-sm">
               {formatDate(p.planned_date)}
               {canWrite && (
-                <Button variant="ghost" size="sm" aria-label={`Remover plano de ${formatDate(p.planned_date)}`} onClick={() => remove.mutate(p.id)}>
-                  ×
+                <Button
+                  variant="ghost"
+                  size="icon-sm"
+                  aria-label={`Remover plano de ${formatDate(p.planned_date)}`}
+                  onClick={() => remove.mutate(p.id)}
+                >
+                  <X aria-hidden="true" />
                 </Button>
               )}
             </li>

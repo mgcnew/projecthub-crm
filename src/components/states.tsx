@@ -50,7 +50,7 @@ const tones = {
   success: 'bg-success/15 text-emerald-800',
   warning: 'bg-warning/20 text-amber-900',
   danger: 'bg-destructive/15 text-red-800',
-  info: 'bg-primary/10 text-primary',
+  info: 'bg-primary/10 text-primary-strong',
 } as const
 
 export function StatusBadge({ tone = 'neutral', children }: { tone?: keyof typeof tones; children: ReactNode }) {

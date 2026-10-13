@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { RowCheckbox } from '@/components/RowCheckbox'
 import { controlClass } from '@/components/form-styles'
 import { ErrorState, LoadingState } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -32,11 +33,9 @@ export function TaskChecklist({ taskId }: { taskId: string }) {
       {list.length > 0 && (
         <ul className="divide-y divide-border rounded-md border border-border bg-card">
           {list.map((i) => (
-            <li key={i.id} className="flex min-h-11 items-center gap-3 px-4">
-              <input
-                type="checkbox"
-                className="size-5"
-                aria-label={i.title}
+            <li key={i.id} className="flex min-h-11 items-center gap-1 pr-4 pl-2">
+              <RowCheckbox
+                label={i.title}
                 checked={i.is_completed}
                 disabled={!canWrite}
                 onChange={() => toggle.mutate({ id: i.id, value: !i.is_completed })}

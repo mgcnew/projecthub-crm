@@ -11,13 +11,17 @@
   --popover-foreground: #0f172a;
   --primary: #2563eb;
   --primary-foreground: #ffffff;
+  /* Azul para texto sobre tint do próprio azul (nav ativa, badge info): 5,82:1 sobre primary/10. */
+  --primary-strong: #1d4ed8;
   --secondary: #f1f5f9;
   --secondary-foreground: #0f172a;
   --muted: #f1f5f9;
-  --muted-foreground: #64748b;
+  /* Escurecido de #64748b: 4,34:1 sobre --muted não passava AA; #5f6e84 dá 4,73:1. */
+  --muted-foreground: #5f6e84;
   --accent: #f1f5f9;
   --accent-foreground: #0f172a;
-  --destructive: #ef4444;
+  /* #ef4444 como texto dava 3,76:1; #dc2626 dá 4,83:1 sobre o painel branco. */
+  --destructive: #dc2626;
   --success: #10b981;
   --warning: #f59e0b;
   --border: #e2e8f0;
@@ -36,6 +40,7 @@
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
   --color-primary-foreground: var(--primary-foreground);
+  --color-primary-strong: var(--primary-strong);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
@@ -57,5 +62,16 @@
   }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

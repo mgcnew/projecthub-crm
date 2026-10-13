@@ -1,6 +1,7 @@
 import { useMemo, type ReactNode } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { RowCheckbox } from '@/components/RowCheckbox'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useOccurrences } from '@/features/calendar/api'
 import { useUnreadCount } from '@/features/notifications/api'
@@ -51,10 +52,8 @@ function TaskRow({ task, canWrite, onToggle }: { task: DashTask; canWrite: boole
   const due = task.due_at ? formatDateTime(task.due_at) : task.due_date ? formatDate(task.due_date) : null
   return (
     <li className="flex items-center gap-3 px-4 py-2">
-      <input
-        type="checkbox"
-        className="size-5"
-        aria-label={`Concluir ${task.title}`}
+      <RowCheckbox
+        label={`Concluir ${task.title}`}
         checked={done}
         disabled={!canWrite}
         onChange={() => onToggle(!done)}

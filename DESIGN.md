@@ -4,13 +4,14 @@ description: Central pessoal de gestão em tema claro, calma e densa, com neutro
 colors:
   primary: "#2563eb"
   primary-foreground: "#ffffff"
+  primary-strong: "#1d4ed8"
   background: "#f8fafc"
   foreground: "#0f172a"
   card: "#ffffff"
   muted: "#f1f5f9"
-  muted-foreground: "#64748b"
+  muted-foreground: "#5f6e84"
   border: "#e2e8f0"
-  destructive: "#ef4444"
+  destructive: "#dc2626"
   success: "#10b981"
   warning: "#f59e0b"
 typography:
@@ -85,7 +86,7 @@ components:
     height: "44px"
     padding: "0 12px"
   nav-link-active:
-    textColor: "{colors.primary}"
+    textColor: "{colors.primary-strong}"
   status-badge:
     backgroundColor: "{colors.muted}"
     textColor: "{colors.muted-foreground}"
@@ -121,20 +122,21 @@ O sistema serve a um profissional autônomo que alterna entre o desktop (gestão
 Paleta fria e contida: neutros azulados, um azul de ação, e três cores de estado usadas com parcimônia.
 
 ### Primary
-- **Azul de Ação** (#2563eb): único acento do sistema. Botão primário, item de navegação ativo (em 10% de opacidade como fundo), links, contador de não lidas e anel de foco.
+- **Azul de Ação** (#2563eb): único acento do sistema. Botão primário, links, contador de não lidas e anel de foco.
+- **Azul Firme** (#1d4ed8): o mesmo azul, mais escuro, para texto sobre tint do próprio azul (item de navegação ativo e badge informativa), onde o azul de ação ficaria abaixo de 4,5:1.
 
 ### Neutral
 - **Névoa Fria** (#f8fafc): fundo da página.
 - **Painel Branco** (#ffffff): superfície de cartões, listas, campos e da barra de navegação.
 - **Linho Azulado** (#f1f5f9): fundos secundários (muted, accent, hover de itens e badges neutras).
-- **Cinza Ardósia** (#64748b): texto secundário, descrições, metadados e ícones inativos.
+- **Cinza Ardósia** (#5f6e84): texto secundário, descrições, metadados e ícones inativos.
 - **Tinta Noite** (#0f172a): texto principal e títulos.
 - **Fio de Gelo** (#e2e8f0): bordas e divisores de 1px, contorno de campos.
 
 ### State
 - **Verde Concluído** (#10b981): sucesso (badges em 15% de opacidade com texto emerald-800).
 - **Âmbar de Atenção** (#f59e0b): aviso e prioridade alta (fundo em 20% com texto amber-900).
-- **Vermelho de Risco** (#ef4444): erro, atraso e prioridade urgente; texto de erro e contornos inválidos.
+- **Vermelho de Risco** (#dc2626): erro, atraso e prioridade urgente; texto de erro e contornos inválidos (4,8:1 sobre o painel branco).
 
 ### Named Rules
 **The One Blue Rule.** O azul é o único acento; ele aparece em ação, seleção e foco, nunca como decoração. Cores de estado jamais assumem o papel de acento.
@@ -185,7 +187,7 @@ Cantos suavemente arredondados e uniformes: 6px (rounded-md) em botões, campos,
 ## Components
 
 ### Buttons
-- **Shape:** cantos de 6px, altura de 36px (32px compacto, 40px grande), rótulo Label.
+- **Shape:** cantos de 6px, altura de 36px no desktop (32px compacto, 40px grande) e 44px abaixo de 1024px; rótulo Label.
 - **Primary:** fundo Azul de Ação, texto branco, padding 8px 16px; hover a 90% de opacidade.
 - **Outline:** fundo da página com borda de 1px e sombra mínima; hover em Linho Azulado. Ação secundária de formulário.
 - **Ghost:** sem fundo nem borda; hover em Linho Azulado. Ações de linha (Remover, Cancelar) em tamanho `sm`.
@@ -221,7 +223,9 @@ Painel com borda tracejada, título em peso 500 e descrição em Cinza Ardósia,
 ### Do:
 - **Do** usar o azul (#2563eb) apenas para ação, seleção e foco.
 - **Do** separar superfícies com bordas de 1px em #e2e8f0 e deixar as sombras para o que flutua.
-- **Do** manter alvos de toque de pelo menos 44px em navegação, linhas de lista e campos.
+- **Do** manter alvos de toque de pelo menos 44px abaixo de 1024px em navegação, botões, checkboxes, linhas de lista e campos.
+- **Do** conferir o contraste de texto (4,5:1) em cada par texto/fundo antes de criar um novo tom; sobre tint do azul use o Azul Firme.
+- **Do** respeitar `prefers-reduced-motion` e manter o foco do teclado sempre visível.
 - **Do** acompanhar toda cor de estado com texto ou ícone (badge com rótulo, mensagem de erro).
 - **Do** tratar loading, vazio, erro e sem-permissão em toda lista e painel.
 - **Do** manter o texto da interface em português do Brasil.

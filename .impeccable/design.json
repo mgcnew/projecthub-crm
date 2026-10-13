@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-13T11:38:17Z",
+  "generatedAt": "2026-10-13T11:57:40Z",
   "title": "Design System: ProjectHub CRM",
   "extensions": {
     "colorMeta": {
@@ -82,16 +82,16 @@
       "muted-foreground": {
         "role": "neutral",
         "displayName": "Cinza Ardósia",
-        "canonical": "oklch(55.4% 0.041 257)",
+        "canonical": "oklch(53.4% 0.039 258)",
         "tonalRamp": [
-          "#0e1b2d",
-          "#273549",
-          "#425167",
-          "#5f6f86",
-          "#7e8ea6",
-          "#9eafc8",
-          "#bfd1ea",
-          "#eaf3ff"
+          "#0f1b2d",
+          "#283548",
+          "#435166",
+          "#606f85",
+          "#7e8ea5",
+          "#9eafc7",
+          "#c0d1e9",
+          "#ebf2fe"
         ]
       },
       "border": {
@@ -112,16 +112,16 @@
       "destructive": {
         "role": "state",
         "displayName": "Vermelho de Risco",
-        "canonical": "oklch(63.7% 0.208 25)",
+        "canonical": "oklch(57.7% 0.215 27)",
         "tonalRamp": [
-          "#3a0003",
-          "#68000a",
-          "#990215",
-          "#cb1725",
-          "#f14646",
-          "#fe847c",
-          "#febcb5",
-          "#feeeec"
+          "#3a0002",
+          "#680005",
+          "#9a010c",
+          "#cd0b17",
+          "#f4423c",
+          "#ff8478",
+          "#febcb4",
+          "#ffedeb"
         ]
       },
       "success": {
@@ -152,6 +152,21 @@
           "#ed9808",
           "#ffc27b",
           "#ffefde"
+        ]
+      },
+      "primary-strong": {
+        "role": "primary",
+        "displayName": "Azul Firme",
+        "canonical": "oklch(48.8% 0.217 264)",
+        "tonalRamp": [
+          "#01005f",
+          "#0109a0",
+          "#0e3ac4",
+          "#2a5ee9",
+          "#5185fe",
+          "#85acfe",
+          "#b8cfff",
+          "#ecf2fe"
         ]
       }
     },
@@ -251,7 +266,7 @@
       "refersTo": "nav-link",
       "description": "Item da barra lateral; o ativo usa o azul a 10%.",
       "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link ds-nav-active\" href=\"#\">Início</a><a class=\"ds-nav-link\" href=\"#\">Meu dia</a><a class=\"ds-nav-link\" href=\"#\">Notificações <span class=\"ds-count\">3</span></a></nav>",
-      "css": ".ds-nav{display:grid;gap:4px;width:224px;font-family:'Inter Variable',system-ui,sans-serif}.ds-nav-link{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:6px;color:var(--muted-foreground, #64748b);font:500 14px/20px 'Inter Variable',system-ui,sans-serif;text-decoration:none}.ds-nav-link:hover{background:var(--muted, #f1f5f9)}.ds-nav-active{background:rgb(37 99 235 / .1);color:var(--primary, #2563eb)}.ds-count{margin-left:auto;padding:0 8px;border-radius:9999px;background:var(--primary, #2563eb);color:#fff;font:600 12px/16px 'Inter Variable',system-ui,sans-serif}"
+      "css": ".ds-nav{display:grid;gap:4px;width:224px;font-family:'Inter Variable',system-ui,sans-serif}.ds-nav-link{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:6px;color:var(--muted-foreground, #5f6e84);font:500 14px/20px 'Inter Variable',system-ui,sans-serif;text-decoration:none}.ds-nav-link:hover{background:var(--muted, #f1f5f9)}.ds-nav-active{background:rgb(37 99 235 / .1);color:#1d4ed8}.ds-count{margin-left:auto;padding:0 8px;border-radius:9999px;background:var(--primary, #2563eb);color:#fff;font:600 12px/16px 'Inter Variable',system-ui,sans-serif}"
     },
     {
       "name": "Status Badge",
@@ -259,7 +274,7 @@
       "refersTo": "status-badge",
       "description": "Estado com texto e tom; nunca só cor.",
       "html": "<span class=\"ds-badge ds-badge-info\">Nova</span> <span class=\"ds-badge ds-badge-success\">Concluída</span> <span class=\"ds-badge ds-badge-warning\">Alta</span> <span class=\"ds-badge ds-badge-danger\">Urgente</span> <span class=\"ds-badge\">Lida</span>",
-      "css": ".ds-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;background:var(--muted, #f1f5f9);color:var(--muted-foreground, #64748b);font:500 12px/16px 'Inter Variable',system-ui,sans-serif}.ds-badge-info{background:rgb(37 99 235 / .1);color:var(--primary, #2563eb)}.ds-badge-success{background:rgb(16 185 129 / .15);color:#065f46}.ds-badge-warning{background:rgb(245 158 11 / .2);color:#78350f}.ds-badge-danger{background:rgb(239 68 68 / .15);color:#991b1b}"
+      "css": ".ds-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;background:var(--muted, #f1f5f9);color:var(--muted-foreground, #5f6e84);font:500 12px/16px 'Inter Variable',system-ui,sans-serif}.ds-badge-info{background:rgb(37 99 235 / .1);color:#1d4ed8}.ds-badge-success{background:rgb(16 185 129 / .15);color:#065f46}.ds-badge-warning{background:rgb(245 158 11 / .2);color:#78350f}.ds-badge-danger{background:rgb(239 68 68 / .15);color:#991b1b}"
     },
     {
       "name": "Divided List",
@@ -267,7 +282,7 @@
       "refersTo": "panel",
       "description": "Lista em painel com divisores de 1px; linha de 44px.",
       "html": "<ul class=\"ds-list\"><li class=\"ds-row\"><input type=\"checkbox\" aria-label=\"Concluir\"><span class=\"ds-row-title\">Ligar para o cliente</span><span class=\"ds-row-meta\">prazo 15/10/2026</span></li><li class=\"ds-row\"><input type=\"checkbox\" aria-label=\"Concluir\" checked><span class=\"ds-row-title ds-done\">Enviar proposta</span></li></ul>",
-      "css": ".ds-list{list-style:none;margin:0;padding:0;border:1px solid var(--border, #e2e8f0);border-radius:6px;background:#fff;font-family:'Inter Variable',system-ui,sans-serif}.ds-row{display:flex;align-items:center;gap:12px;min-height:44px;padding:8px 16px}.ds-row+.ds-row{border-top:1px solid var(--border, #e2e8f0)}.ds-row input{width:20px;height:20px}.ds-row-title{font:500 16px/24px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-done{color:var(--muted-foreground, #64748b);text-decoration:line-through;font-weight:400}.ds-row-meta{font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #64748b)}"
+      "css": ".ds-list{list-style:none;margin:0;padding:0;border:1px solid var(--border, #e2e8f0);border-radius:6px;background:#fff;font-family:'Inter Variable',system-ui,sans-serif}.ds-row{display:flex;align-items:center;gap:12px;min-height:44px;padding:8px 16px}.ds-row+.ds-row{border-top:1px solid var(--border, #e2e8f0)}.ds-row input{width:20px;height:20px}.ds-row-title{font:500 16px/24px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-done{color:var(--muted-foreground, #5f6e84);text-decoration:line-through;font-weight:400}.ds-row-meta{font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #5f6e84)}"
     },
     {
       "name": "Dashboard Tile",
@@ -275,7 +290,7 @@
       "refersTo": "panel",
       "description": "Indicador numérico; o número fica vermelho quando há pendência crítica.",
       "html": "<div class=\"ds-tile\"><p class=\"ds-tile-value ds-tile-danger\">3</p><p class=\"ds-tile-label\">Tarefas atrasadas</p></div>",
-      "css": ".ds-tile{width:200px;box-sizing:border-box;padding:16px;border:1px solid var(--border, #e2e8f0);border-radius:6px;background:#fff;font-family:'Inter Variable',system-ui,sans-serif}.ds-tile-value{margin:0;font:600 24px/32px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-tile-danger{color:var(--destructive, #ef4444)}.ds-tile-label{margin:0;font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #64748b)}"
+      "css": ".ds-tile{width:200px;box-sizing:border-box;padding:16px;border:1px solid var(--border, #e2e8f0);border-radius:6px;background:#fff;font-family:'Inter Variable',system-ui,sans-serif}.ds-tile-value{margin:0;font:600 24px/32px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-tile-danger{color:var(--destructive, #dc2626)}.ds-tile-label{margin:0;font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #5f6e84)}"
     },
     {
       "name": "Empty State",
@@ -283,7 +298,7 @@
       "refersTo": "panel",
       "description": "Painel tracejado que indica espaço a preencher.",
       "html": "<div class=\"ds-empty\"><p class=\"ds-empty-title\">Nada planejado para hoje</p><p class=\"ds-empty-desc\">Planeje tarefas no Meu dia.</p></div>",
-      "css": ".ds-empty{padding:32px;border:1px dashed var(--border, #e2e8f0);border-radius:6px;background:#fff;text-align:center;font-family:'Inter Variable',system-ui,sans-serif}.ds-empty-title{margin:0 0 12px;font:500 16px/24px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-empty-desc{margin:0;font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #64748b)}"
+      "css": ".ds-empty{padding:32px;border:1px dashed var(--border, #e2e8f0);border-radius:6px;background:#fff;text-align:center;font-family:'Inter Variable',system-ui,sans-serif}.ds-empty-title{margin:0 0 12px;font:500 16px/24px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-empty-desc{margin:0;font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #5f6e84)}"
     }
   ],
   "narrative": {
@@ -321,7 +336,9 @@
     "dos": [
       "Do usar o azul (#2563eb) apenas para ação, seleção e foco.",
       "Do separar superfícies com bordas de 1px em #e2e8f0 e deixar as sombras para o que flutua.",
-      "Do manter alvos de toque de pelo menos 44px em navegação, linhas de lista e campos.",
+      "Do manter alvos de toque de pelo menos 44px abaixo de 1024px em navegação, botões, checkboxes, linhas de lista e campos.",
+      "Do conferir o contraste de texto (4,5:1) em cada par texto/fundo antes de criar um novo tom; sobre tint do azul use o Azul Firme.",
+      "Do respeitar `prefers-reduced-motion` e manter o foco do teclado sempre visível.",
       "Do acompanhar toda cor de estado com texto ou ícone (badge com rótulo, mensagem de erro).",
       "Do tratar loading, vazio, erro e sem-permissão em toda lista e painel.",
       "Do manter o texto da interface em português do Brasil."
