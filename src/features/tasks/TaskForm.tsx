@@ -2,6 +2,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm, useWatch } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Field } from '@/components/form'
+import { withCurrentOption } from '@/components/option-list'
 import { controlClass, textareaClass } from '@/components/form-styles'
 import { useClientOptions } from '@/features/clients/api'
 import { useProjectOptions } from '@/features/projects/api'
@@ -30,6 +31,8 @@ export function TaskForm({
 }) {
   const projects = useProjectOptions(true)
   const clients = useClientOptions(true)
+  const projectOptions = withCurrentOption(projects.data, initial.project_id, projects.isPending, 'Projeto atual (arquivado)')
+  const clientOptions = withCurrentOption(clients.data, initial.client_id, clients.isPending, 'Cliente atual (arquivado)')
   const {
     register,
     handleSubmit,
@@ -76,10 +79,7 @@ export function TaskForm({
           <Field id="project_id" label="Projeto">
             <select id="project_id" className={controlClass} {...register('project_id')}>
               <option value="">Sem projeto</option>
-              {initial.project_id && !(projects.data ?? []).some((p) => p.id === initial.project_id) && (
-                <option value={initial.project_id}>Projeto atual (arquivado)</option>
-              )}
-              {(projects.data ?? []).map((p) => (
+              {projectOptions.map((p) => (
                 <option key={p.id} value={p.id}>
                   {p.name}
                 </option>
@@ -89,10 +89,7 @@ export function TaskForm({
           <Field id="client_id" label="Cliente">
             <select id="client_id" className={controlClass} {...register('client_id')}>
               <option value="">Sem cliente</option>
-              {initial.client_id && !(clients.data ?? []).some((c) => c.id === initial.client_id) && (
-                <option value={initial.client_id}>Cliente atual (arquivado)</option>
-              )}
-              {(clients.data ?? []).map((c) => (
+              {clientOptions.map((c) => (
                 <option key={c.id} value={c.id}>
                   {c.name}
                 </option>

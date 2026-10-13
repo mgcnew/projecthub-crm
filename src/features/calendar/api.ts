@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { activeTimezone, emptyToNull } from '@/lib/format'
+import { clientScopeFilter, type LinkScope } from '@/features/tasks/api'
 import { supabase } from '@/lib/supabase'
 import {
   eventPayload,
@@ -16,6 +17,51 @@ export function useOccurrences(fromISO: string, toISO: string, enabled: boolean)
       const { data, error } = await supabase.rpc('list_calendar_occurrences', { p_from: fromISO, p_to: toISO })
       if (error) throw error
       return data ?? []
+    },
+  })
+}
+
+type LinkedEvent = {
+  id: string
+  title: string
+  event_type: string
+  starts_at: string
+  ends_at: string
+  timezone: string
+  recurrence_rule_id: string | null
+}
+
+/** Próximos (inclui séries recorrentes, por início crescente; até 6) e anteriores (até 3). */
+export function splitUpcoming(events: LinkedEvent[], now: number) {
+  const isUpcoming = (e: LinkedEvent) => Boolean(e.recurrence_rule_id) || new Date(e.ends_at).getTime() >= now
+  const upcoming = events
+    .filter(isUpcoming)
+    .sort((a, b) => new Date(a.starts_at).getTime() - new Date(b.starts_at).getTime())
+    .slice(0, 6)
+  const past = events.filter((e) => !isUpcoming(e)).slice(0, 3)
+  return { upcoming, past, total: events.length }
+}
+
+/**
+ * Eventos e reuniões do projeto/cliente (exceto blocos de foco e cancelados), os 30 de início mais recente.
+ * A divisão em próximos/anteriores é feita no componente; séries recorrentes contam como próximas.
+ */
+export function useLinkedEvents(scope: LinkScope, enabled = true) {
+  return useQuery({
+    queryKey: ['calendar', 'linked', scope],
+    enabled,
+    queryFn: async () => {
+      let q = supabase
+        .from('calendar_events')
+        .select('id, title, event_type, starts_at, ends_at, timezone, recurrence_rule_id')
+        .neq('status', 'cancelled')
+        .neq('event_type', 'work_block')
+        .order('starts_at', { ascending: false })
+        .limit(30)
+      q = 'projectId' in scope ? q.eq('project_id', scope.projectId) : q.or(clientScopeFilter(scope.clientId, scope.projectIds))
+      const { data, error } = await q
+      if (error) throw error
+      return splitUpcoming(data ?? [], Date.now())
     },
   })
 }

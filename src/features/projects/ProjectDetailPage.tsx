@@ -8,6 +8,8 @@ import { useArchiveProject, useProject, useUpdateProject } from './api'
 import { ProjectForm } from './ProjectForm'
 import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { ProjectLogs } from './ProjectLogs'
+import { LinkedEvents } from '@/features/calendar/LinkedEvents'
+import { LinkedTasks } from '@/features/tasks/LinkedTasks'
 
 export function ProjectDetailPage() {
   const { id = '' } = useParams()
@@ -83,6 +85,11 @@ export function ProjectDetailPage() {
         }}
       />
 
+      <LinkedTasks scope={{ projectId: p.id }} />
+      <LinkedEvents
+        scope={{ projectId: p.id }}
+        link={{ projectId: p.id, clientId: p.client_id ?? undefined }}
+      />
       <ProjectLogs projectId={p.id} />
       <ActivityTimeline entityType="project" entityId={p.id} />
     </>

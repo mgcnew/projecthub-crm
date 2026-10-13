@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { RowCheckbox } from '@/components/RowCheckbox'
 import { controlClass } from '@/components/form-styles'
@@ -13,11 +13,13 @@ import { taskPriorities, taskStatuses } from './schema'
 
 export function TasksPage() {
   const { orgId, canWrite } = useCurrentWorkspace()
+  const [searchParams] = useSearchParams()
   const [params, setParams] = useState<TaskListParams>({
     search: '',
     status: 'open',
     priority: '',
-    projectId: '',
+    // Vindo do detalhe do projeto ("Ver todas"): /app/tarefas?projeto=<id>
+    projectId: searchParams.get('projeto') ?? '',
     page: 0,
   })
   const q = useTasks(params, Boolean(orgId))

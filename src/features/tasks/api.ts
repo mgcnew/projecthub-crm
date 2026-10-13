@@ -73,6 +73,41 @@ export function useSubtasks(parentId: string) {
   })
 }
 
+/**
+ * Escopo de vínculo: um projeto, ou um cliente (tarefas ligadas ao cliente OU a qualquer projeto dele).
+ * `projectIds` precisa estar carregado para o escopo de cliente enxergar o que passa pelos projetos.
+ */
+export type LinkScope = { projectId: string } | { clientId: string; projectIds: string[] }
+
+/** Filtro PostgREST (`or`) para um escopo de cliente; UUIDs são seguros dentro de `or()`. */
+export function clientScopeFilter(clientId: string, projectIds: string[]) {
+  return projectIds.length
+    ? `client_id.eq.${clientId},project_id.in.(${projectIds.join(',')})`
+    : `client_id.eq.${clientId}`
+}
+
+/** Tarefas abertas do projeto/cliente (as 10 de prazo mais próximo) e o total de abertas. */
+export function useLinkedTasks(scope: LinkScope, enabled = true) {
+  return useQuery({
+    queryKey: ['tasks', 'linked', scope],
+    enabled,
+    queryFn: async () => {
+      let q = supabase
+        .from('tasks')
+        .select('id, title, status, priority, due_date, due_at', { count: 'exact' })
+        .in('status', ['todo', 'in_progress'])
+        .order('due_date', { ascending: true, nullsFirst: false })
+        .order('due_at', { ascending: true, nullsFirst: false })
+        .order('created_at', { ascending: false })
+        .limit(10)
+      q = 'projectId' in scope ? q.eq('project_id', scope.projectId) : q.or(clientScopeFilter(scope.clientId, scope.projectIds))
+      const { data, error, count } = await q
+      if (error) throw error
+      return { rows: data ?? [], count: count ?? 0 }
+    },
+  })
+}
+
 /** Tarefas abertas para seletores (ex.: planejar no Meu dia). */
 export function useOpenTaskOptions(enabled: boolean) {
   return useQuery({
@@ -91,12 +126,12 @@ export function useOpenTaskOptions(enabled: boolean) {
   })
 }
 
-type QuickCreate = { title: string; parentTaskId?: string; projectId?: string | null }
+type QuickCreate = { title: string; parentTaskId?: string; projectId?: string | null; clientId?: string | null }
 
 export function useQuickCreateTask(orgId: string | undefined) {
   const qc = useQueryClient()
   return useMutation({
-    mutationFn: async ({ title, parentTaskId, projectId }: QuickCreate) => {
+    mutationFn: async ({ title, parentTaskId, projectId, clientId }: QuickCreate) => {
       if (!orgId) throw new Error('Organização não carregada')
       const { data, error } = await supabase
         .from('tasks')
@@ -105,6 +140,7 @@ export function useQuickCreateTask(orgId: string | undefined) {
           title: title.trim(),
           parent_task_id: parentTaskId ?? null,
           project_id: projectId ?? null,
+          client_id: clientId ?? null,
         })
         .select('id')
         .single()

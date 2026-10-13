@@ -3,6 +3,7 @@ import { useForm } from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import { Field } from '@/components/form'
 import { controlClass, textareaClass } from '@/components/form-styles'
+import { withCurrentOption } from '@/components/option-list'
 import { useUnsavedChangesGuard } from '@/lib/unsaved'
 import { useClientOptions } from '@/features/clients/api'
 import {
@@ -42,9 +43,8 @@ export function ProjectForm({
   })
   const err = (k: keyof ProjectFormValues) => errors[k]?.message
   const inv = (k: keyof ProjectFormValues) => (errors[k] ? true : undefined)
-  // Mantém o cliente atual mesmo que esteja arquivado (não está nas opções ativas).
-  const options = clients.data ?? []
-  const missingCurrent = initial.client_id && !options.some((c) => c.id === initial.client_id)
+  // Mantém o cliente atual (inclusive arquivado) com identidade estável durante o carregamento.
+  const options = withCurrentOption(clients.data, initial.client_id, clients.isPending, 'Cliente atual (arquivado)')
 
   return (
     <form onSubmit={submit} noValidate className="space-y-4">
@@ -55,7 +55,6 @@ export function ProjectForm({
         <Field id="client_id" label="Cliente" hint="Projetos podem existir sem cliente.">
           <select id="client_id" className={controlClass} {...register('client_id')}>
             <option value="">Sem cliente</option>
-            {missingCurrent && <option value={initial.client_id}>Cliente atual (arquivado)</option>}
             {options.map((c) => (
               <option key={c.id} value={c.id}>
                 {c.name}

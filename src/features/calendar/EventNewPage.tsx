@@ -29,7 +29,12 @@ export function EventNewPage() {
     <>
       <PageHeader title={isMeeting ? 'Nova reunião' : 'Novo evento'} />
       <EventForm
-        initial={{ ...eventDefaults(t.start, t.end), event_type: isMeeting ? 'meeting' : 'event' }}
+        initial={{
+          ...eventDefaults(t.start, t.end),
+          event_type: isMeeting ? 'meeting' : 'event',
+          project_id: params.get('projeto') ?? '',
+          client_id: params.get('cliente') ?? '',
+        }}
         submitLabel="Criar"
         serverError={error}
         onSubmit={async (values) => {

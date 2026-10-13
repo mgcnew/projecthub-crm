@@ -2,6 +2,8 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
+import { LinkedEvents } from '@/features/calendar/LinkedEvents'
+import { LinkedTasks } from '@/features/tasks/LinkedTasks'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useProjectsByClient } from '@/features/projects/api'
 import { projectStatuses } from '@/features/projects/schema'
@@ -24,6 +26,7 @@ export function ClientDetailPage() {
   if (q.isError) return <ErrorState message="Não foi possível carregar o cliente." onRetry={() => q.refetch()} />
   const c = q.data
   if (!c) return <ErrorState message="Cliente não encontrado." />
+  const clientScope = { clientId: c.id, projectIds: (projects.data ?? []).map((p) => p.id) }
 
   return (
     <>
@@ -102,6 +105,8 @@ export function ClientDetailPage() {
           </ul>
         )}
       </section>
+      <LinkedTasks scope={clientScope} ready={projects.isSuccess} />
+      <LinkedEvents scope={clientScope} link={{ clientId: c.id }} ready={projects.isSuccess} />
       <ActivityTimeline entityType="client" entityId={c.id} />
     </>
   )
