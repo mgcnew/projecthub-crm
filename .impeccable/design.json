@@ -359,6 +359,10 @@
       "label": {
         "displayName": "Rótulo",
         "purpose": "Cabeçalhos de coluna, selos de situação, hora e tipo de compromisso."
+      },
+      "panel-title": {
+        "displayName": "Título do painel",
+        "purpose": "Título do registro aberto em painel ou modal."
       }
     },
     "shadows": [
@@ -388,6 +392,11 @@
         "name": "reduced-motion",
         "value": "animation/transition 0.01ms",
         "purpose": "prefers-reduced-motion: reduce desliga animações e transições."
+      },
+      {
+        "name": "overlay-in",
+        "value": "160ms ease-out (translateX 1.5rem + fade)",
+        "purpose": "Entrada do painel lateral; o modal expandido usa só fade de 120ms."
       }
     ],
     "breakpoints": [
@@ -526,7 +535,8 @@
       "**Do** encerrar cabeçalhos de página e de tabela com filete de 2px em tinta.",
       "**Do** expressar status pela escala de ênfase em tinta (régua fina, contorno, negrito, placa sólida), sempre com texto.",
       "**Do** usar numerais tabulares em horas, datas, estimativas e contagens.",
-      "**Do** colocar a data e o contexto abaixo do título da página."
+      "**Do** colocar a data e o contexto abaixo do título da página.",
+      "Do abrir registros em painel no desktop e em página no celular, mantendo a URL do registro."
     ],
     "donts": [
       "**Don't** usar cores de linha na navegação, em botões ou em status; a cor pertence aos projetos.",
@@ -534,7 +544,8 @@
       "**Don't** colocar sombra em placas, selos ou botões; sombra só em diálogo e folha flutuante.",
       "**Don't** arredondar placas, botões ou campos além de 2px; círculos são só para selos e estações.",
       "**Don't** abrir a página com uma faixa de indicadores grandes em cartões; o topo da Central do dia é a Linha do dia.",
-      "**Don't** pôr rótulos em caixa alta acima do título da página; caixa alta espaçada é só para títulos de placa."
+      "**Don't** pôr rótulos em caixa alta acima do título da página; caixa alta espaçada é só para títulos de placa.",
+      "Don't empilhar painéis: navegar de um registro para outro substitui o conteúdo do painel."
     ]
   }
 }

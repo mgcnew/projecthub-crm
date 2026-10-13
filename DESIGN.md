@@ -51,6 +51,12 @@ typography:
     fontWeight: 600
     lineHeight: "1.25rem"
     fontFeature: "'tnum' 1"
+  panel-title:
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "1.5rem"
+    fontWeight: 700
+    lineHeight: "1.2"
+    letterSpacing: "-0.02em"
   lead:
     fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.9375rem"
@@ -232,6 +238,8 @@ Desktop (a partir de 1024px): rail branco fixo de 236px à esquerda com borda di
 
 Cada página abre com o cabeçalho: título à esquerda, ações à direita, filete de 2px em tinta embaixo. Placas têm 16px de respiro lateral no celular e 20px a partir de 640px. Na Central do dia, a Linha do dia ocupa a largura toda; abaixo vêm duas colunas (tabela planejada e prazos).
 
+No desktop, **registros** (detalhe de tarefa, projeto, cliente, evento e reunião, e as criações) abrem num painel lateral de 672px por cima da página de origem, que continua visível e inerte atrás; o botão "expandir" o transforma num modal central de até 1056px, e a escolha é lembrada. Abaixo de 1024px a mesma rota é a página inteira. Listas, Central do dia, Meu dia, Agenda, Notificações e Configurações nunca viram painel.
+
 A 768px muda a gramática: a Linha do dia passa de trilho vertical (diagrama de vagão) para horizontal, e a tabela de tarefas troca as colunas por uma linha de metadados sob o título. Filtros recolhem atrás de um botão "Filtros" abaixo de 768px. Alvos de toque têm 44px no celular (botões sobem de 36px para 44px abaixo de 1024px).
 
 ## Elevation & Depth
@@ -281,6 +289,12 @@ Cantos retos: todo elemento retangular usa 2px de raio (placas, botões, campos,
 - **Desktop:** rail branco de 236px; marca "P" em quadrado preto ao lado de "ProjectHub" (17px/700). Itens de 44px com pictograma de 18px e rótulo 14px/600 em Tinta de Menu; hover em Cinza Esmalte; ativo é placa sólida em tinta com texto branco. Contagem de não lidas é um selo contornado na cor do texto. "Sair" fica no pé do rail.
 - **Mobile:** barra inferior branca com filete de 2px em tinta no topo, cinco colunas (quatro destinos e "Mais"), ícone de 20px sobre rótulo de 12px, 56px de altura; ativo em placa de tinta. "Mais" abre uma folha com os demais destinos.
 - O pictograma acompanha o nome, nunca o substitui.
+
+### Painel de registro
+Placa branca fixa à direita, altura da janela, filete de 2px em tinta à esquerda e sombra só no fundo escurecido (45% de tinta). Cabeçalho: tipo do registro em caixa alta espaçada (12px/700), título em 24px/700, selo de situação e ações; abas logo abaixo e conteúdo rolando por baixo do cabeçalho fixo. Fecha com Esc, clique no fundo ou ×; o foco volta ao elemento de origem. Confirmações abrem por cima como diálogo próprio.
+
+### Abas
+Faixa de abas com sublinhado de 3px em tinta na ativa e texto 14px/600 (Tinta na ativa, Tinta Secundária nas demais), altura de 44px, rolagem horizontal quando não cabem. Setas, Home e End navegam; a aba ativa vai para a URL (`?aba=`). Cada painel carrega só ao abrir e fica montado depois, então um formulário digitado não se perde ao trocar de aba. Só a aba "Detalhes" tem o botão Salvar; as demais salvam por ação.
 
 ### Line Badge
 Selo circular na cor da linha do projeto com a inicial em 12px/700 (texto branco ou tinta, conforme a linha). A Prata com travessão marca "sem projeto". A **faixa de linha** (6px, vertical) é a forma em lista do mesmo selo, usada na placa de prazos.

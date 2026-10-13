@@ -8,21 +8,35 @@ import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@
 import { useClientOptions } from '@/features/clients/api'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
+import { objectValidator, usePersistedState } from '@/lib/usePersistedState'
 import { PAGE_SIZE, useProjects, type ArchivedFilter, type ProjectListParams } from './api'
 import { projectPriorities, projectStatuses } from './schema'
 
+type Remembered = Pick<ProjectListParams, 'status' | 'clientId' | 'archived'>
+const REMEMBERED_DEFAULTS: Remembered = { status: '', clientId: '', archived: 'active' }
+const oneOf =
+  <T extends string>(values: readonly T[]) =>
+  (v: unknown): v is T =>
+    typeof v === 'string' && (values as readonly string[]).includes(v)
+const validateRemembered = objectValidator(REMEMBERED_DEFAULTS, {
+  status: oneOf(['', 'planning', 'active', 'on_hold', 'completed', 'cancelled'] as const),
+  clientId: (v): v is string => typeof v === 'string' && v.length <= 64,
+  archived: oneOf(['active', 'archived', 'all'] as const),
+})
+
 export function ProjectsPage() {
   const { orgId, canWrite } = useCurrentWorkspace()
-  const [params, setParams] = useState<ProjectListParams>({
-    search: '',
-    status: '',
-    clientId: '',
-    archived: 'active',
-    page: 0,
-  })
+  const [remembered, setRemembered] = usePersistedState('projecthub:projects-view', REMEMBERED_DEFAULTS, validateRemembered)
+  const [view, setView] = useState({ search: '', page: 0 })
+  const params: ProjectListParams = { ...remembered, ...view }
   const q = useProjects(params, Boolean(orgId))
   const clients = useClientOptions(Boolean(orgId))
-  const set = (patch: Partial<ProjectListParams>) => setParams((p) => ({ ...p, page: 0, ...patch }))
+  const set = (patch: Partial<ProjectListParams>) => {
+    const { search, page: _page, ...rest } = patch
+    void _page
+    if (Object.keys(rest).length) setRemembered((r) => ({ ...r, ...(rest as Partial<Remembered>) }))
+    setView((v) => ({ search: search ?? v.search, page: 0 }))
+  }
   const count = q.data?.count ?? 0
   const pages = Math.max(1, Math.ceil(count / PAGE_SIZE))
   const filtered = Boolean(params.search || params.status || params.clientId || params.archived !== 'active')
@@ -142,10 +156,10 @@ export function ProjectsPage() {
               {count} projeto{count === 1 ? '' : 's'} · página {params.page + 1} de {pages}
             </span>
             <span className="flex gap-2">
-              <Button variant="outline" disabled={params.page === 0} onClick={() => setParams((p) => ({ ...p, page: p.page - 1 }))}>
+              <Button variant="outline" disabled={params.page === 0} onClick={() => setView((v) => ({ ...v, page: v.page - 1 }))}>
                 Anterior
               </Button>
-              <Button variant="outline" disabled={params.page + 1 >= pages} onClick={() => setParams((p) => ({ ...p, page: p.page + 1 }))}>
+              <Button variant="outline" disabled={params.page + 1 >= pages} onClick={() => setView((v) => ({ ...v, page: v.page + 1 }))}>
                 Próxima
               </Button>
             </span>

@@ -1,7 +1,7 @@
 -- Fase 3: tarefas, subtarefas, planejamento diário e checklists.
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(39);
+select plan(42);
 
 create function public.t_rowcount(p_sql text) returns int language plpgsql as $$
 declare n int; begin execute p_sql; get diagnostics n = row_count; return n; end $$;
@@ -120,5 +120,20 @@ reset role;
 select public.t_act_as('bbbbbbbb-0000-0000-0000-000000000002');
 select is((select count(*)::int from public.tasks where organization_id = (select org_a from ctx)), 0,
   'B não lê tarefas de A');
+reset role;
+
+-- priority_rank: coluna gerada (ordenação por importância), nunca escrita pelo cliente
+insert into public.tasks (organization_id, title, priority)
+  select org_a, t.title, t.priority
+    from ctx, (values ('rank-baixa', 'low'), ('rank-media', 'medium'), ('rank-alta', 'high'), ('rank-urgente', 'urgent')) as t(title, priority);
+select is(
+  (select array_agg(title order by priority_rank desc, title) from public.tasks where title like 'rank-%'),
+  array['rank-urgente', 'rank-alta', 'rank-media', 'rank-baixa'],
+  'priority_rank ordena por importância (urgente > alta > média > baixa)');
+select ok(not has_column_privilege('authenticated', 'public.tasks', 'priority_rank', 'UPDATE'),
+  'cliente não atualiza priority_rank');
+select ok(not has_column_privilege('authenticated', 'public.tasks', 'priority_rank', 'INSERT'),
+  'cliente não insere priority_rank');
+
 select * from finish();
 rollback;

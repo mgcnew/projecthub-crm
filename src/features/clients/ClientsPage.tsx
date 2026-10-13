@@ -5,14 +5,33 @@ import { Button } from '@/components/ui/button'
 import { controlClass } from '@/components/form-styles'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
+import { objectValidator, usePersistedState } from '@/lib/usePersistedState'
 import { PAGE_SIZE, useClients, type ArchivedFilter, type ClientListParams } from './api'
 import { clientStatuses } from './schema'
 
+type Remembered = Pick<ClientListParams, 'status' | 'archived'>
+const REMEMBERED_DEFAULTS: Remembered = { status: '', archived: 'active' }
+const oneOf =
+  <T extends string>(values: readonly T[]) =>
+  (v: unknown): v is T =>
+    typeof v === 'string' && (values as readonly string[]).includes(v)
+const validateRemembered = objectValidator(REMEMBERED_DEFAULTS, {
+  status: oneOf(['', 'active', 'inactive'] as const),
+  archived: oneOf(['active', 'archived', 'all'] as const),
+})
+
 export function ClientsPage() {
   const { orgId, canWrite } = useCurrentWorkspace()
-  const [params, setParams] = useState<ClientListParams>({ search: '', status: '', archived: 'active', page: 0 })
+  const [remembered, setRemembered] = usePersistedState('projecthub:clients-view', REMEMBERED_DEFAULTS, validateRemembered)
+  const [view, setView] = useState({ search: '', page: 0 })
+  const params: ClientListParams = { ...remembered, ...view }
   const q = useClients(params, Boolean(orgId))
-  const set = (patch: Partial<ClientListParams>) => setParams((p) => ({ ...p, page: 0, ...patch }))
+  const set = (patch: Partial<ClientListParams>) => {
+    const { search, page: _page, ...rest } = patch
+    void _page
+    if (Object.keys(rest).length) setRemembered((r) => ({ ...r, ...(rest as Partial<Remembered>) }))
+    setView((v) => ({ search: search ?? v.search, page: 0 }))
+  }
   const count = q.data?.count ?? 0
   const pages = Math.max(1, Math.ceil(count / PAGE_SIZE))
 
@@ -105,10 +124,10 @@ export function ClientsPage() {
               {count} cliente{count === 1 ? '' : 's'} · página {params.page + 1} de {pages}
             </span>
             <span className="flex gap-2">
-              <Button variant="outline" disabled={params.page === 0} onClick={() => setParams((p) => ({ ...p, page: p.page - 1 }))}>
+              <Button variant="outline" disabled={params.page === 0} onClick={() => setView((v) => ({ ...v, page: v.page - 1 }))}>
                 Anterior
               </Button>
-              <Button variant="outline" disabled={params.page + 1 >= pages} onClick={() => setParams((p) => ({ ...p, page: p.page + 1 }))}>
+              <Button variant="outline" disabled={params.page + 1 >= pages} onClick={() => setView((v) => ({ ...v, page: v.page + 1 }))}>
                 Próxima
               </Button>
             </span>

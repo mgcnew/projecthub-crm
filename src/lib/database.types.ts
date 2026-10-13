@@ -3,25 +3,7 @@ export type Json = string | number | boolean | null | { [key: string]: Json | un
 
 export type Database = {
   
-  "graphql_public": {
-          Tables: {
-            [_ in never]: never
-          }
-          Views: {
-            [_ in never]: never
-          }
-          Functions: {
-            "graphql":
-{ Args: { "extensions"?: Json,"operationName"?: string,"query"?: string,"variables"?: Json }; Returns: Json
-                           }
-          }
-          Enums: {
-            [_ in never]: never
-          }
-          CompositeTypes: {
-            [_ in never]: never
-          }
-        },"public": {
+  "public": {
           Tables: {
             "activity_logs": {
                   Row: {
@@ -461,14 +443,14 @@ isOneToOne: false
                   ]
                 },"tasks": {
                   Row: {
-                    "assigned_to": string | null,"client_id": string | null,"completed_at": string | null,"created_at": string,"description": string | null,"due_at": string | null,"due_date": string | null,"estimated_minutes": number | null,"id": string,"meeting_id": string | null,"organization_id": string,"parent_task_id": string | null,"priority": string,"project_id": string | null,"status": string,"title": string,"updated_at": string
+                    "assigned_to": string | null,"client_id": string | null,"completed_at": string | null,"created_at": string,"description": string | null,"due_at": string | null,"due_date": string | null,"estimated_minutes": number | null,"id": string,"meeting_id": string | null,"organization_id": string,"parent_task_id": string | null,"priority": string,"priority_rank": number | null,"project_id": string | null,"status": string,"title": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"meeting_id"?: string | null,"organization_id": string,"parent_task_id"?: string | null,"priority"?: string,"project_id"?: string | null,"status"?: string,"title": string,"updated_at"?: string
+                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"meeting_id"?: string | null,"organization_id": string,"parent_task_id"?: string | null,"priority"?: string,"priority_rank"?: never,"project_id"?: string | null,"status"?: string,"title": string,"updated_at"?: string
                   }
                   Update: {
-                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"meeting_id"?: string | null,"organization_id"?: string,"parent_task_id"?: string | null,"priority"?: string,"project_id"?: string | null,"status"?: string,"title"?: string,"updated_at"?: string
+                    "assigned_to"?: string | null,"client_id"?: string | null,"completed_at"?: string | null,"created_at"?: string,"description"?: string | null,"due_at"?: string | null,"due_date"?: string | null,"estimated_minutes"?: number | null,"id"?: string,"meeting_id"?: string | null,"organization_id"?: string,"parent_task_id"?: string | null,"priority"?: string,"priority_rank"?: never,"project_id"?: string | null,"status"?: string,"title"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -650,11 +632,7 @@ export type CompositeTypes<
   : never
 
 export const Constants = {
-  "graphql_public": {
-          Enums: {
-            
-          }
-        },"public": {
+  "public": {
           Enums: {
             
           }

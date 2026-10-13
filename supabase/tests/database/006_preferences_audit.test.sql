@@ -1,7 +1,7 @@
 -- Fase 6: user_preferences (fuso) e activity_logs (trilha imutável gravada por trigger).
 begin;
 create extension if not exists pgtap with schema extensions;
-select plan(31);
+select plan(32);
 
 create function public.t_rowcount(p_sql text) returns int language plpgsql as $$
 declare n int; begin execute p_sql; get diagnostics n = row_count; return n; end $$;
@@ -115,6 +115,15 @@ select is((select count(*)::int from public.activity_logs
             where entity_id = (select id from public.tasks where organization_id = (select org_a from ctx) and title like 'Enviar proposta%')), 0, 'B não lê a trilha de A');
 select is((select count(*)::int from public.user_preferences), 0, 'B não lê preferências de A');
 reset role;
+
+
+-- priority_rank é derivada de priority: mudar a prioridade registra só 'priority' na trilha
+update public.tasks set priority = 'urgent' where id = (select id from public.tasks where organization_id = (select org_a from ctx) and title like 'Enviar proposta%');
+select is(
+  (select array_agg(k order by k) from public.activity_logs l, jsonb_object_keys(l.changes) k
+    where l.entity_id = (select id from public.tasks where organization_id = (select org_a from ctx) and title like 'Enviar proposta%')
+      and l.changes ? 'priority'),
+  array['priority'], 'priority_rank não entra no diff da trilha');
 
 select ok(not has_table_privilege('anon', 'public.activity_logs', 'SELECT'), 'anon sem acesso à trilha');
 select ok(not has_table_privilege('anon', 'public.user_preferences', 'SELECT'), 'anon sem acesso às preferências');

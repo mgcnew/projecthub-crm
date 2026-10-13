@@ -5,12 +5,44 @@ import { taskPayload, type TaskFormValues } from './schema'
 
 export const PAGE_SIZE = 20
 
+export type TaskSort = 'prazo' | 'prioridade' | 'titulo' | 'criada'
+export type SortDir = 'asc' | 'desc'
+
 export type TaskListParams = {
   search: string
   status: 'open' | 'all' | 'todo' | 'in_progress' | 'done' | 'cancelled'
   priority: '' | 'low' | 'medium' | 'high' | 'urgent'
   projectId: string
+  sort: TaskSort
+  dir: SortDir
   page: number
+}
+
+/** Sentido natural de cada critério ao escolhê-lo pela primeira vez. */
+export const defaultDir: Record<TaskSort, SortDir> = { prazo: 'asc', prioridade: 'desc', titulo: 'asc', criada: 'desc' }
+
+/**
+ * Ordenação no servidor. Sem prazo fica sempre no fim (nullsLast); `priority_rank` é a coluna gerada
+ * que ordena por importância; o desempate é estável (mais recente, depois id).
+ */
+export function taskOrder(sort: TaskSort, dir: SortDir) {
+  const asc = dir === 'asc'
+  const primary =
+    sort === 'prazo'
+      ? [
+          { column: 'due_date', ascending: asc, nullsFirst: false },
+          { column: 'due_at', ascending: asc, nullsFirst: false },
+        ]
+      : sort === 'prioridade'
+        ? [{ column: 'priority_rank', ascending: asc, nullsFirst: false }]
+        : sort === 'titulo'
+          ? [{ column: 'title', ascending: asc, nullsFirst: false }]
+          : [{ column: 'created_at', ascending: asc, nullsFirst: false }]
+  const tie = [
+    ...(sort === 'criada' ? [] : [{ column: 'created_at', ascending: false, nullsFirst: false }]),
+    { column: 'id', ascending: true, nullsFirst: false },
+  ]
+  return [...primary, ...tie]
 }
 
 const nameOf = (rel: unknown) => (rel as { name: string } | null)?.name
@@ -26,10 +58,10 @@ export function useTasks(params: TaskListParams, enabled: boolean) {
         .select('id, title, status, priority, due_date, due_at, project_id, parent_task_id, projects(name)', {
           count: 'exact',
         })
-        .order('due_date', { ascending: true, nullsFirst: false })
-        .order('due_at', { ascending: true, nullsFirst: false })
-        .order('created_at', { ascending: false })
         .range(params.page * PAGE_SIZE, params.page * PAGE_SIZE + PAGE_SIZE - 1)
+      for (const o of taskOrder(params.sort, params.dir)) {
+        q = q.order(o.column, { ascending: o.ascending, nullsFirst: o.nullsFirst })
+      }
       const term = sanitizeSearch(params.search)
       if (term) q = q.ilike('title', `%${term}%`)
       if (params.status === 'open') q = q.in('status', ['todo', 'in_progress'])

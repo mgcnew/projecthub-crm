@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react'
+import { ArrowDown, ArrowUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { LineBadge } from '@/components/LineBadge'
 import { RowCheckbox } from '@/components/RowCheckbox'
@@ -27,6 +28,39 @@ const statusTone: Record<string, 'neutral' | 'info' | 'success' | 'danger'> = {
   cancelled: 'neutral',
 }
 
+function SortHeader({
+  id,
+  label,
+  className,
+  sort,
+  onSort,
+}: {
+  id: string
+  label: string
+  className?: string
+  sort?: { key: string; dir: 'asc' | 'desc' }
+  onSort?: (key: string) => void
+}) {
+  const active = sort?.key === id
+  return (
+    <th scope="col" className={className} aria-sort={active ? (sort!.dir === 'asc' ? 'ascending' : 'descending') : undefined}>
+      {onSort ? (
+        <button
+          type="button"
+          onClick={() => onSort(id)}
+          className="-mx-1 inline-flex min-h-8 items-center gap-1 rounded-sm px-1 font-semibold hover:text-foreground"
+        >
+          {label}
+          {active &&
+            (sort!.dir === 'asc' ? <ArrowUp aria-hidden="true" className="size-3.5" /> : <ArrowDown aria-hidden="true" className="size-3.5" />)}
+        </button>
+      ) : (
+        label
+      )}
+    </th>
+  )
+}
+
 /**
  * Tabela de tarefas no vocabulário da sinalização: filete de 2px em tinta sob o cabeçalho, selo de
  * linha do projeto, prazo e estimativa em números tabulares. Abaixo de 768px as colunas viram uma
@@ -41,6 +75,8 @@ export function TaskTable({
   showEstimate = true,
   showPriority = false,
   showStatus = true,
+  sort,
+  onSort,
   actions,
 }: {
   rows: TaskRowData[]
@@ -51,6 +87,9 @@ export function TaskTable({
   showEstimate?: boolean
   showPriority?: boolean
   showStatus?: boolean
+  /** Ordenação por cabeçalho: critério ativo e sentido; sem isso os cabeçalhos são texto. */
+  sort?: { key: string; dir: 'asc' | 'desc' }
+  onSort?: (key: string) => void
   actions?: (task: TaskRowData) => ReactNode
 }) {
   return (
@@ -60,10 +99,10 @@ export function TaskTable({
         <tr className="border-b-2 border-rule-strong text-left text-xs font-semibold text-muted-foreground">
           <th scope="col" className="w-11 py-2"><span className="sr-only">Concluir</span></th>
           <th scope="col" className="w-12 py-2">Linha</th>
-          <th scope="col" className="py-2">Tarefa</th>
-          <th scope="col" className="w-28 py-2">Prazo</th>
+          <SortHeader id="titulo" label="Tarefa" className="py-1" sort={sort} onSort={onSort} />
+          <SortHeader id="prazo" label="Prazo" className="w-28 py-1" sort={sort} onSort={onSort} />
           {showEstimate && <th scope="col" className="w-20 py-2">Estimativa</th>}
-          {showPriority && <th scope="col" className="w-28 py-2">Prioridade</th>}
+          {showPriority && <SortHeader id="prioridade" label="Prioridade" className="w-28 py-1" sort={sort} onSort={onSort} />}
           {showStatus && <th scope="col" className="w-28 py-2">Situação</th>}
           {actions && <th scope="col" className="w-44 py-2"><span className="sr-only">Ações</span></th>}
         </tr>
