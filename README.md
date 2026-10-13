@@ -37,4 +37,4 @@ npm run test:e2e             # Playwright (desktop + mobile + axe); requer `npx 
 Usuário de desenvolvimento local: ver `supabase/seed.sql`.
 
 ## Status
-**Fases 0 a 5 concluídas** (tooling; identidade e RLS; clientes e projetos; tarefas e checklists; agenda, reuniões e recorrência mínima; lembretes com worker `pg_cron`, notificações internas e Dashboard). **Fase 6 em andamento**: preferências (fuso), histórico de atividades, acessibilidade e testes E2E concluídos; revisão de segurança (RLS, CSP, segredos) concluída; backup/restauração ensaiados (docs/RUNBOOK.md); falta o deploy.
+**Fases 0 a 5 concluídas** (tooling; identidade e RLS; clientes e projetos; tarefas e checklists; agenda, reuniões e recorrência mínima; lembretes com worker `pg_cron`, notificações internas e Dashboard). **Fase 6 concluída, exceto o deploy (6.6, adiado: Vercel, ao final do desenvolvimento)**: preferências (fuso), histórico de atividades, acessibilidade, testes E2E, revisão de segurança, backup/restauração ensaiados, redesenho visual "Linhas do Metrô" e registros em painel lateral no desktop com abas por assunto (página inteira no celular).
