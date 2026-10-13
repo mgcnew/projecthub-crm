@@ -72,3 +72,36 @@
 3. Atribuição de membros e transferências futuras.
 4. Contratos de escrita do frontend e bootstrap idempotente.
 5. Storage privado e políticas de arquivos (quando arquivos entrarem no MVP).
+
+## Estado implementado (2026-10-13)
+As 19 tabelas existem, todas com RLS, políticas e privilégios por coluna. O esquema vem de **11 migrações**
+(`supabase/migrations`), agrupadas por fase em vez das 001–010 lógicas acima (D025). O banco hospedado recebeu as
+mesmas 11 (D081).
+
+### Divergências da especificação
+| Tabela / coluna | Especificado | Implementado | Decisão |
+|---|---|---|---|
+| `meetings` | `client_id`, `project_id`, `status` | Não duplica; a fonte é `calendar_events` | D043 |
+| `reminders` | `remind_at` apenas | Tarefa: `remind_at`; evento: `offset_minutes` por ocorrência; mais `user_id`, `status`, `updated_at` | D047 |
+| `notifications` | `reminder_id`, `title`, `body` | Idem, mais `task_id`, `event_id`, `occurrence_at` (chave de idempotência) | D050 |
+| `user_preferences` | `timezone`, `locale`, `theme`, `sidebar_collapsed`, `dashboard_layout` | Só `timezone` | D054 |
+| `tasks.recurrence_rule_id` | Previsto | **Não criado** (tarefas recorrentes fora do MVP) | D044 |
+| `tasks.priority_rank` | Não previsto | Coluna gerada para ordenar por prioridade | D076, D077 |
+| `recurrence_occurrences` | Cogitada | **Não criada**: sem exceções por ocorrência | D040 |
+| Políticas `mfa_required` | Não previstas | Restritiva em toda tabela de `public`; exige `aal2` de quem tem fator TOTP verificado | D082 |
+
+### Funções (todas em `private`, exceto a de leitura da agenda)
+`set_updated_at`, `protect_last_owner`, `is_active_member`, `is_active_owner`, `mfa_satisfied`,
+`ensure_personal_workspace`, `handle_new_user`, `tasks_completion`, `prevent_task_cycles`,
+`checklist_items_completion`, `is_valid_timezone`, `calendar_events_before_write`,
+`calendar_events_create_meeting`, `recurrence_rules_validate`, `reminders_before_write`,
+`process_due_reminders` (agendada no `pg_cron`), `user_preferences_validate`, `log_activity` e a pública
+`list_calendar_occurrences` (SECURITY INVOKER). Nenhuma função SECURITY DEFINER é pública.
+
+### Pendências de design da lista original
+1. Recorrência: escopo reduzido sem exceções (D040); exceções seguem em D009.
+2. Exclusão/arquivamento: parcial (D026, D037, D044); definitiva e exclusão de conta em D010/D022.
+3. Atribuição de membros: coluna `assigned_to` com FK composta existe; sem UI nem visibilidade de perfis (D023, D038).
+4. Contratos de escrita e bootstrap: resolvidos (grants por coluna; provisionamento por gatilho, D021).
+5. Storage privado: não há arquivos no MVP; `profiles.avatar_path` existe sem uso e nenhum bucket foi criado.
+

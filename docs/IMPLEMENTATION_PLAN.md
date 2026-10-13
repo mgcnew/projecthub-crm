@@ -26,3 +26,18 @@ Responsividade, acessibilidade, Playwright, revisão RLS, backup/restauração e
 
 ## Critérios de parada
 Parar e pedir revisão se houver: mudança de modelo de tenancy, relaxamento de RLS, nova integração com credenciais, exclusão destrutiva, migração não reversível, biblioteca de alto impacto ou desvio significativo do escopo.
+
+## Status (2026-10-13)
+| Fase | Situação |
+|---|---|
+| 0 Repositório e tooling | Concluída; CI no GitHub verde (`check`, `database`, `e2e`) |
+| 1 Auth, organização e RLS | Concluída; MFA (TOTP) imposta no banco (D082) |
+| 2 Clientes e projetos | Concluída; regra definitiva de exclusão em aberto (D010) |
+| 3 Tarefas e checklists | Concluída, inclusive modelos de checklist |
+| 4 Agenda e reuniões | Concluída com recorrência mínima, sem exceções por ocorrência (D009, D040) |
+| 5 Lembretes e Dashboard | Concluída; worker `pg_cron` sem disparo duplicado |
+| 6 Mobile e publicação | Concluída exceto o deploy do front (Vercel); banco hospedado com as 11 migrações aplicadas (D081) |
+
+Pendências sem relação com a Vercel: ensaio real de backup/restauração contra o banco hospedado (RUNBOOK),
+política de senha/SMTP/Redirect URLs no painel do Supabase e ativação do MFA na conta.
+

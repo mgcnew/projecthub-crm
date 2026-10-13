@@ -5,6 +5,9 @@ import { AppShell } from './AppShell'
 
 vi.mock('@/features/auth/auth-context', () => ({ useAuth: () => ({ signOut: vi.fn() }) }))
 vi.mock('@/features/notifications/api', () => ({ useUnreadCount: () => ({ data: 3 }) }))
+vi.mock('@/features/search/SearchDialog', () => ({
+  SearchDialog: ({ open }: { open: boolean }) => (open ? <div role="dialog" aria-label="Buscar">busca aberta</div> : null),
+}))
 vi.mock('@/features/settings/TimezoneBoundary', () => ({ TimezoneBoundary: ({ children }: { children: React.ReactNode }) => <>{children}</> }))
 vi.mock('@/components/LineRegistry', () => ({ LineRegistry: ({ children }: { children: React.ReactNode }) => <>{children}</> }))
 
@@ -88,5 +91,22 @@ describe('AppShell — acessibilidade', () => {
     expect(more).toHaveAttribute('aria-expanded', 'true')
     await userEvent.keyboard('{Escape}')
     expect(more).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('Ctrl+K abre e fecha a busca global em qualquer tela', async () => {
+    const user = userEvent.setup()
+    renderShell()
+    expect(screen.queryByRole('dialog', { name: 'Buscar' })).toBeNull()
+    await user.keyboard('{Control>}k{/Control}')
+    expect(screen.getByRole('dialog', { name: 'Buscar' })).toBeTruthy()
+    await user.keyboard('{Control>}k{/Control}')
+    expect(screen.queryByRole('dialog', { name: 'Buscar' })).toBeNull()
+  })
+
+  it('o botão Buscar da barra lateral abre a busca', async () => {
+    const user = userEvent.setup()
+    renderShell()
+    await user.click(screen.getAllByRole('button', { name: /Buscar/ })[0])
+    expect(screen.getByRole('dialog', { name: 'Buscar' })).toBeTruthy()
   })
 })

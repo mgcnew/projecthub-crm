@@ -32,7 +32,7 @@ export default defineConfig({
     {
       name: 'mobile',
       use: { ...devices['Pixel 7'] },
-      testMatch: ['**/mobile.e2e.ts', '**/a11y.e2e.ts', '**/panel-mobile.e2e.ts', '**/password-reset.e2e.ts'],
+      testMatch: ['**/mobile.e2e.ts', '**/a11y.e2e.ts', '**/panel-mobile.e2e.ts', '**/password-reset.e2e.ts', '**/search.e2e.ts'],
     },
     {
       name: 'csp',

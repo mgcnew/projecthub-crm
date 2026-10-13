@@ -8,8 +8,8 @@
 - D006 APROVADA: Supabase Auth/Postgres/RLS, organização padrão e privilégios mínimos.
 - D007 APROVADA: planejar esquema agora, gerar/aplicar migrações incrementais durante desenvolvimento; SQL é fonte de verdade do esquema implementado.
 - D008 APROVADA: módulos futuros não serão implementados antecipadamente.
-- D009 PENDENTE: exceções e edição individual de recorrências; requer persistência adicional.
-- D010 PENDENTE: regras definitivas de arquivamento/exclusão e cascatas.
+- D009 PARCIAL: recorrência mínima entregue sem exceções por ocorrência (D040). Editar/cancelar uma ocorrência isolada segue PENDENTE; requer tabela adicional e migração.
+- D010 PARCIAL: arquivamento por `archived_at` e ausência de DELETE do cliente nas entidades de negócio (D026, D037, D044). Exclusão definitiva, exclusão de conta (D022) e exportação de dados seguem PENDENTES.
 - D011 PENDENTE: integração externa de calendário e notificações push/WhatsApp.
 
 Ao alterar uma decisão, registrar data, motivo, impacto em banco/API/UI e migrações afetadas.
@@ -125,3 +125,7 @@ Ao alterar uma decisão, registrar data, motivo, impacto em banco/API/UI e migra
 - Risco aceito: **não há códigos de recuperação** (o Auth não os oferece). Perder o aplicativo trava a conta até remoção do fator por quem administra o projeto (RUNBOOK, "Perdi o autenticador"). O segredo mostrado na ativação deve ir para um gerenciador de senhas.
 - Local: `config.toml` com TOTP habilitado e `additional_redirect_urls` para `/redefinir-senha` (portas 5173 e 4173). E-mails locais vão para o Mailpit (porta 54324), usado nos testes.
 - Hospedado: a migração `20261013170000` foi aplicada no projeto `gnissqsrpzadthapdpue` (mesmo método de D081). Paridade por hash com o local: 70 políticas, 19 funções, 11 migrações. Teste de fumaça desfeito por exceção: sem fator aal1 lê; com fator verificado aal1 não lê (0 linhas) e a escrita falha com 42501; aal2 lê e grava.
+
+## Busca global (2026-10-13)
+- D085 (UI_UX_SPEC, regras: "busca global inicialmente Postgres, escopo da organização; Cmd/Ctrl+K como melhoria"): `Ctrl/Cmd+K` (ou o botão "Buscar" da barra lateral e do menu "Mais") abre um `<dialog>` modal nativo com campo combobox/listbox. Consulta `ILIKE` em paralelo, sob a RLS do usuário, sem migração nem índice novo: tarefas (`title`), projetos e clientes não arquivados (`name`, e `company_name` no cliente) e eventos/reuniões não cancelados, sem blocos de foco (`title`); 6 por tipo, mínimo de 2 caracteres, atraso de 220 ms, termo passa por `sanitizeSearch`. Navegação por ↑/↓/Enter, Esc fecha, resultados agrupados por tipo com legenda (situação, empresa ou data). Limitações assumidas: sem busca insensível a acento (`unaccent` não está instalada), sem relevância/ordenação por similaridade e sem busca em anotações, checklists ou descrições. Testes: unitários (`results`, AppShell), E2E desktop e celular com axe, isolamento entre organizações, caracteres especiais e CSP estrita.
+

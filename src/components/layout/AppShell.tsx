@@ -8,6 +8,7 @@ import {
   House,
   ListChecks,
   MoreHorizontal,
+  Search,
   Settings,
   UsersRound,
   type LucideIcon,
@@ -18,6 +19,7 @@ import { LineRegistry } from '@/components/LineRegistry'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/features/auth/auth-context'
 import { useUnreadCount } from '@/features/notifications/api'
+import { SearchDialog } from '@/features/search/SearchDialog'
 import { TimezoneBoundary } from '@/features/settings/TimezoneBoundary'
 import { matchEntityRoute } from '@/lib/entityRoutes'
 import { cn } from '@/lib/utils'
@@ -98,6 +100,7 @@ type Origin = { pathname: string; search: string; idx: number | null }
 export function AppShell({ pages }: { pages: RouteObject[] }) {
   const { signOut } = useAuth()
   const [moreOpen, setMoreOpen] = useState(false)
+  const [searchOpen, setSearchOpen] = useState(false)
   const unread = useUnreadCount().data ?? 0
   const online = useOnlineStatus()
   const main = useRef<HTMLElement>(null)
@@ -136,6 +139,19 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
     return () => window.removeEventListener('keydown', onKey)
   }, [moreOpen])
 
+  // Ctrl/Cmd+K abre e fecha a busca global em qualquer tela do app.
+  useEffect(() => {
+    const onKey = (e: KeyboardEvent) => {
+      if ((e.ctrlKey || e.metaKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'k') {
+        e.preventDefault()
+        setMoreOpen(false)
+        setSearchOpen((o) => !o)
+      }
+    }
+    window.addEventListener('keydown', onKey)
+    return () => window.removeEventListener('keydown', onKey)
+  }, [])
+
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[14.75rem_1fr]">
       <a
@@ -156,6 +172,16 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           </span>
           ProjectHub
         </p>
+        <button
+          type="button"
+          aria-keyshortcuts="Control+K Meta+K"
+          onClick={() => setSearchOpen(true)}
+          className="mb-2 flex min-h-11 items-center gap-3 rounded-sm border border-input bg-card px-3 text-sm font-semibold text-[#3b4148] hover:bg-muted"
+        >
+          <Search aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
+          Buscar
+          <kbd className="ml-auto text-xs font-semibold text-muted-foreground">Ctrl K</kbd>
+        </button>
         <nav aria-label="Principal" className="flex flex-col gap-0.5">
           {items.map((i) => (
             <NavLink key={i.to} to={i.to} end={i.end} className={link}>
@@ -197,6 +223,17 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           className="fixed inset-x-0 bottom-[4.25rem] z-30 border-t-2 border-foreground bg-card p-2 shadow-[0_-12px_32px_-12px_rgb(17_20_24/0.3)] lg:hidden"
         >
           <nav aria-label="Mais opções" className="grid gap-1">
+            <button
+              type="button"
+              className={link({ isActive: false })}
+              onClick={() => {
+                setMoreOpen(false)
+                setSearchOpen(true)
+              }}
+            >
+              <Search aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
+              Buscar
+            </button>
             {moreMobile.map((i) => (
               <NavLink key={i.to} to={i.to} className={link} onClick={() => setMoreOpen(false)}>
                 <i.icon aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
@@ -210,6 +247,8 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           </nav>
         </div>
       )}
+
+      <SearchDialog open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       <nav
         aria-label="Principal"

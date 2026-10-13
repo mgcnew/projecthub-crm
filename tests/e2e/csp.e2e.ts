@@ -71,6 +71,15 @@ test('o build de produção funciona sob CSP estrita, sem violações', async ({
   await page.keyboard.press('Escape')
   await expect(page.getByRole('alertdialog')).toBeHidden()
 
+  // Busca global (<dialog> nativo + consultas ao Supabase): abre, busca e fecha sob CSP sem violações.
+  await page.goto('/app')
+  await page.keyboard.press('Control+k')
+  const search = page.getByRole('dialog', { name: 'Buscar' })
+  await search.getByRole('combobox').fill('Cliente CSP')
+  await expect(search.getByRole('option', { name: /Cliente CSP/ })).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(search).toBeHidden()
+
   expect(violations, 'violações de CSP').toEqual([])
   expect(consoleErrors.filter((e) => /Content Security Policy|Refused to/i.test(e))).toEqual([])
 })
