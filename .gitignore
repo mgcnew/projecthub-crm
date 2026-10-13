@@ -10,3 +10,8 @@ coverage
 supabase/.branches
 supabase/.temp
 .claude/
+
+# Instalacao do Impeccable para GitHub Copilot (regeneravel com `npx impeccable install`)
+.github/agents/
+.github/hooks/
+.github/skills/
