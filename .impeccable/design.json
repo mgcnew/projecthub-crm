@@ -1,0 +1,337 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-10-13T11:38:17Z",
+  "title": "Design System: ProjectHub CRM",
+  "extensions": {
+    "colorMeta": {
+      "primary": {
+        "role": "primary",
+        "displayName": "Azul de Ação",
+        "canonical": "oklch(54.6% 0.215 263)",
+        "tonalRamp": [
+          "#00124d",
+          "#002686",
+          "#003cc3",
+          "#2260e8",
+          "#4c86fe",
+          "#82acfe",
+          "#b7d0ff",
+          "#ecf2fe"
+        ]
+      },
+      "background": {
+        "role": "neutral",
+        "displayName": "Névoa Fria",
+        "canonical": "oklch(98.4% 0.003 248)",
+        "tonalRamp": [
+          "#191b1c",
+          "#333436",
+          "#4f5052",
+          "#6c6e70",
+          "#8b8d8f",
+          "#acaeaf",
+          "#cdcfd1",
+          "#f0f2f4"
+        ]
+      },
+      "foreground": {
+        "role": "neutral",
+        "displayName": "Tinta Noite",
+        "canonical": "oklch(20.8% 0.040 266)",
+        "tonalRamp": [
+          "#121a2d",
+          "#2b3449",
+          "#465067",
+          "#636e86",
+          "#828da6",
+          "#a2aec8",
+          "#c3cfea",
+          "#ecf2fe"
+        ]
+      },
+      "card": {
+        "role": "neutral",
+        "displayName": "Painel Branco",
+        "canonical": "oklch(100.0% 0.000 90)",
+        "tonalRamp": [
+          "#1b1b1b",
+          "#343434",
+          "#505050",
+          "#6e6e6e",
+          "#8d8d8d",
+          "#adadad",
+          "#cfcfcf",
+          "#f2f2f2"
+        ]
+      },
+      "muted": {
+        "role": "neutral",
+        "displayName": "Linho Azulado",
+        "canonical": "oklch(96.8% 0.007 248)",
+        "tonalRamp": [
+          "#181b1e",
+          "#323538",
+          "#4d5154",
+          "#6b6e72",
+          "#8a8d91",
+          "#aaaeb2",
+          "#ccd0d3",
+          "#eef2f6"
+        ]
+      },
+      "muted-foreground": {
+        "role": "neutral",
+        "displayName": "Cinza Ardósia",
+        "canonical": "oklch(55.4% 0.041 257)",
+        "tonalRamp": [
+          "#0e1b2d",
+          "#273549",
+          "#425167",
+          "#5f6f86",
+          "#7e8ea6",
+          "#9eafc8",
+          "#bfd1ea",
+          "#eaf3ff"
+        ]
+      },
+      "border": {
+        "role": "neutral",
+        "displayName": "Fio de Gelo",
+        "canonical": "oklch(92.9% 0.013 256)",
+        "tonalRamp": [
+          "#171b20",
+          "#30353b",
+          "#4c5157",
+          "#696e75",
+          "#888d95",
+          "#a8aeb6",
+          "#cad0d7",
+          "#ecf2fa"
+        ]
+      },
+      "destructive": {
+        "role": "state",
+        "displayName": "Vermelho de Risco",
+        "canonical": "oklch(63.7% 0.208 25)",
+        "tonalRamp": [
+          "#3a0003",
+          "#68000a",
+          "#990215",
+          "#cb1725",
+          "#f14646",
+          "#fe847c",
+          "#febcb5",
+          "#feeeec"
+        ]
+      },
+      "success": {
+        "role": "state",
+        "displayName": "Verde Concluído",
+        "canonical": "oklch(69.6% 0.149 162)",
+        "tonalRamp": [
+          "#012114",
+          "#003f29",
+          "#026041",
+          "#088259",
+          "#05a673",
+          "#34ca91",
+          "#61edb2",
+          "#cfffe6"
+        ]
+      },
+      "warning": {
+        "role": "state",
+        "displayName": "Âmbar de Atenção",
+        "canonical": "oklch(76.9% 0.165 70)",
+        "tonalRamp": [
+          "#281601",
+          "#4b2d00",
+          "#704601",
+          "#976005",
+          "#c17b02",
+          "#ed9808",
+          "#ffc27b",
+          "#ffefde"
+        ]
+      }
+    },
+    "typographyMeta": {
+      "headline": {
+        "displayName": "Headline",
+        "purpose": "Título de página e valor dos indicadores do dashboard."
+      },
+      "title": {
+        "displayName": "Title",
+        "purpose": "Título de seção dentro da página."
+      },
+      "body": {
+        "displayName": "Body",
+        "purpose": "Campos, texto corrido e itens de lista."
+      },
+      "label": {
+        "displayName": "Label",
+        "purpose": "Botões, navegação, rótulos de campo e metadados."
+      },
+      "caption": {
+        "displayName": "Caption",
+        "purpose": "Badges e itens da navegação inferior."
+      }
+    },
+    "shadows": [
+      {
+        "name": "outline-subtle",
+        "value": "0 1px 2px 0 rgb(0 0 0 / 0.05)",
+        "purpose": "Botão de contorno."
+      },
+      {
+        "name": "floating-menu",
+        "value": "0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)",
+        "purpose": "Menu \"Mais\" flutuante no mobile."
+      }
+    ],
+    "motion": [
+      {
+        "name": "ease-standard",
+        "value": "cubic-bezier(0.4, 0, 0.2, 1)",
+        "purpose": "Easing padrão das transições de estado."
+      },
+      {
+        "name": "duration-fast",
+        "value": "150ms",
+        "purpose": "Duração padrão de hover e foco em botões."
+      }
+    ],
+    "breakpoints": [
+      {
+        "name": "sm",
+        "value": "640px"
+      },
+      {
+        "name": "lg",
+        "value": "1024px"
+      }
+    ]
+  },
+  "components": [
+    {
+      "name": "Primary Button",
+      "kind": "button",
+      "refersTo": "button-primary",
+      "description": "Ação principal de um formulário ou tela.",
+      "html": "<button class=\"ds-btn-primary\">Salvar alterações</button>",
+      "css": ".ds-btn-primary{background:var(--primary, #2563eb);color:#fff;height:36px;padding:8px 16px;border:0;border-radius:6px;font:500 14px/20px 'Inter Variable',system-ui,sans-serif;cursor:pointer;transition:all .15s cubic-bezier(.4,0,.2,1)}.ds-btn-primary:hover{background:rgb(37 99 235 / .9)}.ds-btn-primary:focus-visible{outline:0;box-shadow:0 0 0 3px rgb(37 99 235 / .5)}"
+    },
+    {
+      "name": "Outline Button",
+      "kind": "button",
+      "refersTo": "button-outline",
+      "description": "Ação secundária de formulário.",
+      "html": "<button class=\"ds-btn-outline\">Adicionar lembrete</button>",
+      "css": ".ds-btn-outline{background:var(--background, #f8fafc);color:var(--foreground, #0f172a);height:36px;padding:8px 16px;border:1px solid var(--border, #e2e8f0);border-radius:6px;box-shadow:0 1px 2px 0 rgb(0 0 0 / .05);font:500 14px/20px 'Inter Variable',system-ui,sans-serif;cursor:pointer;transition:all .15s}.ds-btn-outline:hover{background:var(--muted, #f1f5f9)}.ds-btn-outline:focus-visible{outline:0;box-shadow:0 0 0 3px rgb(37 99 235 / .5)}"
+    },
+    {
+      "name": "Ghost Button",
+      "kind": "button",
+      "refersTo": "button-ghost",
+      "description": "Ação de linha, de baixa ênfase.",
+      "html": "<button class=\"ds-btn-ghost\">Remover</button>",
+      "css": ".ds-btn-ghost{background:transparent;color:var(--foreground, #0f172a);height:32px;padding:0 12px;border:0;border-radius:6px;font:500 14px/20px 'Inter Variable',system-ui,sans-serif;cursor:pointer}.ds-btn-ghost:hover{background:var(--muted, #f1f5f9)}.ds-btn-ghost:focus-visible{outline:0;box-shadow:0 0 0 3px rgb(37 99 235 / .5)}"
+    },
+    {
+      "name": "Text Field",
+      "kind": "input",
+      "refersTo": "input-field",
+      "description": "Campo de formulário com rótulo.",
+      "html": "<label class=\"ds-field\"><span class=\"ds-field-label\">Título</span><input class=\"ds-input\" placeholder=\"Nova tarefa\"></label>",
+      "css": ".ds-field{display:grid;gap:6px;font-family:'Inter Variable',system-ui,sans-serif}.ds-field-label{font:500 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-input{height:44px;width:100%;box-sizing:border-box;padding:0 12px;border:1px solid var(--border, #e2e8f0);border-radius:6px;background:#fff;color:var(--foreground, #0f172a);font:400 16px/24px 'Inter Variable',system-ui,sans-serif;outline:0}.ds-input:focus-visible{border-color:var(--primary, #2563eb);box-shadow:0 0 0 3px rgb(37 99 235 / .3)}"
+    },
+    {
+      "name": "Nav Link (active)",
+      "kind": "nav",
+      "refersTo": "nav-link",
+      "description": "Item da barra lateral; o ativo usa o azul a 10%.",
+      "html": "<nav class=\"ds-nav\"><a class=\"ds-nav-link ds-nav-active\" href=\"#\">Início</a><a class=\"ds-nav-link\" href=\"#\">Meu dia</a><a class=\"ds-nav-link\" href=\"#\">Notificações <span class=\"ds-count\">3</span></a></nav>",
+      "css": ".ds-nav{display:grid;gap:4px;width:224px;font-family:'Inter Variable',system-ui,sans-serif}.ds-nav-link{display:flex;align-items:center;min-height:44px;padding:0 12px;border-radius:6px;color:var(--muted-foreground, #64748b);font:500 14px/20px 'Inter Variable',system-ui,sans-serif;text-decoration:none}.ds-nav-link:hover{background:var(--muted, #f1f5f9)}.ds-nav-active{background:rgb(37 99 235 / .1);color:var(--primary, #2563eb)}.ds-count{margin-left:auto;padding:0 8px;border-radius:9999px;background:var(--primary, #2563eb);color:#fff;font:600 12px/16px 'Inter Variable',system-ui,sans-serif}"
+    },
+    {
+      "name": "Status Badge",
+      "kind": "chip",
+      "refersTo": "status-badge",
+      "description": "Estado com texto e tom; nunca só cor.",
+      "html": "<span class=\"ds-badge ds-badge-info\">Nova</span> <span class=\"ds-badge ds-badge-success\">Concluída</span> <span class=\"ds-badge ds-badge-warning\">Alta</span> <span class=\"ds-badge ds-badge-danger\">Urgente</span> <span class=\"ds-badge\">Lida</span>",
+      "css": ".ds-badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:9999px;background:var(--muted, #f1f5f9);color:var(--muted-foreground, #64748b);font:500 12px/16px 'Inter Variable',system-ui,sans-serif}.ds-badge-info{background:rgb(37 99 235 / .1);color:var(--primary, #2563eb)}.ds-badge-success{background:rgb(16 185 129 / .15);color:#065f46}.ds-badge-warning{background:rgb(245 158 11 / .2);color:#78350f}.ds-badge-danger{background:rgb(239 68 68 / .15);color:#991b1b}"
+    },
+    {
+      "name": "Divided List",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Lista em painel com divisores de 1px; linha de 44px.",
+      "html": "<ul class=\"ds-list\"><li class=\"ds-row\"><input type=\"checkbox\" aria-label=\"Concluir\"><span class=\"ds-row-title\">Ligar para o cliente</span><span class=\"ds-row-meta\">prazo 15/10/2026</span></li><li class=\"ds-row\"><input type=\"checkbox\" aria-label=\"Concluir\" checked><span class=\"ds-row-title ds-done\">Enviar proposta</span></li></ul>",
+      "css": ".ds-list{list-style:none;margin:0;padding:0;border:1px solid var(--border, #e2e8f0);border-radius:6px;background:#fff;font-family:'Inter Variable',system-ui,sans-serif}.ds-row{display:flex;align-items:center;gap:12px;min-height:44px;padding:8px 16px}.ds-row+.ds-row{border-top:1px solid var(--border, #e2e8f0)}.ds-row input{width:20px;height:20px}.ds-row-title{font:500 16px/24px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-done{color:var(--muted-foreground, #64748b);text-decoration:line-through;font-weight:400}.ds-row-meta{font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #64748b)}"
+    },
+    {
+      "name": "Dashboard Tile",
+      "kind": "card",
+      "refersTo": "panel",
+      "description": "Indicador numérico; o número fica vermelho quando há pendência crítica.",
+      "html": "<div class=\"ds-tile\"><p class=\"ds-tile-value ds-tile-danger\">3</p><p class=\"ds-tile-label\">Tarefas atrasadas</p></div>",
+      "css": ".ds-tile{width:200px;box-sizing:border-box;padding:16px;border:1px solid var(--border, #e2e8f0);border-radius:6px;background:#fff;font-family:'Inter Variable',system-ui,sans-serif}.ds-tile-value{margin:0;font:600 24px/32px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-tile-danger{color:var(--destructive, #ef4444)}.ds-tile-label{margin:0;font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #64748b)}"
+    },
+    {
+      "name": "Empty State",
+      "kind": "custom",
+      "refersTo": "panel",
+      "description": "Painel tracejado que indica espaço a preencher.",
+      "html": "<div class=\"ds-empty\"><p class=\"ds-empty-title\">Nada planejado para hoje</p><p class=\"ds-empty-desc\">Planeje tarefas no Meu dia.</p></div>",
+      "css": ".ds-empty{padding:32px;border:1px dashed var(--border, #e2e8f0);border-radius:6px;background:#fff;text-align:center;font-family:'Inter Variable',system-ui,sans-serif}.ds-empty-title{margin:0 0 12px;font:500 16px/24px 'Inter Variable',system-ui,sans-serif;color:var(--foreground, #0f172a)}.ds-empty-desc{margin:0;font:400 14px/20px 'Inter Variable',system-ui,sans-serif;color:var(--muted-foreground, #64748b)}"
+    }
+  ],
+  "narrative": {
+    "northStar": "A Mesa de Trabalho",
+    "overview": "Uma superfície clara e organizada onde tudo o que importa no dia está ao alcance da mão. A interface é calma, densa e objetiva: informa primeiro e não decora. Neutros frios sustentam a leitura e um único azul de ação marca o que se pode fazer, de modo que a atenção vai para tarefas, agenda e reuniões, nunca para a moldura.\n\nO sistema serve a um profissional autônomo que alterna entre o desktop (gestão com tabelas, filtros e listas densas) e o celular (consulta e ação rápida). A mesma linguagem vale nos dois: no desktop a densidade é maior e a navegação lateral; no mobile entram cartões, navegação inferior e alvos de toque generosos.",
+    "keyCharacteristics": [
+      "Tema claro como padrão aprovado (D005); fundo cinza-azulado muito claro com painéis brancos.",
+      "Um único acento (azul); verde, âmbar e vermelho existem só como estado.",
+      "Plano por padrão: separação por bordas de 1px, não por sombras.",
+      "Tipografia única (Inter) com hierarquia por peso e tamanho, sem display.",
+      "Alvos de toque de 44px em controles e navegação."
+    ],
+    "rules": [
+      {
+        "name": "The One Blue Rule",
+        "body": "O azul é o único acento; ele aparece em ação, seleção e foco, nunca como decoração. Cores de estado jamais assumem o papel de acento.",
+        "section": "colors"
+      },
+      {
+        "name": "The Tint, Not Fill Rule",
+        "body": "Estados e seleção usam o tom em baixa opacidade (10–20%) sobre texto escuro ou do próprio matiz; preenchimento sólido é exclusivo do botão primário e do contador.",
+        "section": "colors"
+      },
+      {
+        "name": "The Weight Over Size Rule",
+        "body": "Hierarquia se faz com peso e cor antes de tamanho; o salto máximo de uma página é 24px → 14px.",
+        "section": "typography"
+      },
+      {
+        "name": "The Flat-By-Default Rule",
+        "body": "Superfícies são planas em repouso; só elementos que flutuam sobre outros ganham sombra.",
+        "section": "elevation"
+      }
+    ],
+    "dos": [
+      "Do usar o azul (#2563eb) apenas para ação, seleção e foco.",
+      "Do separar superfícies com bordas de 1px em #e2e8f0 e deixar as sombras para o que flutua.",
+      "Do manter alvos de toque de pelo menos 44px em navegação, linhas de lista e campos.",
+      "Do acompanhar toda cor de estado com texto ou ícone (badge com rótulo, mensagem de erro).",
+      "Do tratar loading, vazio, erro e sem-permissão em toda lista e painel.",
+      "Do manter o texto da interface em português do Brasil."
+    ],
+    "donts": [
+      "Don't introduzir um segundo acento nem usar verde, âmbar ou vermelho como cor de marca.",
+      "Don't usar sombras em cartões em repouso, gradientes, vidro fosco ou bordas laterais coloridas.",
+      "Don't usar fonte de exibição ou tamanhos acima de 24px nas telas de trabalho.",
+      "Don't mostrar módulos futuros no menu antes de implementados, nem números ou ações fictícias.",
+      "Don't depender só de cor para indicar estado ou prioridade."
+    ]
+  }
+}
