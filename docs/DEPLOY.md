@@ -30,9 +30,9 @@ você pode fazer (contas, chaves, domínio). Eu nunca uso nem peço senhas ou ch
 
 ## 1. Supabase hospedado (você)
 
-> **Já feito em 2026-10-13 (passos 1 a 3):** projeto `gnissqsrpzadthapdpue` (sa-east-1) com as 11 migrações
-> aplicadas (a 11ª, `mfa_enforcement`, também conferida por hash e por teste de fumaça: leitura e escrita em aal1
-> bloqueadas com fator verificado), `pg_cron` ativo com o job `process-due-reminders` e histórico registrado em
+> **Já feito em 2026-10-13 (passos 1 a 3):** projeto `gnissqsrpzadthapdpue` (sa-east-1) com as 12 migrações
+> aplicadas (a 11ª, `mfa_enforcement`, conferida por hash e teste de fumaça com leitura e escrita em aal1
+> bloqueadas; a 12ª, `access_directory`, conferida por hash), `pg_cron` ativo com o job `process-due-reminders` e histórico registrado em
 > `supabase_migrations.schema_migrations`. As migrações foram aplicadas por SQL via MCP (a CLI deste ambiente
 > está logada em outra conta e não tinha a senha do banco). A paridade foi conferida contra o banco local:
 > colunas, políticas, privilégios por coluna, índices, constraints, gatilhos e RLS com hashes idênticos, e as

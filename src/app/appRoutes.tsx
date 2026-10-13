@@ -1,4 +1,7 @@
 import type { RouteObject } from 'react-router-dom'
+import { AccessDetailPage } from '@/features/access/AccessDetailPage'
+import { AccessesPage } from '@/features/access/AccessesPage'
+import { AccessNewPage } from '@/features/access/AccessNewPage'
 import { AgendaPage } from '@/features/calendar/AgendaPage'
 import { EventDetailPage } from '@/features/calendar/EventDetailPage'
 import { EventNewPage } from '@/features/calendar/EventNewPage'
@@ -36,6 +39,9 @@ export const appRoutes: RouteObject[] = [
   { path: '/app/clientes', element: <ClientsPage /> },
   { path: '/app/clientes/novo', element: <ClientNewPage /> },
   { path: '/app/clientes/:id', element: <ClientDetailPage /> },
+  { path: '/app/acessos', element: <AccessesPage /> },
+  { path: '/app/acessos/novo', element: <AccessNewPage /> },
+  { path: '/app/acessos/:id', element: <AccessDetailPage /> },
   { path: '/app/projetos', element: <ProjectsPage /> },
   { path: '/app/projetos/novo', element: <ProjectNewPage /> },
   { path: '/app/projetos/:id', element: <ProjectDetailPage /> },

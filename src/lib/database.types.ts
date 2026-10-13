@@ -5,7 +5,39 @@ export type Database = {
   
   "public": {
           Tables: {
-            "activity_logs": {
+            "access_entries": {
+                  Row: {
+                    "archived_at": string | null,"category": string | null,"client_id": string | null,"created_at": string,"id": string,"manager_item": string | null,"name": string,"notes": string | null,"organization_id": string,"project_id": string | null,"updated_at": string,"url": string | null,"username": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "archived_at"?: string | null,"category"?: string | null,"client_id"?: string | null,"created_at"?: string,"id"?: string,"manager_item"?: string | null,"name": string,"notes"?: string | null,"organization_id": string,"project_id"?: string | null,"updated_at"?: string,"url"?: string | null,"username"?: string | null
+                  }
+                  Update: {
+                    "archived_at"?: string | null,"category"?: string | null,"client_id"?: string | null,"created_at"?: string,"id"?: string,"manager_item"?: string | null,"name"?: string,"notes"?: string | null,"organization_id"?: string,"project_id"?: string | null,"updated_at"?: string,"url"?: string | null,"username"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "access_entries_organization_id_client_id_fkey"
+      columns: ["organization_id","client_id"]
+isOneToOne: false
+      referencedRelation: "clients"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "access_entries_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "access_entries_organization_id_project_id_fkey"
+      columns: ["organization_id","project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"activity_logs": {
                   Row: {
                     "action": string,"actor_id": string | null,"changes": NonNullable<Json>,"created_at": string,"entity_id": string,"entity_type": string,"id": string,"organization_id": string
                   }

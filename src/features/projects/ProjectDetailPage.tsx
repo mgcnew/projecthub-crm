@@ -6,6 +6,7 @@ import { lineFor } from '@/lib/lines'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { ErrorState, LoadingState, StatusBadge } from '@/components/states'
 import { EntityView, type EntityTab } from '@/components/entity/EntityView'
+import { LinkedAccess } from '@/features/access/LinkedAccess'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
 import { useArchiveProject, useProject, useUpdateProject } from './api'
@@ -60,6 +61,11 @@ export function ProjectDetailPage() {
           />
         </>
       ),
+    },
+    {
+      id: 'acessos',
+      label: 'Acessos',
+      content: <LinkedAccess projectId={p.id} />,
     },
     {
       id: 'anotacoes',

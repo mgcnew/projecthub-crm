@@ -74,9 +74,9 @@
 5. Storage privado e políticas de arquivos (quando arquivos entrarem no MVP).
 
 ## Estado implementado (2026-10-13)
-As 19 tabelas existem, todas com RLS, políticas e privilégios por coluna. O esquema vem de **11 migrações**
+As 19 tabelas do MVP existem, mais `access_entries` (D086, fora da lista original): 20 no total, todas com RLS, políticas e privilégios por coluna. O esquema vem de **12 migrações**
 (`supabase/migrations`), agrupadas por fase em vez das 001–010 lógicas acima (D025). O banco hospedado recebeu as
-mesmas 11 (D081).
+mesmas 12 (D081; a 12ª, `access_directory`, conferida por hash em 2026-10-13).
 
 ### Divergências da especificação
 | Tabela / coluna | Especificado | Implementado | Decisão |
@@ -89,6 +89,7 @@ mesmas 11 (D081).
 | `tasks.priority_rank` | Não previsto | Coluna gerada para ordenar por prioridade | D076, D077 |
 | `recurrence_occurrences` | Cogitada | **Não criada**: sem exceções por ocorrência | D040 |
 | Políticas `mfa_required` | Não previstas | Restritiva em toda tabela de `public`; exige `aal2` de quem tem fator TOTP verificado | D082 |
+| `access_entries` | Não prevista | Diretório de acessos (URL, usuário, item no gerenciador), **sem coluna de segredo**; sem trilha de atividade | D086, D087 |
 
 ### Funções (todas em `private`, exceto a de leitura da agenda)
 `set_updated_at`, `protect_last_owner`, `is_active_member`, `is_active_owner`, `mfa_satisfied`,

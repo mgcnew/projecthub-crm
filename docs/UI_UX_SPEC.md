@@ -43,7 +43,8 @@ O que a spec original previa e o que existe. Decisões de origem entre parêntes
 
 ### Rotas
 Além do mapa original: `/login`, `/recuperar-senha`, `/redefinir-senha` (sem sessão); `/app/tarefas/modelos`,
-`/app/agenda/novo`, `/app/agenda/:id`, `/app/reunioes/:eventId`, `/app/clientes/novo` e `/app/projetos/novo`.
+`/app/agenda/novo`, `/app/agenda/:id`, `/app/reunioes/:eventId`, `/app/clientes/novo`, `/app/projetos/novo`,
+`/app/acessos`, `/app/acessos/novo` e `/app/acessos/:id` (diretório de acessos, D086).
 
 ### Componentes compartilhados: nome na spec → onde está
 | Spec | Código |
@@ -55,6 +56,7 @@ Além do mapa original: `/login`, `/recuperar-senha`, `/redefinir-senha` (sem se
 | QuickCreate | `src/features/tasks/QuickCapture.tsx` |
 | ActivityTimeline, ChecklistEditor, ReminderEditor | `features/activity`, `features/tasks/TaskChecklist.tsx`, `features/notifications/ReminderEditor.tsx` |
 | Busca global | `src/features/search/` |
+| Acessos (cópia em 1 clique) | `src/features/access/`, `src/components/CopyButton.tsx` |
 
 Sem componente compartilhado (a função existe, inline em cada tela): `DataTable` (tabelas por feature),
 `PriorityIndicator`, `DateTimePicker` (campos nativos `datetime-local`), `EntitySelector` (`<select>` nativos com

@@ -6,6 +6,7 @@ import {
   CalendarDays,
   FolderKanban,
   House,
+  KeyRound,
   ListChecks,
   MoreHorizontal,
   Search,
@@ -35,6 +36,7 @@ const items: { to: string; label: string; end: boolean; icon: LucideIcon }[] = [
   { to: '/app/reunioes', label: 'Reuniões', end: false, icon: UsersRound },
   { to: '/app/projetos', label: 'Projetos', end: false, icon: FolderKanban },
   { to: '/app/clientes', label: 'Clientes', end: false, icon: Building2 },
+  { to: '/app/acessos', label: 'Acessos', end: false, icon: KeyRound },
   { to: '/app/notificacoes', label: 'Notificações', end: false, icon: Bell },
   { to: '/app/configuracoes', label: 'Configurações', end: false, icon: Settings },
 ]

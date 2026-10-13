@@ -71,6 +71,7 @@ compatível com o dump (colunas). Prefira restaurar com o mesmo conjunto de migr
 | Data | Ambiente | Backup | Resultado |
 |---|---|---|---|
 | 2026-10-13 | Supabase local (PG 17.11) | 21 tabelas, 733 linhas, 192 KB | Restauração verificada: contagens iguais, 51 políticas, FKs sem órfãos, RLS idêntica. Negativos: manifesto adulterado e dump corrompido reprovados; 0 bancos de teste remanescentes |
+| 2026-10-13 | Supabase local (PG 17.11) | 22 tabelas, 3.571 linhas, 416 KB | Restauração verificada: contagens iguais, 75 políticas, FKs sem órfãos, RLS idêntica; usuário de teste vê as mesmas 11 tarefas. Achado: o stub de `auth` não tinha `auth.mfa_factors` nem `auth.jwt()` (migração do MFA); corrigido no script |
 
 ## Perdi o autenticador (MFA)
 

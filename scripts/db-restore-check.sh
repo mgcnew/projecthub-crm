@@ -34,6 +34,10 @@ echo "3/7 Esquema: stub mínimo de auth + esquema public/private do backup"
   echo "create function auth.uid() returns uuid language sql stable as \$f\$
     select coalesce(nullif(current_setting('request.jwt.claim.sub', true), ''),
                     nullif(current_setting('request.jwt.claims', true), '')::jsonb ->> 'sub')::uuid \$f\$;"
+  # D082: `private.mfa_satisfied` (política mfa_required) lê auth.mfa_factors e o claim aal do JWT.
+  echo "create table auth.mfa_factors (id uuid primary key, user_id uuid not null, status text not null);"
+  echo "create function auth.jwt() returns jsonb language sql stable as \$f\$
+    select coalesce(nullif(current_setting('request.jwt.claims', true), ''), '{}')::jsonb \$f\$;"
   # Sem os triggers de auth.users (ex.: on_auth_user_created chama private.*, que ainda não existe aqui).
   pg pg_dump -h localhost -U supabase_admin -d postgres --schema-only --no-owner -t auth.users -t auth.identities \
     | sed '/^CREATE TRIGGER /d'

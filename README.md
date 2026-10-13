@@ -4,7 +4,7 @@ Central pessoal de projetos, clientes, tarefas, agenda e reuniões, multitenant 
 (React + TypeScript + Vite no front; Supabase Auth/Postgres/RLS no back).
 
 ## Decisão sobre o Supabase
-O esquema é **materializado por migrações SQL versionadas** (`supabase/migrations`, 11 até aqui), nunca por
+O esquema é **materializado por migrações SQL versionadas** (`supabase/migrations`, 12 até aqui), nunca por
 alterações manuais no painel. O banco é especificado em `docs/DATABASE_SPEC.md` (veja ali a seção "Estado
 implementado" com os desvios).
 
@@ -40,7 +40,7 @@ Publicação (Vercel + Supabase hospedado): ver `docs/DEPLOY.md`.
 **Fases 0 a 6 concluídas, exceto a publicação do front (Vercel, adiada).** Entregue: autenticação com
 verificação em duas etapas (TOTP, imposta no banco) e recuperação de senha; clientes e projetos; tarefas,
 subtarefas, checklists e modelos; agenda, reuniões e recorrência mínima; lembretes com worker `pg_cron` e
-notificações internas; Central do dia com atividade recente; fuso de trabalho; busca global (Ctrl/Cmd+K);
+notificações internas; Central do dia com atividade recente; fuso de trabalho; busca global (Ctrl/Cmd+K); diretório de acessos (sem senhas);
 redesenho "Linhas do Metrô"; registros em painel lateral no desktop e página inteira no celular.
 
 Operação: repositório privado no GitHub com CI verde; banco hospedado com as migrações aplicadas e conferidas

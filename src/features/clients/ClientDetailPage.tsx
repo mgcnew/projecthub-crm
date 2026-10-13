@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
+import { LinkedAccess } from '@/features/access/LinkedAccess'
 import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { LinkedEvents } from '@/features/calendar/LinkedEvents'
 import { LinkedTasks } from '@/features/tasks/LinkedTasks'
@@ -67,6 +68,11 @@ export function ClientDetailPage() {
           <LinkedEvents scope={clientScope} link={{ clientId: c.id }} ready={projects.isSuccess} />
         </>
       ),
+    },
+    {
+      id: 'acessos',
+      label: 'Acessos',
+      content: <LinkedAccess clientId={c.id} projectIds={clientScope.projectIds} ready={projects.isSuccess} />,
     },
     {
       id: 'atividade',
