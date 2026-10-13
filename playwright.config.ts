@@ -3,6 +3,8 @@ import { defineConfig, devices } from '@playwright/test'
 // Exige o Supabase local (`npx supabase start`); use `npm run test:e2e`.
 // O servidor Vite é reaproveitado se já estiver de pé na porta 5173.
 const baseURL = 'http://127.0.0.1:5173'
+// Build de produção servido pelo `vite preview` com CSP e demais cabeçalhos de segurança.
+const previewURL = 'http://127.0.0.1:4173'
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -25,18 +27,31 @@ export default defineConfig({
     {
       name: 'desktop',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: '**/mobile.e2e.ts',
+      testIgnore: ['**/mobile.e2e.ts', '**/csp.e2e.ts'],
     },
     {
       name: 'mobile',
       use: { ...devices['Pixel 7'] },
       testMatch: ['**/mobile.e2e.ts', '**/a11y.e2e.ts'],
     },
+    {
+      name: 'csp',
+      use: { ...devices['Desktop Chrome'], baseURL: previewURL },
+      testMatch: '**/csp.e2e.ts',
+    },
   ],
-  webServer: {
-    command: 'npm run dev -- --host 127.0.0.1 --port 5173',
-    url: baseURL,
-    reuseExistingServer: !process.env.CI,
-    timeout: 60_000,
-  },
+  webServer: [
+    {
+      command: 'npm run dev -- --host 127.0.0.1 --port 5173',
+      url: baseURL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 60_000,
+    },
+    {
+      command: 'npm run build && npm run preview -- --host 127.0.0.1 --port 4173 --strictPort',
+      url: previewURL,
+      reuseExistingServer: !process.env.CI,
+      timeout: 120_000,
+    },
+  ],
 })

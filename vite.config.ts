@@ -2,10 +2,13 @@
 import { fileURLToPath } from 'node:url'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
-import { defineConfig } from 'vite'
+import { defineConfig, loadEnv } from 'vite'
+import { securityHeaders } from './config/security-headers.ts'
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   plugins: [react(), tailwindcss()],
+  // Pré-visualização do build de produção com os mesmos cabeçalhos do deploy (CSP verificada no E2E).
+  preview: { headers: securityHeaders(loadEnv(mode, process.cwd(), 'VITE_').VITE_SUPABASE_URL ?? '') },
   resolve: { alias: { '@': fileURLToPath(new URL('./src', import.meta.url)) } },
   test: {
     globals: true,
@@ -18,4 +21,4 @@ export default defineConfig({
       VITE_SUPABASE_PUBLISHABLE_KEY: 'test-key',
     },
   },
-})
+}))

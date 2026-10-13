@@ -64,9 +64,10 @@ select is((select count(*)::int from public.activity_logs
   'mudança de status registrada');
 
 update public.tasks set description = 'texto muito longo e sigiloso' where id = (select id from public.tasks where organization_id = (select org_a from ctx) and title like 'Enviar proposta%');
+-- Dentro da transação created_at é idêntico; localizar pela chave em vez de ordenar.
 select is((select changes from public.activity_logs
             where entity_id = (select id from public.tasks where organization_id = (select org_a from ctx) and title like 'Enviar proposta%')
-            order by created_at desc, id desc limit 1),
+              and changes ? 'description'),
   '{"description": {"changed": true}}'::jsonb, 'texto longo registra só que mudou');
 
 select lives_ok($$insert into public.clients (organization_id, name)

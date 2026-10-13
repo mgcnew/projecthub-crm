@@ -18,6 +18,8 @@ jobs:
       - run: npm run typecheck
       - run: npm test
       - run: npm run build
+      - run: npm run check:bundle
+      - run: npm run audit:prod
 
   database:
     runs-on: ubuntu-latest
