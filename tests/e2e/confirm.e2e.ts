@@ -1,6 +1,6 @@
 import AxeBuilder from '@axe-core/playwright'
 import { expect, test } from '@playwright/test'
-import { apiSessionFor, createUser, login } from './helpers'
+import { apiSessionFor, createUser, login, panel } from './helpers'
 
 test('ações pouco reversíveis pedem confirmação, com foco e teclado corretos', async ({ page }) => {
   const user = await createUser('conf')
@@ -29,9 +29,9 @@ test('ações pouco reversíveis pedem confirmação, com foco e teclado correto
 
   // --- Projeto: Esc cancela, foco volta ao botão, axe com o diálogo aberto, confirmar arquiva
   await page.goto(`/app/projetos/${p.data!.id}`)
-  const archive = page.getByRole('button', { name: 'Arquivar' })
+  const archive = panel(page).getByRole('button', { name: 'Arquivar' })
   await archive.click()
-  const dialog = page.getByRole('alertdialog', { name: /Arquivar “Projeto Conf”\?/ })
+  const dialog = panel(page).getByRole('alertdialog', { name: /Arquivar “Projeto Conf”\?/ })
   await expect(dialog).toBeVisible()
   await expect(dialog.getByRole('button', { name: 'Voltar' })).toBeFocused()
 
@@ -47,36 +47,36 @@ test('ações pouco reversíveis pedem confirmação, com foco e teclado correto
   await page.keyboard.press('Escape')
   await expect(dialog).toBeHidden()
   await expect(archive).toBeFocused()
-  await expect(page.getByText(/Arquivado em/)).toHaveCount(0)
+  await expect(panel(page).getByText(/Arquivado em/)).toHaveCount(0)
 
   await archive.click()
-  await page.getByRole('button', { name: 'Arquivar projeto' }).click()
-  await expect(page.getByText('Projeto arquivado.')).toBeVisible()
-  await expect(page.getByText(/Arquivado em/)).toBeVisible()
+  await panel(page).getByRole('button', { name: 'Arquivar projeto' }).click()
+  await expect(panel(page).getByText('Projeto arquivado.')).toBeVisible()
+  await expect(panel(page).getByText(/Arquivado em/)).toBeVisible()
 
   // Restaurar não pede confirmação
-  await page.getByRole('button', { name: 'Restaurar' }).click()
-  await expect(page.getByText('Projeto restaurado.')).toBeVisible()
+  await panel(page).getByRole('button', { name: 'Restaurar' }).click()
+  await expect(panel(page).getByText('Projeto restaurado.')).toBeVisible()
 
   // --- Cliente
   await page.goto(`/app/clientes/${c.data!.id}`)
-  await page.getByRole('button', { name: 'Arquivar' }).click()
-  await expect(page.getByRole('alertdialog', { name: /Arquivar “Cliente Conf”\?/ })).toBeVisible()
-  await page.getByRole('button', { name: 'Voltar' }).click()
-  await expect(page.getByRole('alertdialog')).toBeHidden()
-  await page.getByRole('button', { name: 'Arquivar' }).click()
-  await page.getByRole('button', { name: 'Arquivar cliente' }).click()
-  await expect(page.getByText('Cliente arquivado.')).toBeVisible()
+  await panel(page).getByRole('button', { name: 'Arquivar' }).click()
+  await expect(panel(page).getByRole('alertdialog', { name: /Arquivar “Cliente Conf”\?/ })).toBeVisible()
+  await panel(page).getByRole('button', { name: 'Voltar' }).click()
+  await expect(panel(page).getByRole('alertdialog')).toBeHidden()
+  await panel(page).getByRole('button', { name: 'Arquivar' }).click()
+  await panel(page).getByRole('button', { name: 'Arquivar cliente' }).click()
+  await expect(panel(page).getByText('Cliente arquivado.')).toBeVisible()
 
   // --- Evento: "Manter" não cancela; confirmar cancela
   await page.goto(`/app/agenda/${e.data!.id}`)
-  await page.getByRole('button', { name: 'Cancelar evento' }).click()
-  await page.getByRole('button', { name: 'Manter evento' }).click()
-  await expect(page.locator('header').getByText('Agendado', { exact: true })).toBeVisible()
-  await page.getByRole('button', { name: 'Cancelar evento' }).click()
-  await page.getByRole('alertdialog').getByRole('button', { name: 'Cancelar evento' }).click()
-  await expect(page.getByText('Evento cancelado.')).toBeVisible()
-  await expect(page.locator('header').getByText('Cancelado', { exact: true })).toBeVisible()
+  await panel(page).getByRole('button', { name: 'Cancelar evento' }).click()
+  await panel(page).getByRole('button', { name: 'Manter evento' }).click()
+  await expect(panel(page).locator('span', { hasText: /^Agendado$/ }).first()).toBeVisible()
+  await panel(page).getByRole('button', { name: 'Cancelar evento' }).click()
+  await panel(page).getByRole('alertdialog').getByRole('button', { name: 'Cancelar evento' }).click()
+  await expect(panel(page).getByText('Evento cancelado.')).toBeVisible()
+  await expect(panel(page).locator('span', { hasText: /^Cancelado$/ }).first()).toBeVisible()
 
   // --- Modelo de checklist: excluir só depois de confirmar
   await page.goto('/app/tarefas/modelos')

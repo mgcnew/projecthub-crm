@@ -5,7 +5,8 @@ import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { LinkedEvents } from '@/features/calendar/LinkedEvents'
 import { LinkedTasks } from '@/features/tasks/LinkedTasks'
-import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
+import { ErrorState, LoadingState, StatusBadge } from '@/components/states'
+import { EntityView, type EntityTab } from '@/components/entity/EntityView'
 import { useProjectsByClient } from '@/features/projects/api'
 import { projectStatuses } from '@/features/projects/schema'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -30,9 +31,58 @@ export function ClientDetailPage() {
   if (!c) return <ErrorState message="Cliente não encontrado." />
   const clientScope = { clientId: c.id, projectIds: (projects.data ?? []).map((p) => p.id) }
 
+  const tabs: EntityTab[] = [
+    {
+      id: 'detalhes',
+      label: 'Detalhes',
+      content: (
+        <>
+          {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+        </>
+      ),
+    },
+    {
+      id: 'projetos',
+      label: 'Projetos',
+      content: (
+        <>
+
+        </>
+      ),
+    },
+    {
+      id: 'tarefas',
+      label: 'Tarefas',
+      content: (
+        <>
+          <LinkedTasks scope={clientScope} ready={projects.isSuccess} />
+        </>
+      ),
+    },
+    {
+      id: 'reunioes',
+      label: 'Reuniões e eventos',
+      content: (
+        <>
+          <LinkedEvents scope={clientScope} link={{ clientId: c.id }} ready={projects.isSuccess} />
+        </>
+      ),
+    },
+    {
+      id: 'atividade',
+      label: 'Atividade',
+      content: (
+        <>
+          <ActivityTimeline entityType="client" entityId={c.id} />
+        </>
+      ),
+    },
+  ]
+
   return (
-    <>
-      <PageHeader
+    <EntityView
+        kind="Cliente"
+        tabs={tabs}
         title={c.name}
         description={c.company_name ?? undefined}
         actions={
@@ -58,8 +108,7 @@ export function ClientDetailPage() {
             )}
           </>
         }
-      />
-      {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+      >
       <ConfirmDialog
         open={confirmArchive}
         title={`Arquivar “${c.name}”?`}
@@ -127,9 +176,6 @@ export function ClientDetailPage() {
           </ul>
         )}
       </section>
-      <LinkedTasks scope={clientScope} ready={projects.isSuccess} />
-      <LinkedEvents scope={clientScope} link={{ clientId: c.id }} ready={projects.isSuccess} />
-      <ActivityTimeline entityType="client" entityId={c.id} />
-    </>
+      </EntityView>
   )
 }

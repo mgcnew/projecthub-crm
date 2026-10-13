@@ -39,7 +39,7 @@ export function ActivityFeed({ enabled }: { enabled: boolean }) {
             <div className="min-w-0 flex-1">
               <p className="truncate leading-6">
                 {e ? (
-                  <Link to={entityHref(a.entity_type, a.entity_id, e.eventType)} className="font-semibold hover:underline">
+                  <Link to={entityHref(a.entity_type, a.entity_id, e.eventType)} className="-my-2.5 inline-block py-2.5 font-semibold hover:underline">
                     {title}
                   </Link>
                 ) : (

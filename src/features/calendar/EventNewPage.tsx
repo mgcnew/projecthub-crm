@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
-import { PageHeader } from '@/components/states'
+import { EntityView } from '@/components/entity/EntityView'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { fromLocalInput, toLocalInput } from '@/lib/format'
 import { useCreateEvent } from './api'
@@ -26,29 +26,38 @@ export function EventNewPage() {
   const isMeeting = params.get('tipo') === 'reuniao'
 
   return (
-    <>
-      <PageHeader title={isMeeting ? 'Nova reunião' : 'Novo evento'} />
-      <EventForm
-        initial={{
-          ...eventDefaults(t.start, t.end),
-          event_type: isMeeting ? 'meeting' : 'event',
-          project_id: params.get('projeto') ?? '',
-          client_id: params.get('cliente') ?? '',
-        }}
-        submitLabel="Criar"
-        serverError={error}
-        onSubmit={async (values) => {
-          setError(null)
-          try {
-            const created = await create.mutateAsync(values)
-            navigate(created.event_type === 'meeting' ? `/app/reunioes/${created.id}` : `/app/agenda/${created.id}`, {
-              replace: true,
-            })
-          } catch {
-            setError('Não foi possível salvar. Verifique os dados e tente novamente.')
-          }
-        }}
-      />
-    </>
+    <EntityView
+      kind="Evento"
+      title={isMeeting ? 'Nova reunião' : 'Novo evento'}
+      tabs={[
+        {
+          id: 'dados',
+          label: 'Dados',
+          content: (
+            <EventForm
+              initial={{
+                ...eventDefaults(t.start, t.end),
+                event_type: isMeeting ? 'meeting' : 'event',
+                project_id: params.get('projeto') ?? '',
+                client_id: params.get('cliente') ?? '',
+              }}
+              submitLabel="Criar"
+              serverError={error}
+              onSubmit={async (values) => {
+                setError(null)
+                try {
+                  const created = await create.mutateAsync(values)
+                  navigate(created.event_type === 'meeting' ? `/app/reunioes/${created.id}` : `/app/agenda/${created.id}`, {
+                    replace: true,
+                  })
+                } catch {
+                  setError('Não foi possível salvar. Verifique os dados e tente novamente.')
+                }
+              }}
+            />
+          ),
+        },
+      ]}
+    />
   )
 }

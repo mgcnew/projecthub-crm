@@ -12,13 +12,16 @@ import {
   UsersRound,
   type LucideIcon,
 } from 'lucide-react'
-import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { NavLink, useLocation, useNavigate, useRoutes, type RouteObject } from 'react-router-dom'
+import { EntityOverlay } from '@/components/entity/EntityOverlay'
 import { LineRegistry } from '@/components/LineRegistry'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/features/auth/auth-context'
 import { useUnreadCount } from '@/features/notifications/api'
 import { TimezoneBoundary } from '@/features/settings/TimezoneBoundary'
+import { matchEntityRoute } from '@/lib/entityRoutes'
 import { cn } from '@/lib/utils'
+import { useIsDesktop } from '@/lib/useMediaQuery'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
 
 // Pictogramas como na sinalização: o ícone acompanha o nome, nunca o substitui.
@@ -58,7 +61,7 @@ function link({ isActive }: { isActive: boolean }) {
  * Acessibilidade de navegação em SPA: a cada troca de rota o foco vai para o conteúdo e o título do
  * documento acompanha o <h1> da página (que pode aparecer só depois do carregamento).
  */
-function useRouteAccessibility(main: React.RefObject<HTMLElement | null>) {
+function useRouteAccessibility(main: React.RefObject<HTMLElement | null>, overlayOpen: boolean) {
   const { pathname } = useLocation()
   const lastPath = useRef(pathname)
 
@@ -69,9 +72,14 @@ function useRouteAccessibility(main: React.RefObject<HTMLElement | null>) {
     // movem o foco. Comparar com o caminho anterior também é idempotente sob o StrictMode.
     if (lastPath.current !== pathname) {
       lastPath.current = pathname
-      el.focus({ preventScroll: true })
-      window.scrollTo({ top: 0 })
+      // Com o painel aberto o foco é do diálogo; a página de fundo não rola nem recebe foco.
+      if (!overlayOpen) {
+        el.focus({ preventScroll: true })
+        window.scrollTo({ top: 0 })
+      }
     }
+
+    if (overlayOpen) return
 
     const sync = () => {
       const h1 = el.querySelector('h1')?.textContent?.trim()
@@ -81,16 +89,45 @@ function useRouteAccessibility(main: React.RefObject<HTMLElement | null>) {
     const observer = new MutationObserver(sync)
     observer.observe(el, { childList: true, subtree: true, characterData: true })
     return () => observer.disconnect()
-  }, [pathname, main])
+  }, [pathname, main, overlayOpen])
 }
 
-export function AppShell() {
+/** Última página (não-registro) visitada: é o fundo sobre o qual o painel de registro abre. */
+type Origin = { pathname: string; search: string; idx: number | null }
+
+export function AppShell({ pages }: { pages: RouteObject[] }) {
   const { signOut } = useAuth()
   const [moreOpen, setMoreOpen] = useState(false)
   const unread = useUnreadCount().data ?? 0
   const online = useOnlineStatus()
   const main = useRef<HTMLElement>(null)
-  useRouteAccessibility(main)
+
+  // Registro (tarefa, projeto…) abre em painel por cima da página de origem no desktop e como página
+  // inteira abaixo de 1024px. A URL é sempre a do registro: F5, link e Voltar funcionam nos dois modos.
+  const location = useLocation()
+  const navigate = useNavigate()
+  const desktop = useIsDesktop()
+  const entity = matchEntityRoute(location.pathname)
+  const overlayOpen = desktop && entity !== null
+  const [origin, setOrigin] = useState<Origin | null>(null)
+  const historyIdx = () => (window.history.state as { idx?: number } | null)?.idx ?? null
+
+  // Ajuste de estado durante a renderização (padrão do React para derivar de props): ao pousar numa
+  // página que não é registro, ela vira a origem dos próximos painéis.
+  if (!entity && (origin?.pathname !== location.pathname || origin?.search !== location.search)) {
+    setOrigin({ pathname: location.pathname, search: location.search, idx: historyIdx() })
+  }
+
+  const pageLocation = overlayOpen ? { pathname: origin?.pathname ?? entity.fallback, search: origin?.search ?? '' } : location
+  const page = useRoutes(pages, pageLocation)
+  const overlayContent = useRoutes(pages, location)
+  useRouteAccessibility(main, overlayOpen)
+
+  const closeOverlay = () => {
+    const here = historyIdx()
+    if (origin && origin.idx !== null && here !== null && here > origin.idx) navigate(origin.idx - here)
+    else navigate(origin ? origin.pathname + origin.search : (entity?.fallback ?? '/app'), { replace: true })
+  }
 
   useEffect(() => {
     if (!moreOpen) return
@@ -139,18 +176,19 @@ export function AppShell() {
             Sem conexão. Você pode continuar lendo, mas as alterações só serão salvas quando a conexão voltar.
           </p>
         )}
-        <main
-          id="conteudo"
-          ref={main}
-          tabIndex={-1}
-          className="mx-auto w-full max-w-[72rem] space-y-6 px-4 pt-5 pb-28 outline-none sm:px-6 lg:px-8 lg:pt-7 lg:pb-10"
-        >
-          <TimezoneBoundary>
-            <LineRegistry>
-              <Outlet />
-            </LineRegistry>
-          </TimezoneBoundary>
-        </main>
+        <TimezoneBoundary>
+          <LineRegistry>
+            <main
+              id="conteudo"
+              ref={main}
+              tabIndex={-1}
+              className="mx-auto w-full max-w-[72rem] space-y-6 px-4 pt-5 pb-28 outline-none sm:px-6 lg:px-8 lg:pt-7 lg:pb-10"
+            >
+              {page}
+            </main>
+            {overlayOpen && <EntityOverlay onClose={closeOverlay}>{overlayContent}</EntityOverlay>}
+          </LineRegistry>
+        </TimezoneBoundary>
       </div>
 
       {moreOpen && (

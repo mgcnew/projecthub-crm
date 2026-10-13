@@ -55,3 +55,9 @@ export function localInput(date: Date, tz = 'America/Sao_Paulo') {
   )
   return `${p.year}-${p.month}-${p.day}T${p.hour}:${p.minute}`
 }
+
+/**
+ * Registro aberto no desktop: o painel (diálogo) por cima da página de origem. O fundo fica inerte mas
+ * continua no DOM com os mesmos rótulos; por isso os specs de desktop miram sempre dentro do diálogo.
+ */
+export const panel = (page: Page) => page.getByRole('dialog').first()

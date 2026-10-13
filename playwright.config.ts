@@ -27,12 +27,12 @@ export default defineConfig({
     {
       name: 'desktop',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: ['**/mobile.e2e.ts', '**/csp.e2e.ts'],
+      testIgnore: ['**/mobile.e2e.ts', '**/csp.e2e.ts', '**/panel-mobile.e2e.ts'],
     },
     {
       name: 'mobile',
       use: { ...devices['Pixel 7'] },
-      testMatch: ['**/mobile.e2e.ts', '**/a11y.e2e.ts'],
+      testMatch: ['**/mobile.e2e.ts', '**/a11y.e2e.ts', '**/panel-mobile.e2e.ts'],
     },
     {
       name: 'csp',

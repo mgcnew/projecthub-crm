@@ -132,3 +132,22 @@
     scroll-behavior: auto !important;
   }
 }
+
+/* Painel de registro (desktop): entrada lateral curta; o modo expandido só aparece com fade. */
+@keyframes overlay-side {
+  from {
+    transform: translateX(1.5rem);
+    opacity: 0;
+  }
+}
+@keyframes overlay-fade {
+  from {
+    opacity: 0;
+  }
+}
+.overlay-panel[open][data-expanded='false'] {
+  animation: overlay-side 160ms ease-out;
+}
+.overlay-panel[open][data-expanded='true'] {
+  animation: overlay-fade 120ms ease-out;
+}

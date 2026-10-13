@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { apiSessionFor, createUser, login } from './helpers'
+import { apiSessionFor, createUser, login, panel } from './helpers'
 
 // Vínculos: projeto e cliente mostram (e criam) as tarefas e reuniões ligadas a eles.
 test('projeto e cliente enxergam as tarefas e reuniões vinculadas', async ({ page }) => {
@@ -18,10 +18,10 @@ test('projeto e cliente enxergam as tarefas e reuniões vinculadas', async ({ pa
   await login(page, user)
 
   // Projeto: captura rápida já vinculada
-  await page.goto(`/app/projetos/${p.data!.id}`)
-  await page.getByLabel('Nova tarefa neste projeto').fill('Revisar escopo')
+  await page.goto(`/app/projetos/${p.data!.id}?aba=tarefas`)
+  await panel(page).getByLabel('Nova tarefa neste projeto').fill('Revisar escopo')
   await page.keyboard.press('Enter')
-  const tasks = page.getByRole('region', { name: /Tarefas/ })
+  const tasks = panel(page).getByRole('region', { name: /Tarefas/ })
   await expect(tasks.getByRole('link', { name: 'Revisar escopo' })).toBeVisible()
   await expect(tasks.getByText('Tarefa solta')).toHaveCount(0)
 
@@ -33,32 +33,35 @@ test('projeto e cliente enxergam as tarefas e reuniões vinculadas', async ({ pa
   await expect(page.getByText('Tarefa solta')).toHaveCount(0)
 
   // Nova reunião a partir do projeto: projeto e cliente já selecionados
-  await page.goto(`/app/projetos/${p.data!.id}`)
-  await page.getByRole('link', { name: 'Nova reunião' }).click()
-  await expect(page.getByRole('heading', { name: 'Nova reunião', level: 1 })).toBeVisible()
-  await expect(page.getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
-  await expect(page.getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
-  await page.getByLabel('Título *').fill('Kickoff do projeto')
-  await page.getByRole('button', { name: 'Criar' }).click()
-  await expect(page.getByRole('heading', { name: 'Kickoff do projeto' })).toBeVisible()
+  await page.goto(`/app/projetos/${p.data!.id}?aba=reunioes`)
+  await panel(page).getByRole('link', { name: 'Nova reunião' }).click()
+  await expect(panel(page).getByRole('heading', { name: 'Nova reunião' })).toBeVisible()
+  await expect(panel(page).getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
+  await expect(panel(page).getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
+  await panel(page).getByLabel('Título *').fill('Kickoff do projeto')
+  await panel(page).getByRole('button', { name: 'Criar' }).click()
+  await expect(panel(page).getByRole('heading', { name: 'Kickoff do projeto' })).toBeVisible()
 
   // A reunião aparece no projeto
-  await page.goto(`/app/projetos/${p.data!.id}`)
-  const events = page.getByRole('region', { name: 'Reuniões e eventos' })
+  await page.goto(`/app/projetos/${p.data!.id}?aba=reunioes`)
+  const events = panel(page).getByRole('region', { name: 'Reuniões e eventos' })
   await expect(events.getByRole('link', { name: /Kickoff do projeto/ })).toBeVisible()
 
   // Cliente: enxerga a tarefa e a reunião que passam pelo projeto
-  await page.goto(`/app/clientes/${c.data!.id}`)
-  await expect(page.getByRole('link', { name: 'Revisar escopo' })).toBeVisible()
-  await expect(page.getByRole('link', { name: /Kickoff do projeto/ })).toBeVisible()
-  await expect(page.getByText('Tarefa solta')).toHaveCount(0)
+  await page.goto(`/app/clientes/${c.data!.id}?aba=tarefas`)
+  await expect(panel(page).getByRole('link', { name: 'Revisar escopo' })).toBeVisible()
+  await expect(panel(page).getByText('Tarefa solta')).toHaveCount(0)
 
   // Captura rápida no cliente: vira tarefa do cliente (sem projeto)
-  await page.getByLabel('Nova tarefa para este cliente').fill('Ligar para o cliente')
+  await panel(page).getByLabel('Nova tarefa para este cliente').fill('Ligar para o cliente')
   await page.keyboard.press('Enter')
-  await expect(page.getByRole('link', { name: 'Ligar para o cliente' })).toBeVisible()
+  await expect(panel(page).getByRole('link', { name: 'Ligar para o cliente' })).toBeVisible()
 
   // Concluir pelo vínculo some da lista de abertas
-  await page.getByRole('checkbox', { name: 'Concluir Ligar para o cliente' }).click()
-  await expect(page.getByRole('link', { name: 'Ligar para o cliente' })).toHaveCount(0)
+  await panel(page).getByRole('checkbox', { name: 'Concluir Ligar para o cliente' }).click()
+  await expect(panel(page).getByRole('link', { name: 'Ligar para o cliente' })).toHaveCount(0)
+
+  // A reunião do projeto aparece na aba de reuniões do cliente
+  await panel(page).getByRole('tab', { name: 'Reuniões e eventos' }).click()
+  await expect(panel(page).getByRole('link', { name: /Kickoff do projeto/ })).toBeVisible()
 })

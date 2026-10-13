@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { createUser, login } from './helpers'
+import { createUser, login, panel } from './helpers'
 
 test('fluxo diário: cliente → projeto → tarefa planejada → concluir aparece em todas as telas', async ({ page }) => {
   const user = await createUser('daily')
@@ -7,22 +7,22 @@ test('fluxo diário: cliente → projeto → tarefa planejada → concluir apare
 
   // Cliente
   await page.goto('/app/clientes/novo')
-  await page.getByLabel('Nome *').fill('Acme Ltda')
-  await page.getByRole('button', { name: 'Criar cliente' }).click()
-  await expect(page.getByRole('heading', { name: 'Acme Ltda' })).toBeVisible()
+  await panel(page).getByLabel('Nome *').fill('Acme Ltda')
+  await panel(page).getByRole('button', { name: 'Criar cliente' }).click()
+  await expect(panel(page).getByRole('heading', { name: 'Acme Ltda' })).toBeVisible()
 
   // Projeto vinculado ao cliente
   await page.goto('/app/projetos/novo')
-  await page.getByLabel('Nome *').fill('Site institucional')
-  await page.getByLabel('Cliente').selectOption({ label: 'Acme Ltda' })
-  await page.getByRole('button', { name: 'Criar projeto' }).click()
-  await expect(page.getByRole('heading', { name: 'Site institucional' })).toBeVisible()
+  await panel(page).getByLabel('Nome *').fill('Site institucional')
+  await panel(page).getByLabel('Cliente').selectOption({ label: 'Acme Ltda' })
+  await panel(page).getByRole('button', { name: 'Criar projeto' }).click()
+  await expect(panel(page).getByRole('heading', { name: 'Site institucional' })).toBeVisible()
 
   // Projeto sem cliente também é válido
   await page.goto('/app/projetos/novo')
-  await page.getByLabel('Nome *').fill('Estudos internos')
-  await page.getByRole('button', { name: 'Criar projeto' }).click()
-  await expect(page.getByRole('heading', { name: 'Estudos internos' })).toBeVisible()
+  await panel(page).getByLabel('Nome *').fill('Estudos internos')
+  await panel(page).getByRole('button', { name: 'Criar projeto' }).click()
+  await expect(panel(page).getByRole('heading', { name: 'Estudos internos' })).toBeVisible()
 
   // Captura rápida no Meu dia (só o título) já planeja para hoje
   await page.goto('/app/meu-dia')

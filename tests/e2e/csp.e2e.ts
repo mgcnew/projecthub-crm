@@ -41,7 +41,8 @@ test('o build de produção funciona sob CSP estrita, sem violações', async ({
     ['/app/configuracoes', 'Configurações'],
   ] as const) {
     await page.goto(path)
-    await expect(page.getByRole('heading', { name: heading, level: 1 })).toBeVisible()
+    // páginas têm h1; registros abrem em painel (diálogo) com h2
+    await expect(page.getByRole('heading', { name: heading }).first()).toBeVisible()
   }
 
   // Fluxo com escrita: o app continua funcional (fetch ao Supabase permitido pelo connect-src).

@@ -5,7 +5,8 @@ import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { Field } from '@/components/form'
 import { textareaClass } from '@/components/form-styles'
-import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
+import { EntityView, type EntityTab } from '@/components/entity/EntityView'
+import { ErrorState, LoadingState, StatusBadge } from '@/components/states'
 import { QuickCapture } from '@/features/tasks/QuickCapture'
 import { taskStatuses } from '@/features/tasks/schema'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -83,56 +84,73 @@ export function MeetingDetailPage() {
   if (!m) return <ErrorState message="Reunião não encontrada." />
   const ev = m.calendar_events as unknown as { title: string; starts_at: string; status: string } | null
 
-  return (
-    <>
-      <PageHeader
-        title={ev?.title ?? 'Reunião'}
-        description={ev ? formatDateTime(ev.starts_at) : undefined}
-        actions={
-          <>
-            {ev?.status === 'cancelled' && <StatusBadge tone="danger">Cancelada</StatusBadge>}
-            <Button asChild variant="outline">
-              <Link to={`/app/agenda/${eventId}`}>Editar evento</Link>
-            </Button>
-          </>
-        }
-      />
-
-      <MeetingForm
-        meetingId={m.id}
-        readOnly={!canWrite}
-        initial={{ agenda: m.agenda ?? '', notes: m.notes ?? '', decisions: m.decisions ?? '' }}
-      />
-
-      <section aria-labelledby="meeting-tasks" className="space-y-3">
-        <h2 id="meeting-tasks" className="section-title">
-          Tarefas geradas
-        </h2>
-        {tasks.isSuccess && tasks.data.length === 0 && (
-          <p className="text-sm text-muted-foreground">Nenhuma tarefa vinculada a esta reunião.</p>
-        )}
-        {(tasks.data ?? []).length > 0 && (
-          <ul className="plate divide-y divide-border">
-            {tasks.data!.map((t) => (
-              <li key={t.id}>
-                <Link to={`/app/tarefas/${t.id}`} className="flex min-h-11 items-center justify-between px-4 hover:bg-muted">
-                  <span className={t.status === 'done' ? 'text-muted-foreground line-through' : ''}>{t.title}</span>
-                  <StatusBadge tone={t.status === 'done' ? 'success' : 'neutral'}>
-                    {taskStatuses[t.status as keyof typeof taskStatuses] ?? t.status}
-                  </StatusBadge>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-        {canWrite && (
-          <QuickCapture
-            label="Nova tarefa da reunião"
-            placeholder="Nova tarefa a partir desta reunião"
-            onCreate={async (title) => void (await createTask.mutateAsync(title))}
+  const tabs: EntityTab[] = [
+    {
+      id: 'reuniao',
+      label: 'Pauta e notas',
+      content: (
+        <>
+          <MeetingForm
+            meetingId={m.id}
+            readOnly={!canWrite}
+            initial={{ agenda: m.agenda ?? '', notes: m.notes ?? '', decisions: m.decisions ?? '' }}
           />
-        )}
-      </section>
-    </>
+        </>
+      ),
+    },
+    {
+      id: 'tarefas',
+      label: 'Tarefas geradas',
+      content: (
+        <>
+          <section aria-labelledby="meeting-tasks" className="space-y-3">
+            <h2 id="meeting-tasks" className="section-title">
+              Tarefas geradas
+            </h2>
+            {tasks.isSuccess && tasks.data.length === 0 && (
+              <p className="text-sm text-muted-foreground">Nenhuma tarefa vinculada a esta reunião.</p>
+            )}
+            {(tasks.data ?? []).length > 0 && (
+              <ul className="plate divide-y divide-border">
+                {tasks.data!.map((t) => (
+                  <li key={t.id}>
+                    <Link to={`/app/tarefas/${t.id}`} className="flex min-h-11 items-center justify-between px-4 hover:bg-muted">
+                      <span className={t.status === 'done' ? 'text-muted-foreground line-through' : ''}>{t.title}</span>
+                      <StatusBadge tone={t.status === 'done' ? 'success' : 'neutral'}>
+                        {taskStatuses[t.status as keyof typeof taskStatuses] ?? t.status}
+                      </StatusBadge>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {canWrite && (
+              <QuickCapture
+                label="Nova tarefa da reunião"
+                placeholder="Nova tarefa a partir desta reunião"
+                onCreate={async (title) => void (await createTask.mutateAsync(title))}
+              />
+            )}
+          </section>
+        </>
+      ),
+    },
+  ]
+
+  return (
+    <EntityView
+    kind="Reunião"
+    tabs={tabs}
+      title={ev?.title ?? 'Reunião'}
+      description={ev ? formatDateTime(ev.starts_at) : undefined}
+      actions={
+        <>
+          {ev?.status === 'cancelled' && <StatusBadge tone="danger">Cancelada</StatusBadge>}
+          <Button asChild variant="outline">
+            <Link to={`/app/agenda/${eventId}`}>Editar evento</Link>
+          </Button>
+        </>
+      }
+    />
   )
 }

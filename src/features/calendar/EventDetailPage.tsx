@@ -2,7 +2,8 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
-import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
+import { ErrorState, LoadingState, StatusBadge } from '@/components/states'
+import { EntityView, type EntityTab } from '@/components/entity/EntityView'
 import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { ReminderEditor } from '@/features/notifications/ReminderEditor'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -51,9 +52,62 @@ export function EventDetailPage() {
     occurrence_limit: rule?.occurrence_limit ? String(rule.occurrence_limit) : '',
   }
 
+  const tabs: EntityTab[] = [
+    {
+      id: 'detalhes',
+      label: 'Detalhes',
+      content: (
+        <>
+          {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+          <EventForm
+            key={ev.updated_at}
+            initial={initial}
+            lockType
+            readOnly={!canWrite}
+            submitLabel="Salvar alterações"
+            serverError={error}
+            onSubmit={async (values) => {
+              setError(null)
+              setMessage(null)
+              try {
+                await update.mutateAsync(values)
+                setMessage('Alterações salvas.')
+              } catch {
+                setError('Não foi possível salvar. Verifique os dados e tente novamente.')
+              }
+            }}
+          />
+        </>
+      ),
+    },
+    {
+      id: 'lembretes',
+      label: 'Lembretes',
+      content: (
+        <>
+          <ReminderEditor
+            kind="event"
+            id={ev.id}
+            closedReason={ev.status === 'cancelled' ? 'Eventos cancelados não geram novos avisos.' : undefined}
+          />
+        </>
+      ),
+    },
+    {
+      id: 'atividade',
+      label: 'Atividade',
+      content: (
+        <>
+          <ActivityTimeline entityType="calendar_event" entityId={ev.id} />
+        </>
+      ),
+    },
+  ]
+
   return (
-    <>
-      <PageHeader
+    <EntityView
+        kind="Evento"
+        tabs={tabs}
         title={ev.title}
         actions={
           <>
@@ -76,8 +130,7 @@ export function EventDetailPage() {
             )}
           </>
         }
-      />
-      {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+      >
       <ConfirmDialog
         open={confirmCancel}
         title={`Cancelar “${ev.title}”?`}
@@ -102,30 +155,6 @@ export function EventDetailPage() {
           }
         }}
       />
-      <EventForm
-        key={ev.updated_at}
-        initial={initial}
-        lockType
-        readOnly={!canWrite}
-        submitLabel="Salvar alterações"
-        serverError={error}
-        onSubmit={async (values) => {
-          setError(null)
-          setMessage(null)
-          try {
-            await update.mutateAsync(values)
-            setMessage('Alterações salvas.')
-          } catch {
-            setError('Não foi possível salvar. Verifique os dados e tente novamente.')
-          }
-        }}
-      />
-      <ReminderEditor
-        kind="event"
-        id={ev.id}
-        closedReason={ev.status === 'cancelled' ? 'Eventos cancelados não geram novos avisos.' : undefined}
-      />
-      <ActivityTimeline entityType="calendar_event" entityId={ev.id} />
-    </>
+      </EntityView>
   )
 }

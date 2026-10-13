@@ -17,15 +17,17 @@ function Page({ title, to }: { title: string; to?: string }) {
   )
 }
 
+const pages = [
+  { path: '/app', element: <Page title="Central do dia" to="/app/agenda" /> },
+  { path: '/app/agenda', element: <Page title="Agenda" /> },
+]
+
 function renderShell() {
   const router = createMemoryRouter(
     [
       {
-        element: <AppShell />,
-        children: [
-          { path: '/app', element: <Page title="Central do dia" to="/app/agenda" /> },
-          { path: '/app/agenda', element: <Page title="Agenda" /> },
-        ],
+        element: <AppShell pages={pages} />,
+        children: pages,
       },
     ],
     { initialEntries: ['/app'] },

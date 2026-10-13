@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { apiSessionFor, createUser, localInput, login } from './helpers'
+import { apiSessionFor, createUser, localInput, login, panel } from './helpers'
 
 // Percorre o caminho real: lembrete na UI → worker do pg_cron (a cada minuto) → sino → notificação.
 test('lembrete de tarefa dispara pelo worker e aparece como notificação', async ({ page }) => {
@@ -14,12 +14,12 @@ test('lembrete de tarefa dispara pelo worker e aparece como notificação', asyn
   expect(task.error).toBeNull()
 
   await login(page, user)
-  await page.goto(`/app/tarefas/${task.data!.id}`)
-  await expect(page.getByRole('heading', { name: 'Enviar contrato' })).toBeVisible()
+  await page.goto(`/app/tarefas/${task.data!.id}?aba=lembretes`)
+  await expect(panel(page).getByRole('heading', { name: 'Enviar contrato' })).toBeVisible()
 
-  await page.getByLabel('Avisar em').fill(localInput(new Date(Date.now() + 5_000)))
-  await page.getByRole('button', { name: 'Adicionar lembrete' }).click()
-  await expect(page.getByRole('button', { name: 'Remover' }).first()).toBeVisible()
+  await panel(page).getByLabel('Avisar em').fill(localInput(new Date(Date.now() + 5_000)))
+  await panel(page).getByRole('button', { name: 'Adicionar lembrete' }).click()
+  await expect(panel(page).getByRole('button', { name: 'Remover' }).first()).toBeVisible()
 
   // O contador do sino atualiza por polling (60 s) ou ao focar; força a releitura recarregando.
   await expect

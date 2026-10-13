@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { apiSessionFor, createUser, login } from './helpers'
+import { apiSessionFor, createUser, login, panel } from './helpers'
 
 // Regressão: ao abrir um registro com projeto/cliente, o select mostrava "Sem …" (opções carregam
 // depois do formulário) e salvar podia desvincular. O vínculo precisa aparecer e sobreviver ao salvar.
@@ -36,32 +36,32 @@ test('selects de projeto/cliente refletem o vínculo salvo e o salvar o preserva
 
   // Projeto (carga direta: sem cache das opções)
   await page.goto(`/app/projetos/${p.data!.id}`)
-  await expect(page.getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
-  await page.getByLabel('Nome *').fill('Projeto Sel renomeado')
-  await page.getByRole('button', { name: 'Salvar alterações' }).click()
-  await expect(page.getByText('Alterações salvas.')).toBeVisible()
+  await expect(panel(page).getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
+  await panel(page).getByLabel('Nome *').fill('Projeto Sel renomeado')
+  await panel(page).getByRole('button', { name: 'Salvar alterações' }).click()
+  await expect(panel(page).getByText('Alterações salvas.')).toBeVisible()
   await page.reload()
-  await expect(page.getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
+  await expect(panel(page).getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
 
   // Tarefa
   await page.goto(`/app/tarefas/${t.data!.id}`)
-  await expect(page.getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
-  await expect(page.getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
-  await page.getByLabel('Título *').fill('Tarefa Sel renomeada')
-  await page.getByRole('button', { name: 'Salvar alterações' }).click()
-  await expect(page.getByText('Alterações salvas.')).toBeVisible()
+  await expect(panel(page).getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
+  await expect(panel(page).getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
+  await panel(page).getByLabel('Título *').fill('Tarefa Sel renomeada')
+  await panel(page).getByRole('button', { name: 'Salvar alterações' }).click()
+  await expect(panel(page).getByText('Alterações salvas.')).toBeVisible()
   await page.reload()
-  await expect(page.getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
-  await expect(page.getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
+  await expect(panel(page).getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
+  await expect(panel(page).getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
 
   // Evento
   await page.goto(`/app/agenda/${e.data!.id}`)
-  await expect(page.getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
-  await expect(page.getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
-  await page.getByLabel('Título *').fill('Evento Sel renomeado')
-  await page.getByRole('button', { name: 'Salvar alterações' }).click()
-  await expect(page.getByText('Alterações salvas.')).toBeVisible()
+  await expect(panel(page).getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
+  await expect(panel(page).getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
+  await panel(page).getByLabel('Título *').fill('Evento Sel renomeado')
+  await panel(page).getByRole('button', { name: 'Salvar alterações' }).click()
+  await expect(panel(page).getByText('Alterações salvas.')).toBeVisible()
   await page.reload()
-  await expect(page.getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
-  await expect(page.getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
+  await expect(panel(page).getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
+  await expect(panel(page).getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
 })

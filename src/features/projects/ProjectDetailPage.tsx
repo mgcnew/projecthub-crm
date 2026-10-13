@@ -4,7 +4,8 @@ import { Button } from '@/components/ui/button'
 import { LineBadge } from '@/components/LineBadge'
 import { lineFor } from '@/lib/lines'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
-import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
+import { ErrorState, LoadingState, StatusBadge } from '@/components/states'
+import { EntityView, type EntityTab } from '@/components/entity/EntityView'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
 import { useArchiveProject, useProject, useUpdateProject } from './api'
@@ -29,9 +30,61 @@ export function ProjectDetailPage() {
   const p = q.data
   if (!p) return <ErrorState message="Projeto não encontrado." />
 
+  const tabs: EntityTab[] = [
+    {
+      id: 'detalhes',
+      label: 'Detalhes',
+      content: (
+        <>
+          {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+        </>
+      ),
+    },
+    {
+      id: 'tarefas',
+      label: 'Tarefas',
+      content: (
+        <>
+
+        </>
+      ),
+    },
+    {
+      id: 'reunioes',
+      label: 'Reuniões e eventos',
+      content: (
+        <>
+          <LinkedEvents
+            scope={{ projectId: p.id }}
+            link={{ projectId: p.id, clientId: p.client_id ?? undefined }}
+          />
+        </>
+      ),
+    },
+    {
+      id: 'anotacoes',
+      label: 'Anotações',
+      content: (
+        <>
+          <ProjectLogs projectId={p.id} />
+        </>
+      ),
+    },
+    {
+      id: 'atividade',
+      label: 'Atividade',
+      content: (
+        <>
+          <ActivityTimeline entityType="project" entityId={p.id} />
+        </>
+      ),
+    },
+  ]
+
   return (
-    <>
-      <PageHeader
+    <EntityView
+        kind="Projeto"
+        tabs={tabs}
         title={p.name}
         description={
           <span className="inline-flex items-center gap-2">
@@ -67,8 +120,7 @@ export function ProjectDetailPage() {
             )}
           </>
         }
-      />
-      {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+      >
       <ConfirmDialog
         open={confirmArchive}
         title={`Arquivar “${p.name}”?`}
@@ -116,12 +168,6 @@ export function ProjectDetailPage() {
       />
 
       <LinkedTasks scope={{ projectId: p.id }} />
-      <LinkedEvents
-        scope={{ projectId: p.id }}
-        link={{ projectId: p.id, clientId: p.client_id ?? undefined }}
-      />
-      <ProjectLogs projectId={p.id} />
-      <ActivityTimeline entityType="project" entityId={p.id} />
-    </>
+      </EntityView>
   )
 }
