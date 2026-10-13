@@ -19,8 +19,8 @@ você pode fazer (contas, chaves, domínio). Eu nunca uso nem peço senhas ou ch
 
 ## 0. Antes de começar (pendências que são suas)
 
-- [ ] **Repositório remoto.** Hoje o repositório só tem commits locais. Crie um repositório privado no GitHub e
-      envie: `git remote add origin <url>` e `git push -u origin main`. A Vercel importa a partir dele.
+- [x] **Repositório remoto.** Feito em 2026-10-13: repositório **privado** `mgcnew/projecthub-crm`, `main` enviada.
+      A Vercel importa a partir dele.
 - [ ] **CI no GitHub.** O workflow `.github/workflows/ci.yml` nunca rodou fora desta máquina (inclui os jobs
       `database` e `e2e`). Depois do primeiro push, confirme que os três jobs ficam verdes.
 - [ ] **Banco do zero.** Rode `npm run db:reset` localmente (apaga só o banco local) e depois
@@ -29,6 +29,14 @@ você pode fazer (contas, chaves, domínio). Eu nunca uso nem peço senhas ou ch
 - [ ] Leia a seção "Antes de publicar" de [SECURITY_REVIEW.md](SECURITY_REVIEW.md).
 
 ## 1. Supabase hospedado (você)
+
+> **Já feito em 2026-10-13 (passos 1 a 3):** projeto `gnissqsrpzadthapdpue` (sa-east-1) com as 10 migrações
+> aplicadas, `pg_cron` ativo com o job `process-due-reminders` e histórico registrado em
+> `supabase_migrations.schema_migrations`. As migrações foram aplicadas por SQL via MCP (a CLI deste ambiente
+> está logada em outra conta e não tinha a senha do banco). A paridade foi conferida contra o banco local:
+> colunas, políticas, privilégios por coluna, índices, constraints, gatilhos e RLS com hashes idênticos, e as
+> 18 funções idênticas ignorando comentários. Se for usar `supabase link`/`db push` depois, o histórico já está
+> alinhado e a CLI não deve reaplicar nada. **Faltam os passos 4 a 7** (Auth, Data API, usuário e chaves).
 
 1. **Criar o projeto** em supabase.com. Região sugerida: `South America (São Paulo)`. Guarde a senha do banco
    num gerenciador de senhas (nunca no repositório).
