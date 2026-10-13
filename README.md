@@ -29,6 +29,7 @@ npx supabase start           # requer Docker ou Podman
 npm run db:reset             # recria o banco por migrações + seed
 npm run db:test              # pgTAP
 npm run test:integration     # JWT reais contra o Supabase local
+npm run db:backup            # backup lógico em backups/ (fora do Git); npm run db:restore-check verifica a restauração
 npm run check:bundle         # falha se o dist/ tiver segredo privilegiado (rode após build)
 npm run test:e2e             # Playwright (desktop + mobile + axe); requer `npx playwright install chromium`
 ```
@@ -36,4 +37,4 @@ npm run test:e2e             # Playwright (desktop + mobile + axe); requer `npx 
 Usuário de desenvolvimento local: ver `supabase/seed.sql`.
 
 ## Status
-**Fases 0 a 5 concluídas** (tooling; identidade e RLS; clientes e projetos; tarefas e checklists; agenda, reuniões e recorrência mínima; lembretes com worker `pg_cron`, notificações internas e Dashboard). **Fase 6 em andamento**: preferências (fuso), histórico de atividades, acessibilidade e testes E2E concluídos; revisão de segurança (RLS, CSP, segredos) concluída; faltam backup/restauração e deploy.
+**Fases 0 a 5 concluídas** (tooling; identidade e RLS; clientes e projetos; tarefas e checklists; agenda, reuniões e recorrência mínima; lembretes com worker `pg_cron`, notificações internas e Dashboard). **Fase 6 em andamento**: preferências (fuso), histórico de atividades, acessibilidade e testes E2E concluídos; revisão de segurança (RLS, CSP, segredos) concluída; backup/restauração ensaiados (docs/RUNBOOK.md); falta o deploy.
