@@ -1,6 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { sanitizeSearch } from '@/lib/format'
 import { supabase } from '@/lib/supabase'
+import { patchTaskStatus } from './optimistic'
 import { taskPayload, type TaskFormValues } from './schema'
 
 export const PAGE_SIZE = 20
@@ -196,12 +197,25 @@ export function useUpdateTask(id: string) {
 
 export function useSetTaskStatus() {
   const qc = useQueryClient()
+  const roots = [['tasks'], ['plans']] as const
   return useMutation({
     mutationFn: async ({ id, status }: { id: string; status: 'todo' | 'done' | 'cancelled' | 'in_progress' }) => {
       const { error } = await supabase.from('tasks').update({ status }).eq('id', id)
       if (error) throw error
     },
-    onSuccess: () => {
+    // Atualização otimista: o checkbox e o selo mudam na hora; em erro, o cache volta ao que era.
+    onMutate: async ({ id, status }) => {
+      await Promise.all(roots.map((r) => qc.cancelQueries({ queryKey: [...r] })))
+      const snapshots = roots.flatMap((r) => qc.getQueriesData({ queryKey: [...r] }))
+      for (const [key, data] of snapshots) {
+        if (data !== undefined) qc.setQueryData(key, patchTaskStatus(data, id, status))
+      }
+      return { snapshots }
+    },
+    onError: (_e, _v, ctx) => {
+      for (const [key, data] of ctx?.snapshots ?? []) qc.setQueryData(key, data)
+    },
+    onSettled: () => {
       void qc.invalidateQueries({ queryKey: ['tasks'] })
       void qc.invalidateQueries({ queryKey: ['plans'] })
     },
