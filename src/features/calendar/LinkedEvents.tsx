@@ -47,7 +47,7 @@ export function LinkedEvents({
   return (
     <section aria-labelledby="linked-events-h" className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id="linked-events-h" className="text-lg font-semibold">
+        <h2 id="linked-events-h" className="section-title">
           Reuniões e eventos
         </h2>
         {canWrite && (
@@ -68,13 +68,13 @@ export function LinkedEvents({
       {upcoming.length > 0 && (
         <div className="space-y-1">
           <h3 className="text-sm font-medium text-muted-foreground">Próximos</h3>
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">{upcoming.map(row)}</ul>
+          <ul className="plate divide-y divide-border">{upcoming.map(row)}</ul>
         </div>
       )}
       {past.length > 0 && (
         <div className="space-y-1">
           <h3 className="text-sm font-medium text-muted-foreground">Anteriores</h3>
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">{past.map(row)}</ul>
+          <ul className="plate divide-y divide-border">{past.map(row)}</ul>
         </div>
       )}
     </section>

@@ -23,15 +23,15 @@ export function TaskChecklist({ taskId }: { taskId: string }) {
 
   return (
     <section aria-labelledby="checklist-h" className="space-y-3">
-      <h2 id="checklist-h" className="text-lg font-semibold">
-        Checklist {list.length > 0 && <span className="text-sm font-normal text-muted-foreground">({doneCount}/{list.length})</span>}
+      <h2 id="checklist-h" className="section-title">
+        Checklist {list.length > 0 && <span className="ml-1 font-semibold tracking-normal text-muted-foreground normal-case">({doneCount}/{list.length})</span>}
       </h2>
 
       {items.isPending && <LoadingState />}
       {items.isError && <ErrorState message="Não foi possível carregar o checklist." onRetry={() => items.refetch()} />}
       {items.isSuccess && list.length === 0 && <p className="text-sm text-muted-foreground">Nenhum item.</p>}
       {list.length > 0 && (
-        <ul className="divide-y divide-border rounded-md border border-border bg-card">
+        <ul className="plate divide-y divide-border">
           {list.map((i) => (
             <li key={i.id} className="flex min-h-11 items-center gap-1 pr-4 pl-2">
               <RowCheckbox

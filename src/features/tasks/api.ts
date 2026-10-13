@@ -329,7 +329,9 @@ export function useDayPlans(date: string, enabled: boolean) {
     queryFn: async () => {
       const { data, error } = await supabase
         .from('task_plans')
-        .select('id, sort_order, status, task_id, tasks(id, title, status, priority, due_date, due_at, projects(name))')
+        .select(
+          'id, sort_order, status, task_id, tasks(id, title, status, priority, due_date, due_at, estimated_minutes, project_id, projects(name))',
+        )
         .eq('planned_date', date)
         .neq('status', 'cancelled')
         .order('sort_order')

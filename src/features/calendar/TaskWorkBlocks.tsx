@@ -37,14 +37,14 @@ export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitl
 
   return (
     <section aria-labelledby="blocks-h" className="space-y-3">
-      <h2 id="blocks-h" className="text-lg font-semibold">
+      <h2 id="blocks-h" className="section-title">
         Blocos de tempo
       </h2>
       {blocks.isSuccess && blocks.data.length === 0 && (
         <p className="text-sm text-muted-foreground">Nenhum bloco reservado.</p>
       )}
       {(blocks.data ?? []).length > 0 && (
-        <ul className="divide-y divide-border rounded-md border border-border bg-card">
+        <ul className="plate divide-y divide-border">
           {blocks.data!.map((b) => (
             <li key={b.id} className="flex min-h-11 items-center justify-between gap-2 px-4">
               <span className="text-sm">

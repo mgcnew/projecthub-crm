@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Folhinha — Central do dia</title>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,100..900&display=swap" rel="stylesheet">
+<style>
+:root{--papel:#F3F2EE;--folha:#FFF;--tinta:#18181B;--t2:#3A3A3F;--t3:#62626A;--regua:#D8D6D0;--verm:#D0262D;--caneta:#1F4FBF;--lapis:#8A8D93}
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--papel);color:var(--tinta);font:400 14px/1.45 Archivo,sans-serif;font-variant-numeric:tabular-nums}
+.shell{display:grid;grid-template-columns:232px 1fr;height:900px}
+.rail{background:var(--tinta);color:#D9D8D3;padding:22px 14px;display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;align-items:center;gap:10px;padding:0 10px 22px;font:700 15px Archivo;font-stretch:75%;letter-spacing:.12em;text-transform:uppercase;color:#fff}
+.brand i{width:12px;height:14px;background:var(--verm)}
+.nav a{display:flex;align-items:center;height:44px;padding:0 12px;color:#BDBCB6;text-decoration:none;font-weight:500;border-left:3px solid transparent}
+.nav a.on{color:#fff;background:#26262A;border-left-color:var(--verm)}
+.nav a b{margin-left:auto;background:var(--verm);color:#fff;font-size:12px;padding:2px 8px}
+.who{margin-top:auto;padding:12px;border-top:1px solid #2E2E33;color:#9B9A95;font-size:13px}
+main{padding:28px 36px;display:grid;grid-template-rows:auto 1fr;gap:24px}
+.top{display:grid;grid-template-columns:600px 1fr;gap:40px;align-items:start}
+.sheetwrap{position:relative}
+.under{position:absolute;inset:8px -8px -8px 8px;background:#FAFAF7;border:1px solid var(--regua)}
+.under.two{inset:16px -16px -16px 16px;background:#F7F7F3}
+.sheet{position:relative;background:var(--folha);border:1px solid var(--regua);padding:0 28px 22px}
+.perf{height:14px;margin:0 -28px 14px;border-bottom:1px dashed var(--regua);background:radial-gradient(circle at 7px 7px,var(--papel) 3px,transparent 3.5px) 0 0/22px 14px repeat-x}
+.day{display:grid;grid-template-columns:auto 1fr;gap:26px;align-items:end}
+.num{font:800 216px/0.78 Archivo;font-stretch:62%;letter-spacing:-.02em}
+.wk{font:700 34px/1 Archivo;font-stretch:70%;text-transform:uppercase;letter-spacing:.02em}
+.mo{font-size:17px;color:var(--t2);margin:6px 0 14px}
+.fine{border-top:1px solid var(--regua);padding-top:10px;font-size:13px;color:var(--t2);display:grid;gap:3px}
+.fine .r{color:var(--verm);font-weight:600}
+.daynav{display:flex;gap:8px;margin-top:18px}
+.btn{height:36px;padding:0 14px;border:1px solid var(--tinta);background:var(--folha);font:600 13px Archivo;display:inline-flex;align-items:center}
+.btn.ink{background:var(--tinta);color:#fff}
+.cap h2,.col h2{font:700 13px Archivo;font-stretch:75%;letter-spacing:.14em;text-transform:uppercase}
+.cap{display:grid;gap:12px;padding-top:6px}
+.field{display:flex;gap:8px}
+.field span{flex:1;height:44px;border:1px solid var(--regua);background:var(--folha);display:flex;align-items:center;padding:0 12px;color:var(--t3)}
+.inks{display:flex;gap:22px;font-size:13px;color:var(--t2);padding-top:4px}
+.inks em{font-style:normal;display:inline-block;width:22px;height:0;border-top:3px solid;vertical-align:middle;margin-right:7px}
+.cols{display:grid;grid-template-columns:1.15fr 1fr 1fr;gap:20px;min-height:0}
+.col{background:var(--folha);border:1px solid var(--regua);padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.col h2{display:flex;justify-content:space-between;align-items:baseline;padding-bottom:8px;border-bottom:1px solid var(--regua)}
+.col h2 small{font:500 12px Archivo;letter-spacing:0;text-transform:none;color:var(--t3)}
+.c-plan h2{border-bottom:2px solid var(--caneta)}
+.c-ag h2{border-bottom:2px solid var(--lapis)}
+.c-pz h2{border-bottom:2px solid var(--verm)}
+.row{display:flex;align-items:center;gap:12px;min-height:44px;padding:8px 0;border-bottom:1px solid #EEEDE8}
+.box{width:18px;height:18px;border:1.5px solid var(--tinta);flex:none}
+.box.ok{border-color:var(--caneta);background:linear-gradient(45deg,transparent 45%,var(--caneta) 45% 55%,transparent 55%),linear-gradient(-45deg,transparent 45%,var(--caneta) 45% 55%,transparent 55%)}
+.row .t{flex:1}
+.done .t{color:var(--t3);text-decoration:line-through;text-decoration-color:var(--caneta);text-decoration-thickness:2px}
+.circ .t span{outline:2px solid var(--caneta);outline-offset:3px;border-radius:40% 55% 45% 60%}
+.est{color:var(--t3);font-size:13px}
+.pri{width:8px;height:8px;background:var(--tinta);flex:none}.pri.u{width:12px;height:12px}.pri.l{width:5px;height:5px;background:var(--t3)}
+.sum{margin-top:auto;display:flex;justify-content:space-between;font-size:13px;color:var(--caneta);font-weight:600;padding-top:8px}
+.ag{display:grid;grid-template-columns:44px 1fr;row-gap:0;font-size:13px}
+.ag .h{color:var(--t3);height:38px;border-top:1px solid #EEEDE8;padding-top:2px}
+.ag .s{border-top:1px solid #EEEDE8;position:relative;height:38px}
+.ev{position:absolute;left:0;right:0;padding:4px 10px;font-size:13px;line-height:1.3}
+.ev.meet{background:var(--tinta);color:#fff}
+.ev.blk{border:1.5px solid var(--lapis);color:var(--t2);background:repeating-linear-gradient(135deg,transparent 0 6px,rgba(138,141,147,.28) 6px 7px)}
+.ev small{display:block;opacity:.8}
+.pz{display:flex;gap:14px;align-items:center;min-height:58px;padding:8px 0;border-bottom:1px solid #EEEDE8}
+.mini{width:46px;flex:none;border:1px solid var(--regua);text-align:center;background:var(--folha)}
+.mini b{display:block;background:var(--tinta);color:#fff;font:700 11px/18px Archivo;letter-spacing:.1em;padding:0 4px}
+.mini span{display:block;font:800 26px/30px Archivo;font-stretch:62%}
+.mini.red b{background:var(--verm)}.mini.red span{color:var(--verm)}
+.pz .t{flex:1;display:grid}.pz .t small{color:var(--t3);font-size:12.5px}
+.tag{font:600 12px Archivo;color:var(--verm);border:1.5px solid var(--verm);padding:3px 9px}
+</style></head><body>
+<div class="shell">
+<aside class="rail">
+  <div class="brand"><i></i>ProjectHub</div>
+  <nav class="nav">
+    <a class="on">Início</a><a>Meu dia</a><a>Agenda</a><a>Tarefas</a><a>Reuniões</a><a>Projetos</a><a>Clientes</a><a>Notificações <b>2</b></a><a>Configurações</a>
+  </nav>
+  <div class="who">Espaço pessoal · Sair</div>
+</aside>
+<main>
+  <section class="top">
+    <div class="sheetwrap"><div class="under two"></div><div class="under"></div>
+      <div class="sheet"><div class="perf"></div>
+        <div class="day"><div class="num">13</div>
+          <div><div class="wk">Terça-feira</div><div class="mo">Outubro de 2026 · semana 42</div>
+            <div class="fine"><span>4 tarefas planejadas · 2h30 de 6h estimadas</span><span>2 compromissos · o próximo às 10:00</span><span class="r">1 prazo vence hoje · 1 atrasado</span></div>
+          </div></div>
+        <div class="daynav"><span class="btn">‹ 12 seg</span><span class="btn ink">Hoje</span><span class="btn">14 qua ›</span></div>
+      </div>
+    </div>
+    <div class="cap"><h2>Capturar</h2>
+      <div class="field"><span>Nova tarefa para hoje — só o título</span><span class="btn ink" style="flex:none;height:44px">Adicionar</span></div>
+      <div class="inks"><span><em style="color:var(--verm)"></em>Prazo, impresso</span><span><em style="color:var(--caneta)"></em>Plano, a caneta</span><span><em style="color:var(--lapis)"></em>Bloco, a lápis</span></div>
+    </div>
+  </section>
+  <section class="cols">
+    <div class="col c-plan"><h2>Planejado hoje <small>4 tarefas</small></h2>
+      <div class="row done"><span class="box ok"></span><span class="pri"></span><span class="t">Enviar proposta revisada · Acme</span><span class="est">30 min</span></div>
+      <div class="row circ"><span class="box"></span><span class="pri u"></span><span class="t"><span>Revisar escopo com a Acme</span></span><span class="est">1 h</span></div>
+      <div class="row"><span class="box"></span><span class="pri"></span><span class="t">Atualizar contrato da Beta</span><span class="est">45 min</span></div>
+      <div class="row"><span class="box"></span><span class="pri l"></span><span class="t">Ligar para o fornecedor</span><span class="est">15 min</span></div>
+      <div class="sum"><span>2h30 de 6h</span><span>cabe no dia</span></div>
+    </div>
+    <div class="col c-ag"><h2>Agenda <small>2 compromissos · 1 bloco</small></h2>
+      <div class="ag">
+        <div class="h">09:00</div><div class="s"></div>
+        <div class="h">10:00</div><div class="s"><div class="ev meet" style="top:0;height:38px">Kickoff · Site institucional<small>Reunião · Acme</small></div></div>
+        <div class="h">11:00</div><div class="s"></div>
+        <div class="h">14:00</div><div class="s"><div class="ev blk" style="top:0;height:76px">Foco: proposta Acme<small>Bloco de tempo · 14:00–16:00</small></div></div>
+        <div class="h">15:00</div><div class="s"></div>
+        <div class="h">17:30</div><div class="s"><div class="ev meet" style="top:0;height:38px;background:var(--t2)">Dentista</div></div>
+      </div>
+    </div>
+    <div class="col c-pz"><h2>Prazos <small>próximos 7 dias</small></h2>
+      <div class="pz"><div class="mini red"><b>OUT</b><span>11</span></div><div class="t">Enviar orçamento do app<small>Beta Comércio</small></div><span class="tag">atrasada 2 dias</span></div>
+      <div class="pz"><div class="mini red"><b>OUT</b><span>13</span></div><div class="t">Entregar layout da home<small>Site institucional · vence hoje</small></div></div>
+      <div class="pz"><div class="mini"><b>OUT</b><span>15</span></div><div class="t">Revisar contrato<small>Beta Comércio · em 2 dias</small></div></div>
+      <div class="pz"><div class="mini"><b>OUT</b><span>18</span></div><div class="t">Publicar versão 1.2<small>App de pedidos</small></div></div>
+    </div>
+  </section>
+</main>
+</div>
+</body></html>

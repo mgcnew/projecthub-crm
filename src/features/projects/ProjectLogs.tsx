@@ -36,7 +36,7 @@ export function ProjectLogs({ projectId }: { projectId: string }) {
 
   return (
     <section aria-labelledby="project-history" className="space-y-4">
-      <h2 id="project-history" className="text-lg font-semibold">
+      <h2 id="project-history" className="section-title">
         Histórico
       </h2>
 

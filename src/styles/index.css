@@ -1,37 +1,53 @@
 @import 'tailwindcss';
-@import '@fontsource-variable/inter';
+@import '@fontsource-variable/hanken-grotesk';
 
-/* Tokens do UI_UX_SPEC.md — tema claro padrão (D005) */
+/*
+ * Mundo "Linhas do Metrô" (direção escolhida em 2026-10-13; contrato em .impeccable/surfaces/).
+ * Placas esmaltadas da sinalização do Metrô de São Paulo: fundo cinza-claro, placas brancas, tinta
+ * quase preta, réguas frias. A cor de linha é reservada aos projetos; o vermelho marca "agora" e atraso.
+ * Tema claro padrão (D005). Contrastes de texto conferidos para AA.
+ */
 :root {
-  --background: #f8fafc;
-  --foreground: #0f172a;
+  --background: #f2f4f5;
+  --foreground: #111418;
   --card: #ffffff;
-  --card-foreground: #0f172a;
+  --card-foreground: #111418;
   --popover: #ffffff;
-  --popover-foreground: #0f172a;
-  --primary: #2563eb;
+  --popover-foreground: #111418;
+  /* Primário é a própria tinta da placa: ação principal em preto sólido. */
+  --primary: #111418;
   --primary-foreground: #ffffff;
-  /* Azul para texto sobre tint do próprio azul (nav ativa, badge info): 5,82:1 sobre primary/10. */
-  --primary-strong: #1d4ed8;
-  --secondary: #f1f5f9;
-  --secondary-foreground: #0f172a;
-  --muted: #f1f5f9;
-  /* Escurecido de #64748b: 4,34:1 sobre --muted não passava AA; #5f6e84 dá 4,73:1. */
-  --muted-foreground: #5f6e84;
-  --accent: #f1f5f9;
-  --accent-foreground: #0f172a;
-  /* #ef4444 como texto dava 3,76:1; #dc2626 dá 4,83:1 sobre o painel branco. */
-  --destructive: #dc2626;
-  --success: #10b981;
-  --warning: #f59e0b;
-  --border: #e2e8f0;
-  --input: #e2e8f0;
-  --ring: #2563eb;
-  --radius: 0.5rem;
+  /* Azul da Linha 1 para links, foco e informação (7,45:1 sobre branco). */
+  --primary-strong: #0455a1;
+  --secondary: #e8ecef;
+  --secondary-foreground: #111418;
+  --muted: #e8ecef;
+  /* 6,59:1 sobre branco, 5,54:1 sobre --muted. */
+  --muted-foreground: #565e66;
+  --accent: #e8ecef;
+  --accent-foreground: #111418;
+  /* Texto de erro/atraso (6,87:1 sobre branco); o vermelho vivo fica para o marcador "agora". */
+  --destructive: #b4141b;
+  --border: #d9dee2;
+  --input: #848e96;
+  --ring: #0455a1;
+  --radius: 0.125rem;
+  --rule-strong: #111418;
+  --now: #ee372f;
+
+  /* Cores de linha (projetos). Texto sobre a cor definido em src/lib/lines.ts. */
+  --line-azul: #0455a1;
+  --line-verde: #007e5e;
+  --line-amarela: #ffd400;
+  --line-lilas: #9b3894;
+  --line-rubi: #ca016b;
+  --line-turquesa: #047fa3;
+  --line-ouro: #946616;
+  --line-prata: #68717a;
 }
 
 @theme inline {
-  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-sans: 'Hanken Grotesk Variable', ui-sans-serif, system-ui, sans-serif;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
@@ -48,20 +64,61 @@
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
-  --color-success: var(--success);
-  --color-warning: var(--warning);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --radius-md: calc(var(--radius) - 2px);
+  --color-rule-strong: var(--rule-strong);
+  --color-now: var(--now);
+  --radius-md: var(--radius);
+  --radius-sm: var(--radius);
+  --radius-lg: var(--radius);
 }
 
 @layer base {
   * {
     @apply border-border;
   }
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
   body {
     @apply bg-background text-foreground font-sans antialiased;
+    font-feature-settings: 'tnum' 1;
+  }
+  ::selection {
+    background: #0455a133;
+  }
+  a {
+    text-underline-offset: 3px;
+  }
+  :focus-visible {
+    outline: 3px solid var(--ring);
+    outline-offset: 2px;
+  }
+  input[type='checkbox'] {
+    accent-color: var(--foreground);
+  }
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+}
+
+@layer components {
+  /* Título de seção: caixa alta firme, como o nome de uma estação na placa. */
+  .section-title {
+    font-size: 0.8125rem;
+    line-height: 1.25rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--foreground);
+  }
+  /* Placa: superfície branca com régua fina. */
+  .plate {
+    background: var(--card);
+    border: 1px solid var(--border);
   }
 }
 

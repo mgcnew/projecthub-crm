@@ -58,7 +58,7 @@ export function SettingsPage() {
     <>
       <PageHeader title="Configurações" />
       <section aria-labelledby="tz-h" className="max-w-xl space-y-3">
-        <h2 id="tz-h" className="text-lg font-semibold">
+        <h2 id="tz-h" className="section-title">
           Fuso de trabalho
         </h2>
         <p className="text-sm text-muted-foreground">

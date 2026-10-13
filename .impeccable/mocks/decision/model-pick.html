@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="pt-BR"><head><meta charset="utf-8"><title>Linhas do Metrô — Central do dia</title>
+<style>
+:root{--bg:#F2F4F5;--w:#FFF;--ink:#111418;--t2:#3B4148;--t3:#5D646C;--rule:#D9DEE2;--l1:#0455A1;--l2:#007E5E;--l3:#EE372F;--l4:#FFD400;--l5:#9B3894}
+*{box-sizing:border-box;margin:0}
+body{width:1440px;height:900px;overflow:hidden;background:var(--bg);color:var(--ink);font:400 14px/1.45 "Helvetica Neue",Helvetica,Arial,sans-serif;font-variant-numeric:tabular-nums}
+.shell{display:grid;grid-template-columns:236px 1fr;height:900px}
+.rail{background:var(--w);border-right:1px solid var(--rule);padding:20px 12px;display:flex;flex-direction:column;gap:2px}
+.brand{font-weight:700;font-size:17px;letter-spacing:-.01em;padding:0 10px 20px;display:flex;align-items:center;gap:10px}
+.brand i{width:22px;height:22px;background:var(--ink);color:#fff;font:700 13px/22px Helvetica;text-align:center;font-style:normal}
+.nav a{display:flex;align-items:center;gap:12px;height:42px;padding:0 10px;color:var(--t2);font-weight:500}
+.nav a i{width:6px;height:22px;flex:none}
+.nav a.on{background:var(--ink);color:#fff}
+.nav a.on i{background:#fff!important}
+main{padding:24px 32px;display:grid;grid-template-rows:auto auto 1fr;gap:20px}
+.hd{display:flex;align-items:end;justify-content:space-between}
+.hd h1{font-size:30px;font-weight:700;letter-spacing:-.02em}
+.hd p{color:var(--t3);font-size:15px}
+.btn{height:38px;padding:0 14px;display:inline-flex;align-items:center;font-weight:600;border:1px solid var(--ink);background:var(--w)}
+.btn.ink{background:var(--ink);color:#fff}
+.line{background:var(--w);border:1px solid var(--rule);padding:18px 26px 16px;position:relative}
+.line h2,.card h2{font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--t2)}
+.track{position:relative;height:118px;margin-top:8px}
+.bar{position:absolute;top:56px;height:10px}
+.st{position:absolute;top:49px;width:24px;height:24px;border-radius:50%;background:#fff;border:5px solid var(--ink);transform:translateX(-12px)}
+.st.now{border-color:var(--l3)}
+.lbl{position:absolute;top:0;transform:translateX(-12px);font-size:13px;font-weight:600;white-space:nowrap}
+.lbl small{display:block;color:var(--t3);font-weight:400}
+.tm{position:absolute;top:84px;transform:translateX(-12px);font-size:12px;color:var(--t3)}
+.now-l{position:absolute;top:36px;bottom:20px;width:2px;background:var(--l3)}
+.grid{display:grid;grid-template-columns:1.6fr 1fr;gap:20px;min-height:0}
+.card{background:var(--w);border:1px solid var(--rule);padding:16px 18px}
+table{width:100%;border-collapse:collapse;margin-top:10px}
+th{text-align:left;font-size:12px;color:var(--t3);font-weight:600;padding:8px 6px;border-bottom:2px solid var(--ink)}
+td{padding:10px 6px;border-bottom:1px solid var(--rule);font-size:14px}
+.badge{display:inline-flex;width:24px;height:24px;color:#fff;font:700 12px/24px Helvetica;justify-content:center;border-radius:50%}
+.chk{width:18px;height:18px;border:2px solid var(--ink);display:inline-block;vertical-align:middle}
+.st-t{font-size:12px;font-weight:600;padding:2px 8px;background:var(--bg)}
+.late{color:#B4141B;font-weight:600}
+.pz{display:flex;gap:12px;align-items:center;padding:11px 0;border-bottom:1px solid var(--rule)}
+.pz i{width:6px;align-self:stretch;flex:none}
+.pz div{flex:1;display:grid}.pz small{color:var(--t3)}
+.pz b{font-size:13px}
+</style></head><body>
+<div class="shell">
+<aside class="rail">
+  <div class="brand"><i>P</i>ProjectHub</div>
+  <nav class="nav">
+    <a class="on"><i></i>Início</a><a><i style="background:var(--l1)"></i>Meu dia</a><a><i style="background:var(--l2)"></i>Agenda</a><a><i style="background:var(--l3)"></i>Tarefas</a><a><i style="background:var(--l5)"></i>Reuniões</a><a><i style="background:var(--l4)"></i>Projetos</a><a><i style="background:#8C959D"></i>Clientes</a><a><i style="background:#8C959D"></i>Notificações</a>
+  </nav>
+</aside>
+<main>
+  <div class="hd"><div><p>Terça-feira, 13 de outubro</p><h1>Central do dia</h1></div><div style="display:flex;gap:8px"><span class="btn">‹ Ontem</span><span class="btn ink">Nova tarefa</span><span class="btn">Amanhã ›</span></div></div>
+  <section class="line"><h2>Linha do dia</h2>
+    <div class="track">
+      <div class="bar" style="left:0;width:100%;background:#D3D9DE"></div>
+      <div class="bar" style="left:14%;width:12%;background:var(--l1)"></div>
+      <div class="bar" style="left:52%;width:22%;background:var(--l2)"></div>
+      <div class="now-l" style="left:31%"></div>
+      <div class="st" style="left:14%"></div><div class="lbl" style="left:14%">Kickoff · Site institucional<small>Reunião · Acme</small></div><div class="tm" style="left:14%">10:00</div>
+      <div class="st now" style="left:31%"></div><div class="tm" style="left:31%">agora 11:42</div>
+      <div class="st" style="left:52%"></div><div class="lbl" style="left:52%">Foco: proposta Beta<small>Bloco · até 16:00</small></div><div class="tm" style="left:52%">14:00</div>
+      <div class="st" style="left:86%"></div><div class="lbl" style="left:86%">Dentista</div><div class="tm" style="left:86%">17:30</div>
+    </div>
+  </section>
+  <section class="grid">
+    <div class="card"><h2>Planejado hoje · 4 tarefas · 2h30 estimadas</h2>
+      <table><thead><tr><th></th><th>Linha</th><th>Tarefa</th><th>Prazo</th><th>Estimativa</th><th>Situação</th></tr></thead><tbody>
+        <tr><td><span class="chk"></span></td><td><span class="badge" style="background:var(--l1)">S</span></td><td>Revisar escopo com a Acme</td><td>13/10</td><td>1 h</td><td><span class="st-t">Em andamento</span></td></tr>
+        <tr><td><span class="chk"></span></td><td><span class="badge" style="background:var(--l2)">B</span></td><td>Atualizar contrato da Beta</td><td>15/10</td><td>45 min</td><td><span class="st-t">A fazer</span></td></tr>
+        <tr><td><span class="chk"></span></td><td><span class="badge" style="background:#5D646C">—</span></td><td>Ligar para o fornecedor</td><td>—</td><td>15 min</td><td><span class="st-t">A fazer</span></td></tr>
+        <tr><td><span class="chk" style="background:var(--ink)"></span></td><td><span class="badge" style="background:var(--l1)">S</span></td><td style="text-decoration:line-through;color:var(--t3)">Enviar proposta revisada</td><td>12/10</td><td>30 min</td><td><span class="st-t">Concluída</span></td></tr>
+      </tbody></table>
+    </div>
+    <div class="card"><h2>Prazos · próximos 7 dias</h2>
+      <div class="pz"><i style="background:var(--l2)"></i><div><b>Enviar orçamento do app</b><small>Beta Comércio</small></div><span class="late">atrasada 2 dias</span></div>
+      <div class="pz"><i style="background:var(--l1)"></i><div><b>Entregar layout da home</b><small>Site institucional</small></div><span class="late">hoje</span></div>
+      <div class="pz"><i style="background:var(--l2)"></i><div><b>Revisar contrato</b><small>Beta Comércio</small></div><span>15/10</span></div>
+      <div class="pz"><i style="background:var(--l5)"></i><div><b>Publicar versão 1.2</b><small>App de pedidos</small></div><span>18/10</span></div>
+    </div>
+  </section>
+</main>
+</div>
+</body></html>

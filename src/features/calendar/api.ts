@@ -66,6 +66,23 @@ export function useLinkedEvents(scope: LinkScope, enabled = true) {
   })
 }
 
+/**
+ * Projeto das tarefas dos blocos de foco: a ocorrência traz só o task_id, e o bloco deve correr na
+ * linha do projeto da tarefa (não em Prata).
+ */
+export function useWorkBlockProjects(occurrences: { event_type: string; task_id: string | null }[] | undefined) {
+  const ids = [...new Set((occurrences ?? []).filter((o) => o.event_type === 'work_block' && o.task_id).map((o) => o.task_id!))].sort()
+  return useQuery({
+    queryKey: ['tasks', 'work-block-projects', ids],
+    enabled: ids.length > 0,
+    queryFn: async () => {
+      const { data, error } = await supabase.from('tasks').select('id, project_id').in('id', ids)
+      if (error) throw error
+      return new Map((data ?? []).map((t) => [t.id, t.project_id as string | null]))
+    },
+  })
+}
+
 export function useEvent(id: string | undefined) {
   return useQuery({
     queryKey: ['calendar', 'event', id],
@@ -165,7 +182,7 @@ export function useMeetings(page: number, pageSize: number, enabled: boolean) {
     queryFn: async () => {
       const { data, error, count } = await supabase
         .from('calendar_events')
-        .select('id, title, starts_at, status, project_id, client_id', { count: 'exact' })
+        .select('id, title, starts_at, status, project_id, client_id, projects(name)', { count: 'exact' })
         .eq('event_type', 'meeting')
         .order('starts_at', { ascending: false })
         .range(page * pageSize, page * pageSize + pageSize - 1)

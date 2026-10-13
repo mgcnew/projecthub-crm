@@ -1,5 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
+import {
+  Bell,
+  Building2,
+  CalendarCheck2,
+  CalendarDays,
+  FolderKanban,
+  House,
+  ListChecks,
+  MoreHorizontal,
+  Settings,
+  UsersRound,
+  type LucideIcon,
+} from 'lucide-react'
 import { NavLink, Outlet, useLocation } from 'react-router-dom'
+import { LineRegistry } from '@/components/LineRegistry'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/features/auth/auth-context'
 import { useUnreadCount } from '@/features/notifications/api'
@@ -7,16 +21,17 @@ import { TimezoneBoundary } from '@/features/settings/TimezoneBoundary'
 import { cn } from '@/lib/utils'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
 
-const items = [
-  { to: '/app', label: 'Início', end: true },
-  { to: '/app/meu-dia', label: 'Meu dia', end: false },
-  { to: '/app/agenda', label: 'Agenda', end: false },
-  { to: '/app/tarefas', label: 'Tarefas', end: false },
-  { to: '/app/reunioes', label: 'Reuniões', end: false },
-  { to: '/app/projetos', label: 'Projetos', end: false },
-  { to: '/app/clientes', label: 'Clientes', end: false },
-  { to: '/app/notificacoes', label: 'Notificações', end: false },
-  { to: '/app/configuracoes', label: 'Configurações', end: false },
+// Pictogramas como na sinalização: o ícone acompanha o nome, nunca o substitui.
+const items: { to: string; label: string; end: boolean; icon: LucideIcon }[] = [
+  { to: '/app', label: 'Início', end: true, icon: House },
+  { to: '/app/meu-dia', label: 'Meu dia', end: false, icon: CalendarCheck2 },
+  { to: '/app/agenda', label: 'Agenda', end: false, icon: CalendarDays },
+  { to: '/app/tarefas', label: 'Tarefas', end: false, icon: ListChecks },
+  { to: '/app/reunioes', label: 'Reuniões', end: false, icon: UsersRound },
+  { to: '/app/projetos', label: 'Projetos', end: false, icon: FolderKanban },
+  { to: '/app/clientes', label: 'Clientes', end: false, icon: Building2 },
+  { to: '/app/notificacoes', label: 'Notificações', end: false, icon: Bell },
+  { to: '/app/configuracoes', label: 'Configurações', end: false, icon: Settings },
 ]
 const primaryMobile = items.slice(0, 4)
 const moreMobile = items.slice(4)
@@ -25,7 +40,7 @@ const APP_NAME = 'ProjectHub CRM'
 function UnreadBadge({ count }: { count: number }) {
   if (count <= 0) return null
   return (
-    <span className="ml-auto rounded-full bg-primary px-2 text-xs font-semibold text-primary-foreground">
+    <span className="ml-auto rounded-sm border border-current px-1.5 text-xs font-bold tabular-nums">
       {count > 99 ? '99+' : count}
       <span className="sr-only"> não lida{count > 1 ? 's' : ''}</span>
     </span>
@@ -34,8 +49,8 @@ function UnreadBadge({ count }: { count: number }) {
 
 function link({ isActive }: { isActive: boolean }) {
   return cn(
-    'flex min-h-11 items-center rounded-md px-3 text-sm font-medium',
-    isActive ? 'bg-primary/10 text-primary-strong' : 'text-muted-foreground hover:bg-muted',
+    'flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm font-semibold',
+    isActive ? 'bg-foreground text-card' : 'text-[#3b4148] hover:bg-muted',
   )
 }
 
@@ -85,10 +100,10 @@ export function AppShell() {
   }, [moreOpen])
 
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[15rem_1fr]">
+    <div className="min-h-dvh lg:grid lg:grid-cols-[14.75rem_1fr]">
       <a
         href="#conteudo"
-        className="sr-only focus:not-sr-only focus:fixed focus:left-3 focus:top-3 focus:z-50 focus:rounded-md focus:bg-card focus:px-4 focus:py-2 focus:text-sm focus:font-medium focus:text-primary-strong focus:shadow-lg focus:ring-[3px] focus:ring-ring/50"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border-2 focus:border-foreground focus:bg-card focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
         onClick={(e) => {
           e.preventDefault()
           main.current?.focus()
@@ -97,24 +112,30 @@ export function AppShell() {
         Pular para o conteúdo
       </a>
 
-      <aside className="hidden border-r border-border bg-card p-3 lg:flex lg:flex-col lg:gap-1">
-        <p className="px-3 py-3 font-semibold">{APP_NAME}</p>
-        <nav aria-label="Principal" className="flex flex-col gap-1">
+      <aside className="sticky top-0 hidden h-dvh border-r border-border bg-card px-3 py-5 lg:flex lg:flex-col lg:gap-1">
+        <p className="flex items-center gap-2.5 px-3 pb-5 text-[1.0625rem] font-bold tracking-[-0.01em]">
+          <span aria-hidden="true" className="inline-flex size-[1.375rem] items-center justify-center bg-foreground text-[0.8125rem] text-card">
+            P
+          </span>
+          ProjectHub
+        </p>
+        <nav aria-label="Principal" className="flex flex-col gap-0.5">
           {items.map((i) => (
             <NavLink key={i.to} to={i.to} end={i.end} className={link}>
+              <i.icon aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
               {i.label}
               {i.to === '/app/notificacoes' && <UnreadBadge count={unread} />}
             </NavLink>
           ))}
         </nav>
-        <Button variant="ghost" className="mt-auto justify-start" onClick={() => void signOut()}>
+        <Button variant="ghost" className="mt-auto justify-start px-3" onClick={() => void signOut()}>
           Sair
         </Button>
       </aside>
 
       <div className="min-w-0">
         {!online && (
-          <p role="status" className="border-b border-warning/40 bg-warning/20 px-4 py-2 text-sm text-amber-900">
+          <p role="status" className="border-b-2 border-foreground bg-[#fff3b0] px-4 py-2 text-sm font-medium text-[#5c4700]">
             Sem conexão. Você pode continuar lendo, mas as alterações só serão salvas quando a conexão voltar.
           </p>
         )}
@@ -122,10 +143,12 @@ export function AppShell() {
           id="conteudo"
           ref={main}
           tabIndex={-1}
-          className="mx-auto w-full max-w-5xl space-y-6 px-4 pb-24 pt-6 outline-none lg:pb-8"
+          className="mx-auto w-full max-w-[72rem] space-y-6 px-4 pt-5 pb-28 outline-none sm:px-6 lg:px-8 lg:pt-7 lg:pb-10"
         >
           <TimezoneBoundary>
-            <Outlet />
+            <LineRegistry>
+              <Outlet />
+            </LineRegistry>
           </TimezoneBoundary>
         </main>
       </div>
@@ -133,16 +156,17 @@ export function AppShell() {
       {moreOpen && (
         <div
           id="menu-mais"
-          className="fixed inset-x-0 bottom-14 border-t border-border bg-card p-2 shadow-lg lg:hidden"
+          className="fixed inset-x-0 bottom-[4.25rem] z-30 border-t-2 border-foreground bg-card p-2 shadow-[0_-12px_32px_-12px_rgb(17_20_24/0.3)] lg:hidden"
         >
           <nav aria-label="Mais opções" className="grid gap-1">
             {moreMobile.map((i) => (
               <NavLink key={i.to} to={i.to} className={link} onClick={() => setMoreOpen(false)}>
+                <i.icon aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
                 {i.label}
                 {i.to === '/app/notificacoes' && <UnreadBadge count={unread} />}
               </NavLink>
             ))}
-            <Button variant="ghost" className="justify-start" onClick={() => void signOut()}>
+            <Button variant="ghost" className="justify-start px-3" onClick={() => void signOut()}>
               Sair
             </Button>
           </nav>
@@ -151,16 +175,17 @@ export function AppShell() {
 
       <nav
         aria-label="Principal"
-        className="fixed inset-x-0 bottom-0 grid grid-cols-5 border-t border-border bg-card p-1 lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 gap-1 border-t-2 border-foreground bg-card px-1 pt-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         {primaryMobile.map((i) => (
           <NavLink
             key={i.to}
             to={i.to}
             end={i.end}
-            className={(s) => cn(link(s), 'justify-center px-1 text-xs')}
+            className={(s) => cn(link(s), 'min-h-14 flex-col justify-center gap-1 px-1 text-xs')}
             onClick={() => setMoreOpen(false)}
           >
+            <i.icon aria-hidden="true" className="size-5 shrink-0" strokeWidth={2} />
             {i.label}
           </NavLink>
         ))}
@@ -169,14 +194,17 @@ export function AppShell() {
           aria-expanded={moreOpen}
           aria-controls="menu-mais"
           className={cn(
-            'flex min-h-11 items-center justify-center rounded-md px-1 text-xs font-medium',
-            moreOpen ? 'bg-primary/10 text-primary-strong' : 'text-muted-foreground',
+            'relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-sm px-1 text-xs font-semibold',
+            moreOpen ? 'bg-foreground text-card' : 'text-[#3b4148]',
           )}
           onClick={() => setMoreOpen((o) => !o)}
         >
+          <MoreHorizontal aria-hidden="true" className="size-5" strokeWidth={2} />
           Mais
           {unread > 0 && <span className="sr-only"> ({unread} notificações não lidas)</span>}
-          {unread > 0 && <span aria-hidden="true" className="ml-1 size-2 rounded-full bg-primary" />}
+          {unread > 0 && (
+            <span aria-hidden="true" className="absolute top-2 right-[calc(50%-1.1rem)] size-2.5 rounded-full bg-foreground ring-2 ring-card" />
+          )}
         </button>
       </nav>
     </div>

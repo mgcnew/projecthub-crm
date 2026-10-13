@@ -105,14 +105,14 @@ export function MeetingDetailPage() {
       />
 
       <section aria-labelledby="meeting-tasks" className="space-y-3">
-        <h2 id="meeting-tasks" className="text-lg font-semibold">
+        <h2 id="meeting-tasks" className="section-title">
           Tarefas geradas
         </h2>
         {tasks.isSuccess && tasks.data.length === 0 && (
           <p className="text-sm text-muted-foreground">Nenhuma tarefa vinculada a esta reunião.</p>
         )}
         {(tasks.data ?? []).length > 0 && (
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">
+          <ul className="plate divide-y divide-border">
             {tasks.data!.map((t) => (
               <li key={t.id}>
                 <Link to={`/app/tarefas/${t.id}`} className="flex min-h-11 items-center justify-between px-4 hover:bg-muted">

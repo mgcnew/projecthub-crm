@@ -47,7 +47,7 @@ export function ReminderEditor({ kind, id, closedReason }: ReminderTarget & { cl
 
   return (
     <section aria-labelledby="reminders-h" className="space-y-3">
-      <h2 id="reminders-h" className="text-lg font-semibold">
+      <h2 id="reminders-h" className="section-title">
         Lembretes
       </h2>
       {closedReason && <p className="text-sm text-muted-foreground">{closedReason}</p>}
@@ -56,7 +56,7 @@ export function ReminderEditor({ kind, id, closedReason }: ReminderTarget & { cl
         <p className="text-sm text-muted-foreground">Nenhum lembrete.</p>
       )}
       {rows.length > 0 && (
-        <ul className="divide-y divide-border rounded-md border border-border bg-card">
+        <ul className="plate divide-y divide-border">
           {rows.map((r) => (
             <li key={r.id} className="flex min-h-11 items-center justify-between gap-2 px-4">
               <span className="text-sm">

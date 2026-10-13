@@ -3,13 +3,13 @@ import { changedFields, describeActivity } from './describe'
 
 describe('describeActivity', () => {
   it('descreve criação com o título', () => {
-    expect(describeActivity({ action: 'created', changes: { title: 'Enviar proposta' } })).toBe('Criou “Enviar proposta”')
+    expect(describeActivity({ action: 'created', changes: { title: 'Enviar proposta' } })).toBe('criou “Enviar proposta”')
   })
 
   it('traduz a mudança de status', () => {
     expect(
       describeActivity({ action: 'status_changed', changes: { status: { from: 'todo', to: 'done' } } }),
-    ).toBe('Alterou o status: A fazer → Concluída')
+    ).toBe('alterou o status: A fazer → Concluída')
   })
 
   it('lista campos alterados sem duplicar rótulos', () => {
@@ -18,16 +18,16 @@ describe('describeActivity', () => {
       'título',
     ])
     expect(describeActivity({ action: 'updated', changes: { priority: { from: 'low', to: 'high' } } })).toBe(
-      'Alterou prioridade',
+      'alterou prioridade',
     )
   })
 
   it('arquivamento e desarquivamento', () => {
-    expect(describeActivity({ action: 'archived', changes: {} })).toBe('Arquivou')
-    expect(describeActivity({ action: 'unarchived', changes: {} })).toBe('Desarquivou')
+    expect(describeActivity({ action: 'archived', changes: {} })).toBe('arquivou')
+    expect(describeActivity({ action: 'unarchived', changes: {} })).toBe('desarquivou')
   })
 
   it('tolera changes inesperado', () => {
-    expect(describeActivity({ action: 'updated', changes: null })).toBe('Alterou o registro')
+    expect(describeActivity({ action: 'updated', changes: null })).toBe('alterou o registro')
   })
 })

@@ -6,7 +6,7 @@ import { supabase } from '@/lib/supabase'
 // ['tasks'] e ['notifications'] para serem invalidadas junto das demais telas.
 
 const OPEN = ['todo', 'in_progress']
-const taskColumns = 'id, title, status, priority, due_date, due_at, projects(name)'
+const taskColumns = 'id, title, status, priority, due_date, due_at, project_id, projects(name)'
 const isoNoMs = (d: Date) => d.toISOString().replace(/\.\d{3}Z$/, 'Z')
 
 /** Tarefas abertas com prazo vencido (data anterior a hoje ou hora já passada). */

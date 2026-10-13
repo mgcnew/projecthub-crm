@@ -7,7 +7,7 @@ import { simpleTitleSchema } from './schema'
 
 /** Captura rápida: pede somente o título (UI_UX_SPEC). */
 export function QuickCapture({
-  placeholder = 'Nova tarefa — digite o título e tecle Enter',
+  placeholder = 'Nova tarefa — só o título',
   label = 'Nova tarefa',
   onCreate,
 }: {

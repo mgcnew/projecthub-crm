@@ -65,17 +65,17 @@ export function describeActivity(row: ActivityRow): string {
   switch (row.action) {
     case 'created': {
       const title = (row.changes as { title?: string } | null)?.title
-      return title ? `Criou “${title}”` : 'Criou o registro'
+      return title ? `criou “${title}”` : 'criou o registro'
     }
     case 'archived':
-      return 'Arquivou'
+      return 'arquivou'
     case 'unarchived':
-      return 'Desarquivou'
+      return 'desarquivou'
     case 'status_changed':
-      return `Alterou o status: ${fromTo(row.changes, 'status') ?? ''}`.trim()
+      return `alterou o status: ${fromTo(row.changes, 'status') ?? ''}`.trim()
     default: {
       const fields = changedFields(row.changes)
-      return fields.length ? `Alterou ${fields.join(', ')}` : 'Alterou o registro'
+      return fields.length ? `alterou ${fields.join(', ')}` : 'alterou o registro'
     }
   }
 }

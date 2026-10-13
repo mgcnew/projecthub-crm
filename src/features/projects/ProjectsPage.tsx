@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { FilterBar } from '@/components/FilterBar'
 import { Button } from '@/components/ui/button'
+import { LineBadge } from '@/components/LineBadge'
 import { controlClass } from '@/components/form-styles'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useClientOptions } from '@/features/clients/api'
@@ -38,7 +40,10 @@ export function ProjectsPage() {
         }
       />
 
-      <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+      <FilterBar
+        className="md:grid-cols-[minmax(0,1.4fr)_repeat(3,minmax(0,1fr))]"
+        activeCount={(params.status ? 1 : 0) + (params.clientId ? 1 : 0) + (params.archived !== 'active' ? 1 : 0)}
+        search={
         <input
           aria-label="Buscar projetos"
           placeholder="Buscar por nome"
@@ -46,6 +51,8 @@ export function ProjectsPage() {
           value={params.search}
           onChange={(e) => set({ search: e.target.value })}
         />
+        }
+      >
         <select
           aria-label="Situação"
           className={controlClass}
@@ -82,7 +89,7 @@ export function ProjectsPage() {
           <option value="archived">Arquivados</option>
           <option value="all">Todos</option>
         </select>
-      </div>
+      </FilterBar>
 
       {q.isPending && <LoadingState />}
       {q.isError && <ErrorState message="Não foi possível carregar os projetos." onRetry={() => q.refetch()} />}
@@ -102,19 +109,21 @@ export function ProjectsPage() {
 
       {q.isSuccess && count > 0 && (
         <>
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">
+          <ul className="plate divide-y divide-border">
             {q.data.rows.map((p) => {
               const clientName = (p.clients as unknown as { name: string } | null)?.name
               return (
                 <li key={p.id}>
-                  <Link to={`/app/projetos/${p.id}`} className="flex min-h-12 flex-wrap items-center justify-between gap-2 px-4 py-3 hover:bg-muted">
-                    <span>
-                      <span className="font-medium">{p.name}</span>
-                      <span className="ml-2 text-sm text-muted-foreground">
-                        {clientName ?? 'Sem cliente'} · prazo {formatDate(p.target_date)}
+                  <Link to={`/app/projetos/${p.id}`} className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 hover:bg-muted/60 sm:px-5">
+                    <LineBadge projectId={p.id} projectName={p.name} />
+                    <span className="min-w-0 flex-1">
+                      <span className="block font-semibold">{p.name}</span>
+                      <span className="block text-sm text-muted-foreground">
+                        {clientName ?? 'Sem cliente'}
+                        {p.target_date && ` · prazo ${formatDate(p.target_date)}`}
                       </span>
                     </span>
-                    <span className="flex gap-2">
+                    <span className="flex flex-wrap gap-2">
                       {p.archived_at && <StatusBadge>Arquivado</StatusBadge>}
                       <StatusBadge tone={p.priority === 'urgent' ? 'danger' : p.priority === 'high' ? 'warning' : 'neutral'}>
                         {projectPriorities[p.priority as keyof typeof projectPriorities] ?? p.priority}

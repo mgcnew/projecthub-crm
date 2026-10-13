@@ -16,7 +16,7 @@ export function TaskPlanning({ taskId }: { taskId: string }) {
 
   return (
     <section aria-labelledby="planning-h" className="space-y-3">
-      <h2 id="planning-h" className="text-lg font-semibold">
+      <h2 id="planning-h" className="section-title">
         Planejamento
       </h2>
       {plans.isSuccess && plans.data.length === 0 && (
@@ -25,7 +25,7 @@ export function TaskPlanning({ taskId }: { taskId: string }) {
       {(plans.data ?? []).length > 0 && (
         <ul className="flex flex-wrap gap-2">
           {plans.data!.map((p) => (
-            <li key={p.id} className="flex items-center gap-1 rounded-full border border-border bg-card py-1 pl-3 pr-1 text-sm">
+            <li key={p.id} className="flex items-center gap-1 rounded-sm border border-border bg-card py-1 pl-3 pr-1 text-sm">
               {formatDate(p.planned_date)}
               {canWrite && (
                 <Button

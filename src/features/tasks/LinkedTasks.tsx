@@ -20,9 +20,9 @@ export function LinkedTasks({ scope, ready = true }: { scope: LinkScope; ready?:
   return (
     <section aria-labelledby="linked-tasks-h" className="space-y-3">
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id="linked-tasks-h" className="text-lg font-semibold">
+        <h2 id="linked-tasks-h" className="section-title">
           Tarefas
-          {q.isSuccess && <span className="ml-2 text-sm font-normal text-muted-foreground">{total} aberta{total === 1 ? '' : 's'}</span>}
+          {q.isSuccess && <span className="ml-2 font-semibold tracking-normal text-muted-foreground normal-case">{total} aberta{total === 1 ? '' : 's'}</span>}
         </h2>
         {isProject && (
           <Button asChild variant="ghost" size="sm">
@@ -48,7 +48,7 @@ export function LinkedTasks({ scope, ready = true }: { scope: LinkScope; ready?:
       {q.isSuccess && rows.length === 0 && <p className="text-sm text-muted-foreground">Nenhuma tarefa aberta.</p>}
       {rows.length > 0 && (
         <>
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">
+          <ul className="plate divide-y divide-border">
             {rows.map((t) => (
               <li key={t.id} className="flex items-center gap-1 pr-4 pl-2">
                 <RowCheckbox

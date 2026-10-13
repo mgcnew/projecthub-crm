@@ -50,3 +50,18 @@ describe('fuso de trabalho', () => {
     expect(addDays('2026-03-01', -1)).toBe('2026-02-28')
   })
 })
+
+describe('formatMinutes e prazos', () => {
+  it('estimativas curtas', async () => {
+    const { formatMinutes } = await import('./format')
+    expect(formatMinutes(null)).toBe('—')
+    expect(formatMinutes(45)).toBe('45 min')
+    expect(formatMinutes(60)).toBe('1 h')
+    expect(formatMinutes(90)).toBe('1h30')
+  })
+  it('dias entre datas atravessando o mês', async () => {
+    const { daysBetween } = await import('./format')
+    expect(daysBetween('2026-10-30', '2026-11-02')).toBe(3)
+    expect(daysBetween('2026-10-13', '2026-10-11')).toBe(-2)
+  })
+})

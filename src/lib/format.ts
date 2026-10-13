@@ -115,3 +115,24 @@ export function fromLocalInput(value: string) {
   const at = zonedWallToInstant(value, activeTimezone())
   return Number.isNaN(at.getTime()) ? null : at.toISOString()
 }
+
+/** Estimativa curta: "45 min", "1 h", "1h30". */
+export function formatMinutes(minutes: number | null | undefined) {
+  if (!minutes || minutes <= 0) return '—'
+  if (minutes < 60) return `${minutes} min`
+  const h = Math.floor(minutes / 60)
+  const m = minutes % 60
+  return m === 0 ? `${h} h` : `${h}h${String(m).padStart(2, '0')}`
+}
+
+/** Dias inteiros entre duas datas 'YYYY-MM-DD' (b − a). */
+export function daysBetween(a: string, b: string) {
+  const [y1, m1, d1] = a.split('-').map(Number)
+  const [y2, m2, d2] = b.split('-').map(Number)
+  return Math.round((Date.UTC(y2, m2 - 1, d2) - Date.UTC(y1, m1 - 1, d1)) / 86_400_000)
+}
+
+/** Data do prazo de uma tarefa (dia inteiro ou com hora) no fuso de trabalho. */
+export function dueDateOf(t: { due_date: string | null; due_at: string | null }) {
+  return t.due_at ? dateInTz(t.due_at) : t.due_date
+}

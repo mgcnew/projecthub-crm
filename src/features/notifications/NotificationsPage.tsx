@@ -42,7 +42,7 @@ export function NotificationsPage() {
       )}
 
       {rows.length > 0 && (
-        <ul className="divide-y divide-border rounded-md border border-border bg-card">
+        <ul className="plate divide-y divide-border">
           {rows.map((n) => {
             const href = notificationHref(n)
             const isNew = n.read_at === null

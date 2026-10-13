@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { FilterBar } from '@/components/FilterBar'
 import { Button } from '@/components/ui/button'
 import { controlClass } from '@/components/form-styles'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
@@ -28,7 +29,10 @@ export function ClientsPage() {
         }
       />
 
-      <div className="grid gap-3 sm:grid-cols-[1fr_10rem_10rem]">
+      <FilterBar
+        className="md:grid-cols-[minmax(0,1fr)_14rem_13rem]"
+        activeCount={(params.status ? 1 : 0) + (params.archived !== 'active' ? 1 : 0)}
+        search={
         <input
           aria-label="Buscar clientes"
           placeholder="Buscar por nome ou empresa"
@@ -36,6 +40,8 @@ export function ClientsPage() {
           value={params.search}
           onChange={(e) => set({ search: e.target.value })}
         />
+        }
+      >
         <select
           aria-label="Situação"
           className={controlClass}
@@ -56,7 +62,7 @@ export function ClientsPage() {
           <option value="archived">Arquivados</option>
           <option value="all">Todos</option>
         </select>
-      </div>
+      </FilterBar>
 
       {q.isPending && <LoadingState />}
       {q.isError && <ErrorState message="Não foi possível carregar os clientes." onRetry={() => q.refetch()} />}
@@ -76,17 +82,17 @@ export function ClientsPage() {
 
       {q.isSuccess && count > 0 && (
         <>
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">
+          <ul className="plate divide-y divide-border">
             {q.data.rows.map((c) => (
               <li key={c.id}>
-                <Link to={`/app/clientes/${c.id}`} className="flex min-h-12 flex-wrap items-center justify-between gap-2 px-4 py-3 hover:bg-muted">
-                  <span>
-                    <span className="font-medium">{c.name}</span>
-                    {c.company_name && <span className="ml-2 text-sm text-muted-foreground">{c.company_name}</span>}
+                <Link to={`/app/clientes/${c.id}`} className="flex min-h-14 flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-3 hover:bg-muted/60 sm:px-5">
+                  <span className="min-w-0">
+                    <span className="block font-semibold">{c.name}</span>
+                    {c.company_name && <span className="block text-sm text-muted-foreground">{c.company_name}</span>}
                   </span>
                   <span className="flex gap-2">
                     {c.archived_at && <StatusBadge>Arquivado</StatusBadge>}
-                    <StatusBadge tone={c.status === 'active' ? 'success' : 'neutral'}>
+                    <StatusBadge tone={c.status === 'active' ? 'neutral' : 'success'}>
                       {clientStatuses[c.status as keyof typeof clientStatuses] ?? c.status}
                     </StatusBadge>
                   </span>

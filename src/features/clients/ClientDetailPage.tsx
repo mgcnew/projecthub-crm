@@ -106,7 +106,7 @@ export function ClientDetailPage() {
       />
 
       <section aria-labelledby="client-projects" className="space-y-3">
-        <h2 id="client-projects" className="text-lg font-semibold">
+        <h2 id="client-projects" className="section-title">
           Projetos
         </h2>
         {projects.isPending && <LoadingState />}
@@ -115,7 +115,7 @@ export function ClientDetailPage() {
           <p className="text-sm text-muted-foreground">Nenhum projeto vinculado.</p>
         )}
         {projects.isSuccess && projects.data.length > 0 && (
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">
+          <ul className="plate divide-y divide-border">
             {projects.data.map((p) => (
               <li key={p.id}>
                 <Link to={`/app/projetos/${p.id}`} className="flex min-h-12 items-center justify-between gap-2 px-4 py-3 hover:bg-muted">

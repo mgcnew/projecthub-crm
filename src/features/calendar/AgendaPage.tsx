@@ -1,10 +1,14 @@
 import { useMemo, useState } from 'react'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Link } from 'react-router-dom'
+import { DayLine } from '@/components/DayLine'
+import { Plate } from '@/components/Plate'
+import { EmptyState, ErrorState, LoadingState, PageHeader } from '@/components/states'
 import { Button } from '@/components/ui/button'
-import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
-import { addDays, dateInTz, dayStartInstant, formatDate, formatTime, toISODate, todayISO } from '@/lib/format'
-import { useOccurrences } from './api'
+import { addDays, dateInTz, dayStartInstant, formatDate, toISODate, todayISO } from '@/lib/format'
+import { useOccurrences, useWorkBlockProjects } from './api'
+import { occurrenceToStop } from './stops'
 
 function mondayOf(iso: string) {
   const [y, m, d] = iso.split('-').map(Number)
@@ -13,9 +17,6 @@ function mondayOf(iso: string) {
   return toISODate(new Date(y, m - 1, d - shift))
 }
 
-const timeFmt = formatTime
-
-const typeLabel: Record<string, string> = { event: 'Evento', meeting: 'Reunião', work_block: 'Bloco de foco' }
 
 export function AgendaPage() {
   const { orgId, canWrite } = useCurrentWorkspace()
@@ -26,6 +27,7 @@ export function AgendaPage() {
   }, [weekStart])
 
   const q = useOccurrences(from, to, Boolean(orgId))
+  const blockProjects = useWorkBlockProjects(q.data)
 
   const data = q.data
   const byDay = useMemo(() => {
@@ -40,75 +42,90 @@ export function AgendaPage() {
 
   const total = (data ?? []).length
 
+  const today = todayISO()
+  const freeDays = byDay.filter(([, items]) => items.length === 0).map(([d]) => weekdayShort(d))
+
   return (
     <>
       <PageHeader
         title="Agenda"
-        description={`${formatDate(weekStart)} a ${formatDate(addDays(weekStart, 6))}`}
+        description={`Semana de ${formatDate(weekStart)} a ${formatDate(addDays(weekStart, 6))}`}
         actions={
-          canWrite && (
-            <Button asChild>
-              <Link to="/app/agenda/novo">Novo evento</Link>
-            </Button>
-          )
+          <>
+            <span className="flex items-center gap-1">
+              <Button variant="outline" size="icon" aria-label="Semana anterior" onClick={() => setWeekStart(addDays(weekStart, -7))}>
+                <ChevronLeft aria-hidden="true" />
+              </Button>
+              <Button variant="outline" onClick={() => setWeekStart(mondayOf(todayISO()))}>
+                Esta semana
+              </Button>
+              <Button variant="outline" size="icon" aria-label="Próxima semana" onClick={() => setWeekStart(addDays(weekStart, 7))}>
+                <ChevronRight aria-hidden="true" />
+              </Button>
+            </span>
+            {canWrite && (
+              <Button asChild>
+                <Link to="/app/agenda/novo">Novo evento</Link>
+              </Button>
+            )}
+          </>
         }
       />
 
-      <div className="flex gap-2">
-        <Button variant="outline" aria-label="Semana anterior" onClick={() => setWeekStart(addDays(weekStart, -7))}>
-          ←
-        </Button>
-        <Button variant="outline" onClick={() => setWeekStart(mondayOf(todayISO()))}>
-          Esta semana
-        </Button>
-        <Button variant="outline" aria-label="Próxima semana" onClick={() => setWeekStart(addDays(weekStart, 7))}>
-          →
-        </Button>
-      </div>
-
       {q.isPending && <LoadingState />}
       {q.isError && <ErrorState message="Não foi possível carregar a agenda." onRetry={() => q.refetch()} />}
-      {q.isSuccess && total === 0 && <EmptyState title="Nada agendado nesta semana" />}
+      {q.isSuccess && total === 0 && (
+        <EmptyState
+          title="Nada agendado nesta semana"
+          description="Reuniões, eventos e blocos de foco aparecem aqui, dia a dia."
+          action={
+            canWrite ? (
+              <Button asChild variant="outline">
+                <Link to="/app/agenda/novo">Novo evento</Link>
+              </Button>
+            ) : undefined
+          }
+        />
+      )}
 
       {q.isSuccess && total > 0 && (
         <div className="space-y-4">
           {byDay
             .filter(([, items]) => items.length > 0)
             .map(([day, items]) => (
-              <section key={day} aria-label={formatDate(day)}>
-                <h2 className="mb-2 text-sm font-semibold text-muted-foreground">
-                  {new Date(`${day}T12:00:00`).toLocaleDateString('pt-BR', { weekday: 'long', day: '2-digit', month: 'short' })}
-                </h2>
-                <ul className="divide-y divide-border rounded-md border border-border bg-card">
-                  {items.map((o) => {
-                    const href =
-                      o.event_type === 'meeting'
-                        ? `/app/reunioes/${o.event_id}`
-                        : o.event_type === 'work_block' && o.task_id
-                          ? `/app/tarefas/${o.task_id}`
-                          : `/app/agenda/${o.event_id}`
-                    return (
-                      <li key={`${o.event_id}-${o.occurrence_start}`}>
-                        <Link to={href} className="flex min-h-12 flex-wrap items-center justify-between gap-2 px-4 py-3 hover:bg-muted">
-                          <span>
-                            <span className="mr-3 text-sm tabular-nums text-muted-foreground">
-                              {timeFmt(o.occurrence_start)}–{timeFmt(o.occurrence_end)}
-                            </span>
-                            <span className="font-medium">{o.title}</span>
-                            {o.is_recurring && <span className="ml-2 text-xs text-muted-foreground">↻ repete</span>}
-                          </span>
-                          <StatusBadge tone={o.event_type === 'meeting' ? 'info' : o.event_type === 'work_block' ? 'success' : 'neutral'}>
-                            {typeLabel[o.event_type] ?? o.event_type}
-                          </StatusBadge>
-                        </Link>
-                      </li>
-                    )
-                  })}
-                </ul>
-              </section>
+              <Plate
+                key={day}
+                id={`day-${day}`}
+                title={longDay(day)}
+                meta={
+                  <>
+                    {day === today && <span className="mr-2 font-bold text-destructive">Hoje</span>}
+                    {items.length} {items.length === 1 ? 'compromisso' : 'compromissos'}
+                    {items.some((o) => o.is_recurring) && ' · inclui série'}
+                  </>
+                }
+              >
+                <DayLine
+                  stops={items.map((o) => occurrenceToStop(o, blockProjects.data))}
+                  nowISO={day === today ? new Date().toISOString() : null}
+                  label={`Compromissos de ${longDay(day)}`}
+                />
+              </Plate>
             ))}
+          {freeDays.length > 0 && (
+            <p className="text-sm text-muted-foreground">Sem compromissos: {freeDays.join(', ')}.</p>
+          )}
         </div>
       )}
     </>
   )
+}
+
+function longDay(iso: string) {
+  const raw = new Date(`${iso}T12:00:00`).toLocaleDateString('pt-BR', { weekday: 'long', day: 'numeric', month: 'short' })
+  return raw.replace('.', '')
+}
+
+function weekdayShort(iso: string) {
+  return new Date(`${iso}T12:00:00`).toLocaleDateString('pt-BR', { weekday: 'long' }).replace('-feira', '')
 }

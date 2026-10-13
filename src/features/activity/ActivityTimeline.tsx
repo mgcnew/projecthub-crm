@@ -39,7 +39,7 @@ export function ActivityTimeline({ entityType, entityId }: { entityType: EntityT
 
   return (
     <section aria-labelledby="activity-h" className="space-y-3">
-      <h2 id="activity-h" className="text-lg font-semibold">
+      <h2 id="activity-h" className="section-title">
         Histórico de atividade
       </h2>
       {q.isPending && <p role="status" className="text-sm text-muted-foreground">Carregando…</p>}
@@ -48,7 +48,7 @@ export function ActivityTimeline({ entityType, entityId }: { entityType: EntityT
         <p className="text-sm text-muted-foreground">Nenhuma atividade registrada.</p>
       )}
       {(q.data ?? []).length > 0 && (
-        <ol className="divide-y divide-border rounded-md border border-border bg-card">
+        <ol className="plate divide-y divide-border">
           {q.data!.map((a) => (
             <li key={a.id} className="flex flex-wrap items-baseline justify-between gap-x-4 px-4 py-2">
               <span className="text-sm">

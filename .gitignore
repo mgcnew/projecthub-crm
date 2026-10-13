@@ -23,3 +23,7 @@ blob-report/
 
 # Backups lógicos (dados pessoais; nunca versionar)
 backups/
+
+# Impeccable: capturas de revisão e estado do servidor de decisão (regeneráveis)
+.impeccable/review/
+.impeccable/questions/

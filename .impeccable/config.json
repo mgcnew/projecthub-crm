@@ -1,0 +1,143 @@
+{
+  "detector": {
+    "ignoreRules": [],
+    "ignoreFiles": [],
+    "ignoreValues": [
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-13T14:20:10.454Z",
+        "reason": "Esboço de decisão de redesenho: o usuário escolheu 'Redesenho' (novo mundo visual); DESIGN.md será reescrito no fim"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-13T14:20:10.465Z",
+        "reason": "Esboço de decisão de redesenho: o usuário escolheu 'Redesenho' (novo mundo visual); DESIGN.md será reescrito no fim"
+      },
+      {
+        "rule": "design-system-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-13T14:20:10.476Z",
+        "reason": "Esboço de decisão de redesenho: o usuário escolheu 'Redesenho' (novo mundo visual); DESIGN.md será reescrito no fim"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-13T14:21:52.894Z",
+        "reason": "Esboço de decisão: Helvetica é a face da sinalização do Metrô de SP, o mundo deste card"
+      },
+      {
+        "rule": "overused-font",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-13T14:21:52.908Z",
+        "reason": "Esboço de decisão: o card canônico representa o padrão da categoria (Inter) por definição"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.079Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.091Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.103Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.116Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.128Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/model-pick.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.141Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "design-system-color",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.153Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "design-system-font-size",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.166Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "design-system-radius",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/canon.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.180Z",
+        "reason": "Esboço de decisão de redesenho (usuário escolheu 'Redesenho'): propõe um mundo novo, fora do DESIGN.md atual de propósito"
+      },
+      {
+        "rule": "repeating-stripes-gradient",
+        "value": "*",
+        "files": [
+          ".impeccable/mocks/decision/assigned.html"
+        ],
+        "createdAt": "2026-10-13T14:22:10.193Z",
+        "reason": "Hachura de lápis marca o bloco de tempo (uma das três tintas da direção Folhinha): função, não decoração"
+      }
+    ]
+  }
+}

@@ -1,238 +1,311 @@
 ---
 name: ProjectHub CRM
-description: Central pessoal de gestão em tema claro, calma e densa, com neutros frios e um único azul de ação.
+description: Central pessoal de trabalho lida como um mapa de metrô; placas esmaltadas em tinta, linhas coloridas por projeto e o vermelho reservado para o agora.
 colors:
-  primary: "#2563eb"
-  primary-foreground: "#ffffff"
-  primary-strong: "#1d4ed8"
-  background: "#f8fafc"
-  foreground: "#0f172a"
+  background: "#f2f4f5"
+  foreground: "#111418"
   card: "#ffffff"
-  muted: "#f1f5f9"
-  muted-foreground: "#5f6e84"
-  border: "#e2e8f0"
-  destructive: "#dc2626"
-  success: "#10b981"
-  warning: "#f59e0b"
+  primary: "#111418"
+  primary-foreground: "#ffffff"
+  primary-strong: "#0455a1"
+  muted: "#e8ecef"
+  muted-foreground: "#565e66"
+  nav-ink: "#3b4148"
+  border: "#d9dee2"
+  input: "#848e96"
+  track: "#d3d9de"
+  destructive: "#b4141b"
+  now: "#ee372f"
+  line-azul: "#0455a1"
+  line-verde: "#007e5e"
+  line-amarela: "#ffd400"
+  line-lilas: "#9b3894"
+  line-rubi: "#ca016b"
+  line-turquesa: "#047fa3"
+  line-ouro: "#946616"
+  line-prata: "#68717a"
 typography:
   headline:
-    fontFamily: "Inter Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.5rem"
-    fontWeight: 600
-    lineHeight: "2rem"
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "1.875rem"
+    fontWeight: 700
+    lineHeight: 1.25
+    letterSpacing: "-0.02em"
+    fontFeature: "'tnum' 1"
   title:
-    fontFamily: "Inter Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1.125rem"
-    fontWeight: 600
-    lineHeight: "1.75rem"
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.8125rem"
+    fontWeight: 700
+    lineHeight: "1.25rem"
+    letterSpacing: "0.1em"
+    fontFeature: "'tnum' 1"
   body:
-    fontFamily: "Inter Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "1rem"
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 400
+    lineHeight: "1.25rem"
+    fontFeature: "'tnum' 1"
+  body-strong:
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.875rem"
+    fontWeight: 600
+    lineHeight: "1.25rem"
+    fontFeature: "'tnum' 1"
+  lead:
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
+    fontSize: "0.9375rem"
     fontWeight: 400
     lineHeight: "1.5rem"
+    fontFeature: "'tnum' 1"
   label:
-    fontFamily: "Inter Variable, ui-sans-serif, system-ui, sans-serif"
-    fontSize: "0.875rem"
-    fontWeight: 500
-    lineHeight: "1.25rem"
-  caption:
-    fontFamily: "Inter Variable, ui-sans-serif, system-ui, sans-serif"
+    fontFamily: "Hanken Grotesk Variable, ui-sans-serif, system-ui, sans-serif"
     fontSize: "0.75rem"
-    fontWeight: 500
+    fontWeight: 600
     lineHeight: "1rem"
+    fontFeature: "'tnum' 1"
 rounded:
-  md: "6px"
+  sm: "2px"
   full: "9999px"
 spacing:
   xs: "4px"
   sm: "8px"
-  md: "16px"
-  lg: "24px"
-  xl: "32px"
+  md: "12px"
+  lg: "16px"
+  xl: "20px"
+  2xl: "24px"
 components:
   button-primary:
     backgroundColor: "{colors.primary}"
     textColor: "{colors.primary-foreground}"
-    typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    height: "36px"
+    typography: "{typography.body-strong}"
+    rounded: "{rounded.sm}"
     padding: "8px 16px"
+    height: "36px"
   button-outline:
-    backgroundColor: "{colors.background}"
-    textColor: "{colors.foreground}"
-    typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    height: "36px"
-    padding: "8px 16px"
-  button-ghost:
-    backgroundColor: "{colors.background}"
-    textColor: "{colors.foreground}"
-    typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    height: "36px"
-    padding: "8px 16px"
-  input-field:
     backgroundColor: "{colors.card}"
     textColor: "{colors.foreground}"
-    typography: "{typography.body}"
-    rounded: "{rounded.md}"
-    height: "44px"
-    padding: "0 12px"
-  nav-link:
-    backgroundColor: "{colors.card}"
-    textColor: "{colors.muted-foreground}"
-    typography: "{typography.label}"
-    rounded: "{rounded.md}"
-    height: "44px"
-    padding: "0 12px"
-  nav-link-active:
+    typography: "{typography.body-strong}"
+    rounded: "{rounded.sm}"
+    padding: "8px 16px"
+    height: "36px"
+  button-outline-hover:
+    backgroundColor: "{colors.muted}"
+  button-destructive:
+    backgroundColor: "{colors.destructive}"
+    textColor: "{colors.primary-foreground}"
+    rounded: "{rounded.sm}"
+    padding: "8px 16px"
+    height: "36px"
+  button-link:
     textColor: "{colors.primary-strong}"
-  status-badge:
+    typography: "{typography.body-strong}"
+  input:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    rounded: "{rounded.sm}"
+    padding: "0 12px"
+    height: "44px"
+  nav-link:
+    textColor: "{colors.nav-ink}"
+    typography: "{typography.body-strong}"
+    rounded: "{rounded.sm}"
+    padding: "0 12px"
+    height: "44px"
+  nav-link-active:
+    backgroundColor: "{colors.foreground}"
+    textColor: "{colors.card}"
+    rounded: "{rounded.sm}"
+  plate:
+    backgroundColor: "{colors.card}"
+    rounded: "{rounded.sm}"
+    padding: "12px 20px 16px"
+  line-badge:
+    backgroundColor: "{colors.line-azul}"
+    textColor: "{colors.primary-foreground}"
+    typography: "{typography.label}"
+    rounded: "{rounded.full}"
+    size: "24px"
+  status-neutral:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    typography: "{typography.label}"
+    rounded: "{rounded.sm}"
+    padding: "2px 8px"
+  status-info:
+    backgroundColor: "{colors.card}"
+    textColor: "{colors.foreground}"
+    typography: "{typography.label}"
+    rounded: "{rounded.sm}"
+    padding: "2px 8px"
+  status-success:
     backgroundColor: "{colors.muted}"
     textColor: "{colors.muted-foreground}"
-    typography: "{typography.caption}"
-    rounded: "{rounded.full}"
+    typography: "{typography.label}"
+    rounded: "{rounded.sm}"
     padding: "2px 8px"
-  panel:
-    backgroundColor: "{colors.card}"
-    textColor: "{colors.foreground}"
-    rounded: "{rounded.md}"
-    padding: "16px"
+  status-danger:
+    backgroundColor: "{colors.foreground}"
+    textColor: "{colors.card}"
+    typography: "{typography.label}"
+    rounded: "{rounded.sm}"
+    padding: "2px 8px"
 ---
 
 # Design System: ProjectHub CRM
 
 ## Overview
 
-**Creative North Star: "A Mesa de Trabalho"**
+**Creative North Star: "Linhas do Metrô"**
 
-Uma superfície clara e organizada onde tudo o que importa no dia está ao alcance da mão. A interface é calma, densa e objetiva: informa primeiro e não decora. Neutros frios sustentam a leitura e um único azul de ação marca o que se pode fazer, de modo que a atenção vai para tarefas, agenda e reuniões, nunca para a moldura.
+O sistema empresta a sinalização do Metrô de São Paulo: placas esmaltadas brancas sobre um fundo cinza-claro frio, tinta quase preta, réguas finas e selos circulares de linha. Projetos e clientes são linhas; o dia é uma linha de estações (os compromissos) onde essas linhas se cruzam. A pessoa lê o dia como um trajeto: onde está agora, qual é a próxima estação, que linhas passam hoje e o que vence.
 
-O sistema serve a um profissional autônomo que alterna entre o desktop (gestão com tabelas, filtros e listas densas) e o celular (consulta e ação rápida). A mesma linguagem vale nos dois: no desktop a densidade é maior e a navegação lateral; no mobile entram cartões, navegação inferior e alvos de toque generosos.
+A densidade é de painel de operação, não de vitrine: tabelas com números tabulares, placas de seção com título em caixa alta e contagem ao lado, uma única grotesca em pesos firmes. A ênfase vem de tinta, peso e preenchimento, não de cor. A cor é um recurso escasso e com dono: pertence às linhas dos projetos, e o vermelho pertence ao "agora" e ao atraso.
+
+O mundo recusa o arranjo padrão da categoria: cartões brancos com indicadores grandes no topo, pílulas coloridas de status e um acento azul genérico em tudo. A navegação não usa cor de linha (o arco-íris no menu foi descartado de propósito); ela usa placa preta sólida para o item ativo.
 
 **Key Characteristics:**
-- Tema claro como padrão aprovado (D005); fundo cinza-azulado muito claro com painéis brancos.
-- Um único acento (azul); verde, âmbar e vermelho existem só como estado.
-- Plano por padrão: separação por bordas de 1px, não por sombras.
-- Tipografia única (Inter) com hierarquia por peso e tamanho, sem display.
-- Alvos de toque de 44px em controles e navegação.
+- Fundo cinza frio, placas brancas com régua de 1px, tinta quase preta como cor de ação.
+- Sete cores de linha mais a Prata, atribuídas aos projetos; nada mais na interface é colorido.
+- Vermelho só para o marcador "agora" e para atraso.
+- Cantos retos (2px) em tudo que é placa; círculos só em selos de linha e estações.
+- Filete de 2px em tinta sob cabeçalhos de página e de tabela.
+- Uma assinatura: a Linha do dia.
 
 ## Colors
 
-Paleta fria e contida: neutros azulados, um azul de ação, e três cores de estado usadas com parcimônia.
+Neutros frios de sinalização, tinta como primária e uma paleta de linhas que funciona como identidade dos projetos, nunca como decoração.
 
 ### Primary
-- **Azul de Ação** (#2563eb): único acento do sistema. Botão primário, links, contador de não lidas e anel de foco.
-- **Azul Firme** (#1d4ed8): o mesmo azul, mais escuro, para texto sobre tint do próprio azul (item de navegação ativo e badge informativa), onde o azul de ação ficaria abaixo de 4,5:1.
+- **Tinta de Placa** (foreground / primary): texto, botão primário, item ativo da navegação, selo de situação "perigo", filete de cabeçalho. A ação principal é tinta sólida, não azul.
+- **Azul da Linha 1** (primary-strong): links, anel de foco (3px) e seleção de texto (com 20% de opacidade). 7,45:1 sobre branco.
+
+### Secondary
+- **Linhas de projeto** (line-azul, line-verde, line-amarela, line-lilas, line-rubi, line-turquesa, line-ouro): cada projeto recebe uma linha na ordem de criação; a partir do oitavo projeto o ciclo recomeça. Aparecem no selo de linha, na faixa vertical de prazos e nos segmentos e estações da Linha do dia. Texto sobre a linha é branco, exceto na Amarela, que usa tinta; todos com contraste de pelo menos 4,5:1.
+- **Prata** (line-prata): a linha de "sem projeto"; o selo mostra um travessão em vez de inicial.
+
+### Tertiary
+- **Vermelho Agora** (now): somente o marcador e a estação "agora" da Linha do dia.
+- **Vermelho Atraso** (destructive): texto de prazo atrasado, erros, borda do estado de erro e botão destrutivo. 6,87:1 sobre branco.
 
 ### Neutral
-- **Névoa Fria** (#f8fafc): fundo da página.
-- **Painel Branco** (#ffffff): superfície de cartões, listas, campos e da barra de navegação.
-- **Linho Azulado** (#f1f5f9): fundos secundários (muted, accent, hover de itens e badges neutras).
-- **Cinza Ardósia** (#5f6e84): texto secundário, descrições, metadados e ícones inativos.
-- **Tinta Noite** (#0f172a): texto principal e títulos.
-- **Fio de Gelo** (#e2e8f0): bordas e divisores de 1px, contorno de campos.
-
-### State
-- **Verde Concluído** (#10b981): sucesso (badges em 15% de opacidade com texto emerald-800).
-- **Âmbar de Atenção** (#f59e0b): aviso e prioridade alta (fundo em 20% com texto amber-900).
-- **Vermelho de Risco** (#dc2626): erro, atraso e prioridade urgente; texto de erro e contornos inválidos (4,8:1 sobre o painel branco).
+- **Cinza de Plataforma** (background): fundo da aplicação.
+- **Placa Branca** (card): toda superfície de conteúdo, rail lateral, diálogo e barra inferior.
+- **Cinza Esmalte** (muted): hover de itens, selo "concluída", esqueletos de carregamento, campo desabilitado.
+- **Tinta Secundária** (muted-foreground): metadados, descrições, cabeçalhos de coluna. 6,59:1 sobre branco e 5,54:1 sobre o Cinza Esmalte.
+- **Tinta de Menu** (nav-ink): rótulos inativos da navegação.
+- **Régua Fina** (border): bordas de placa, divisórias de linhas de tabela.
+- **Régua de Campo** (input): borda de campos e da placa tracejada de vazio. 3,34:1, acima do mínimo de 3:1 para componentes.
+- **Trilho** (track): o trilho cinza da Linha do dia, sob os segmentos coloridos.
 
 ### Named Rules
-**The One Blue Rule.** O azul é o único acento; ele aparece em ação, seleção e foco, nunca como decoração. Cores de estado jamais assumem o papel de acento.
+**The Line Ownership Rule.** Cor de linha pertence a projetos. Não pinte áreas do menu, botões, títulos ou status com cores de linha; se algo não é um projeto, é tinta ou cinza.
 
-**The Tint, Not Fill Rule.** Estados e seleção usam o tom em baixa opacidade (10–20%) sobre texto escuro ou do próprio matiz; preenchimento sólido é exclusivo do botão primário e do contador.
+**The Red Is Now Rule.** Vermelho aparece só no "agora" e no atraso. A paleta de linhas exclui o vermelho de propósito, para que nenhum projeto seja confundido com urgência.
+
+**The Yellow Outline Rule.** A Linha Amarela tem 1,30:1 contra o fundo; todo uso dela (selo, faixa, segmento, estação) leva contorno de 1px em tinta e texto em tinta.
+
+**The Never Color Alone Rule.** O selo de linha sempre traz a inicial do projeto e o nome como rótulo acessível; status sempre têm texto.
 
 ## Typography
 
-**Display Font:** nenhuma; o sistema não usa fonte de exibição.
-**Body Font:** Inter Variable (com ui-sans-serif, system-ui, sans-serif)
-**Label/Mono Font:** Inter Variable (sem fonte mono)
+**Display Font:** Hanken Grotesk Variable (com ui-sans-serif, system-ui)
+**Body Font:** Hanken Grotesk Variable
+**Label/Mono Font:** a mesma família; números tabulares ligados globalmente (`tnum`).
 
-**Character:** uma única família neutra e legível, com antialiasing; a hierarquia nasce de peso (500–600) e de pouco salto de tamanho, para manter a densidade sem cansar.
+**Character:** Uma grotesca neo-grotesca auto-hospedada em pesos firmes, como as letras de uma placa de estação: o peso faz a hierarquia, não o tamanho.
 
 ### Hierarchy
-- **Headline** (600, 1.5rem, 2rem): título de página (`PageHeader`) e valor dos indicadores do dashboard.
-- **Title** (600, 1.125rem, 1.75rem): títulos de seção dentro de uma página.
-- **Body** (400, 1rem, 1.5rem): campos, texto corrido e itens de lista; 16px nos campos evita zoom no iOS.
-- **Label** (500, 0.875rem, 1.25rem): botões, navegação, rótulos de campo, metadados de linha (em Cinza Ardósia).
-- **Caption** (500, 0.75rem, 1rem): badges e itens da navegação inferior.
+- **Headline** (700, 30px, 1.25, -0.02em; 28px abaixo de 640px): o título de cada página, com a descrição (data, contexto) logo abaixo, nunca acima.
+- **Title** (700, 13px, 20px, 0.1em, caixa alta): título de placa de seção, como o nome de uma estação; a contagem segue ao lado em peso 600, caixa normal, Tinta Secundária.
+- **Lead** (400, 15px): descrição sob o título da página, em Tinta Secundária.
+- **Body / Body strong** (400 e 600, 14px, 20px): texto de tabela, nomes de estação e de tarefa (600).
+- **Label** (600, 12px): cabeçalhos de coluna, selos de situação, horas e tipo de compromisso; marcas de hora do trilho a 11px/500.
 
 ### Named Rules
-**The Weight Over Size Rule.** Hierarquia se faz com peso e cor antes de tamanho; o salto máximo de uma página é 24px → 14px.
+**The Tabular Rule.** Toda hora, data, estimativa e contagem usa numerais tabulares; colunas de número se alinham sem esforço.
+
+**The Weight Not Size Rule.** A hierarquia dentro das placas vem de peso (600/700) e caixa alta espaçada, não de tamanhos maiores. Nada passa de 30px.
 
 ## Layout
 
-Casca de aplicação: barra lateral fixa de 15rem (240px) a partir de 1024px; abaixo disso, navegação inferior fixa com 4 destinos mais "Mais". Conteúdo em coluna única centralizada (largura máxima 64rem / `max-w-5xl`), com 16px de margem lateral, 24px de respiro entre blocos e folga inferior de 96px no mobile para a navegação.
+Desktop (a partir de 1024px): rail branco fixo de 236px à esquerda com borda direita em Régua Fina; conteúdo centralizado com largura máxima de 1152px e respiro lateral de 32px. Abaixo de 1024px o rail some e a navegação vira barra inferior fixa. O conteúdo empilha placas com 24px entre elas.
 
-Densidade: listas com linhas de 44px mínimo (alvo de toque), padding horizontal de 16px e divisores de 1px. Painéis de indicadores em grade de 2 colunas no mobile e 4 no desktop; seções do dashboard em 1 coluna no mobile e 2 a partir de 1024px. Espaçamento em múltiplos de 4px (4, 8, 12, 16, 24, 32).
+Cada página abre com o cabeçalho: título à esquerda, ações à direita, filete de 2px em tinta embaixo. Placas têm 16px de respiro lateral no celular e 20px a partir de 640px. Na Central do dia, a Linha do dia ocupa a largura toda; abaixo vêm duas colunas (tabela planejada e prazos).
 
-Pontos de quebra: 640px (intermediário) e 1024px (barra lateral e grade de duas colunas).
+A 768px muda a gramática: a Linha do dia passa de trilho vertical (diagrama de vagão) para horizontal, e a tabela de tarefas troca as colunas por uma linha de metadados sob o título. Filtros recolhem atrás de um botão "Filtros" abaixo de 768px. Alvos de toque têm 44px no celular (botões sobem de 36px para 44px abaixo de 1024px).
 
 ## Elevation & Depth
 
-Plano por padrão. Profundidade é comunicada por borda de 1px (Fio de Gelo) e por contraste entre o fundo Névoa Fria e os painéis brancos, não por sombras. Sombras aparecem só como resposta a papel funcional: sombra mínima nos botões de contorno e sombra larga no menu flutuante "Mais" do mobile, que se sobrepõe à navegação.
+O sistema é plano. Profundidade vem de placas brancas sobre o fundo cinza e de réguas, nunca de sombra em repouso. As duas únicas sombras são de camadas flutuantes que cobrem conteúdo: o diálogo de confirmação e a folha "Mais" da navegação móvel.
 
 ### Shadow Vocabulary
-- **Contorno sutil** (`box-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05)`): botão outline.
-- **Menu flutuante** (`box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)`): menu "Mais" no mobile.
+- **Diálogo** (`box-shadow: 0 18px 40px -12px rgb(17 20 24 / 0.35)`): diálogo modal de confirmação, sobre véu de tinta a 45%.
+- **Folha inferior** (`box-shadow: 0 -12px 32px -12px rgb(17 20 24 / 0.3)`): menu "Mais" acima da barra inferior.
 
 ### Named Rules
-**The Flat-By-Default Rule.** Superfícies são planas em repouso; só elementos que flutuam sobre outros ganham sombra.
+**The Flat Plate Rule.** Placas, selos, botões e tabelas não têm sombra. Se algo precisa se destacar, use régua de 2px em tinta ou preenchimento sólido.
 
 ## Shapes
 
-Cantos suavemente arredondados e uniformes: 6px (rounded-md) em botões, campos, painéis e listas; 9999px apenas em badges e contadores. Bordas de 1px sólidas em Fio de Gelo; o estado vazio usa borda tracejada para indicar "espaço a preencher". Sem recortes, ângulos ou formas decorativas.
+Cantos retos: todo elemento retangular usa 2px de raio (placas, botões, campos, selos de situação, diálogo, itens de menu). Círculos são reservados a selos de linha (24px; 20px na versão compacta) e estações da Linha do dia (anel de 5px sobre miolo branco). Réguas de 1px separam; o filete de 2px em tinta encerra cabeçalhos de página, de tabela, a barra inferior móvel e o diálogo. A placa vazia usa borda tracejada na Régua de Campo, como um espaço de placa ainda sem sinal. Faixas de linha são retângulos verticais de 6px.
 
 ## Components
 
 ### Buttons
-- **Shape:** cantos de 6px, altura de 36px no desktop (32px compacto, 40px grande) e 44px abaixo de 1024px; rótulo Label.
-- **Primary:** fundo Azul de Ação, texto branco, padding 8px 16px; hover a 90% de opacidade.
-- **Outline:** fundo da página com borda de 1px e sombra mínima; hover em Linho Azulado. Ação secundária de formulário.
-- **Ghost:** sem fundo nem borda; hover em Linho Azulado. Ações de linha (Remover, Cancelar) em tamanho `sm`.
-- **Foco:** anel de 3px em azul a 50% de opacidade; desabilitado a 50% de opacidade.
+- **Shape:** retos (2px), 36px de altura no desktop e 44px abaixo de 1024px, texto 14px/600.
+- **Primary:** tinta sólida com texto branco; hover clareia para `#2a3038`.
+- **Outline:** placa branca com borda de 1px em tinta; hover em Cinza Esmalte. É o par natural do primário ("Novo evento" ao lado de "Planejar o dia").
+- **Destructive:** Vermelho Atraso sólido com texto branco, hover `#931016`; só dentro de confirmações.
+- **Ghost / Link:** ghost só ganha Cinza Esmalte no hover; link usa o Azul da Linha 1 com sublinhado no hover.
+- **Focus:** contorno de 3px no Azul da Linha 1 com 2px de afastamento, igual em todo o sistema.
 
-### Inputs / Fields
-- **Style:** altura de 44px, fundo branco, borda de 1px em Fio de Gelo, cantos de 6px, texto de 16px.
-- **Focus:** borda e anel de 3px em azul a 30% de opacidade.
-- **Error / Disabled:** borda vermelha quando inválido, mensagem em vermelho abaixo do campo; desabilitado a 60%.
-
-### Navigation
-- **Style:** item de 44px de altura, cantos de 6px, rótulo Label. Inativo em Cinza Ardósia com hover em Linho Azulado; ativo com fundo do azul a 10% e texto azul.
-- **Contador:** pílula azul sólida com texto branco à direita do item (Notificações); no mobile vira um ponto no "Mais".
-- **Mobile:** barra inferior fixa em cinco colunas, texto Caption centralizado, borda superior de 1px.
+### Chips (status)
+- **Style:** placa retangular pequena (2px, 2px 8px, 12px/600), sempre com texto, nunca colorida.
+- **Escala de ênfase:** neutro = régua fina sobre branco ("A fazer"); info = contorno em tinta ("Em andamento"); sucesso = Cinza Esmalte com Tinta Secundária ("Concluída"); atenção = só texto em negrito, sem placa ("Alta"); perigo = placa sólida em tinta ("Urgente").
 
 ### Cards / Containers
-- **Corner Style:** 6px.
-- **Background:** Painel Branco com borda de 1px.
-- **Shadow Strategy:** nenhuma em repouso (Flat-By-Default).
-- **Internal Padding:** 16px em indicadores; listas usam linhas de 16px × 8px separadas por divisores.
+- **Corner Style:** 2px.
+- **Background:** Placa Branca sobre o Cinza de Plataforma.
+- **Shadow Strategy:** nenhuma (ver The Flat Plate Rule).
+- **Border:** 1px na Régua Fina.
+- **Internal Padding:** cabeçalho 12px em cima e 8px embaixo; corpo 16px (celular) ou 20px de lado e 16px embaixo. Título em caixa alta à esquerda, contagem ao lado, ação de texto à direita.
+- **Estados:** carregamento é uma placa com barras e círculos pulsantes em Cinza Esmalte; erro é placa com borda em Vermelho Atraso, ícone e "Tentar novamente"; vazio é placa tracejada centralizada que sempre oferece a próxima ação.
 
-### Status Badge
-- **Style:** pílula de Caption com padding 2px 8px; tom neutro (Linho Azulado), sucesso, aviso, perigo ou informação, sempre com texto além da cor.
+### Inputs / Fields
+- **Style:** 44px de altura, fundo branco, borda de 1px na Régua de Campo, 2px de raio, texto 16px.
+- **Focus:** borda passa ao Azul da Linha 1 com contorno de 3px desse azul a 40%.
+- **Error / Disabled:** borda em Vermelho Atraso; desabilitado em Cinza Esmalte a 70%.
+- **Checkbox:** nativo com `accent-color` em tinta.
 
-### Dashboard Tile
-Indicador com número em Headline sobre rótulo em Cinza Ardósia, em painel branco; o número vira Vermelho de Risco quando há pendência crítica (atrasadas).
+### Navigation
+- **Desktop:** rail branco de 236px; marca "P" em quadrado preto ao lado de "ProjectHub" (17px/700). Itens de 44px com pictograma de 18px e rótulo 14px/600 em Tinta de Menu; hover em Cinza Esmalte; ativo é placa sólida em tinta com texto branco. Contagem de não lidas é um selo contornado na cor do texto. "Sair" fica no pé do rail.
+- **Mobile:** barra inferior branca com filete de 2px em tinta no topo, cinco colunas (quatro destinos e "Mais"), ícone de 20px sobre rótulo de 12px, 56px de altura; ativo em placa de tinta. "Mais" abre uma folha com os demais destinos.
+- O pictograma acompanha o nome, nunca o substitui.
 
-### Empty State
-Painel com borda tracejada, título em peso 500 e descrição em Cinza Ardósia, centralizados com 32px de padding; sempre oferece a próxima ação quando houver.
+### Line Badge
+Selo circular na cor da linha do projeto com a inicial em 12px/700 (texto branco ou tinta, conforme a linha). A Prata com travessão marca "sem projeto". A **faixa de linha** (6px, vertical) é a forma em lista do mesmo selo, usada na placa de prazos.
+
+### Task Table
+Cabeçalho de colunas em 12px/600 Tinta Secundária sobre filete de 2px em tinta; linhas separadas por Régua Fina. Colunas: concluir, Linha (selo), Tarefa (título 600 com projeto embaixo), Prazo, Estimativa, Situação. Prazo atrasado em Vermelho Atraso 600. Concluídas ficam riscadas em Tinta Secundária. Abaixo de 768px, os metadados (selo, projeto, prazo, estimativa) viram uma linha sob o título.
+
+### Linha do dia (Signature Component)
+A assinatura do sistema. Um trilho de 8px em Trilho atravessa o dia; cada compromisso é um segmento na cor da linha do projeto (blocos de foco a 55% de opacidade) com uma estação circular no início. Nome da estação (14px/600) acima ou abaixo do trilho, alternando para não colidir, com "hora · tipo" em 12px. Marcas de hora em 11px embaixo. O "agora" é um traço vertical de 2px em Vermelho Agora com estação vermelha e o rótulo "Agora HH:MM" em Vermelho Atraso. Abaixo de 768px o trilho fica vertical, como o diagrama dentro do vagão: hora à esquerda, estação no trilho, nome à direita. Fecha com a leitura "Próxima estação · HH:MM · título · em 1h12" (e "Em andamento · título até HH:MM" quando houver), separada por régua fina. É uma única lista ordenada acessível; trilho e segmentos são decorativos.
 
 ## Do's and Don'ts
 
 ### Do:
-- **Do** usar o azul (#2563eb) apenas para ação, seleção e foco.
-- **Do** separar superfícies com bordas de 1px em #e2e8f0 e deixar as sombras para o que flutua.
-- **Do** manter alvos de toque de pelo menos 44px abaixo de 1024px em navegação, botões, checkboxes, linhas de lista e campos.
-- **Do** conferir o contraste de texto (4,5:1) em cada par texto/fundo antes de criar um novo tom; sobre tint do azul use o Azul Firme.
-- **Do** respeitar `prefers-reduced-motion` e manter o foco do teclado sempre visível.
-- **Do** acompanhar toda cor de estado com texto ou ícone (badge com rótulo, mensagem de erro).
-- **Do** tratar loading, vazio, erro e sem-permissão em toda lista e painel.
-- **Do** manter o texto da interface em português do Brasil.
+- **Do** usar tinta sólida (#111418) para a ação principal e para o item ativo da navegação.
+- **Do** dar a cada projeto seu selo de linha, com inicial, sempre que ele aparecer em lista, tabela ou na Linha do dia.
+- **Do** contornar a Linha Amarela com 1px de tinta e escrever sobre ela em tinta.
+- **Do** encerrar cabeçalhos de página e de tabela com filete de 2px em tinta.
+- **Do** expressar status pela escala de ênfase em tinta (régua fina, contorno, negrito, placa sólida), sempre com texto.
+- **Do** usar numerais tabulares em horas, datas, estimativas e contagens.
+- **Do** colocar a data e o contexto abaixo do título da página.
 
 ### Don't:
-- **Don't** introduzir um segundo acento nem usar verde, âmbar ou vermelho como cor de marca.
-- **Don't** usar sombras em cartões em repouso, gradientes, vidro fosco ou bordas laterais coloridas.
-- **Don't** usar fonte de exibição ou tamanhos acima de 24px nas telas de trabalho.
-- **Don't** mostrar módulos futuros no menu antes de implementados, nem números ou ações fictícias.
-- **Don't** depender só de cor para indicar estado ou prioridade.
+- **Don't** usar cores de linha na navegação, em botões ou em status; a cor pertence aos projetos.
+- **Don't** usar vermelho fora do "agora" e do atraso, nem incluí-lo na paleta de linhas.
+- **Don't** colocar sombra em placas, selos ou botões; sombra só em diálogo e folha flutuante.
+- **Don't** arredondar placas, botões ou campos além de 2px; círculos são só para selos e estações.
+- **Don't** abrir a página com uma faixa de indicadores grandes em cartões; o topo da Central do dia é a Linha do dia.
+- **Don't** pôr rótulos em caixa alta acima do título da página; caixa alta espaçada é só para títulos de placa.

@@ -90,14 +90,14 @@ export function TaskDetailPage() {
       <TaskChecklist taskId={t.id} />
 
       <section aria-labelledby="subtasks-h" className="space-y-3">
-        <h2 id="subtasks-h" className="text-lg font-semibold">
+        <h2 id="subtasks-h" className="section-title">
           Subtarefas
         </h2>
         {subtasks.isSuccess && subtasks.data.length === 0 && (
           <p className="text-sm text-muted-foreground">Nenhuma subtarefa.</p>
         )}
         {(subtasks.data ?? []).length > 0 && (
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">
+          <ul className="plate divide-y divide-border">
             {subtasks.data!.map((s) => (
               <li key={s.id}>
                 <Link to={`/app/tarefas/${s.id}`} className="flex min-h-11 items-center justify-between px-4 hover:bg-muted">

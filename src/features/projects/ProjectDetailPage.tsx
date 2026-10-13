@@ -1,6 +1,8 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { LineBadge } from '@/components/LineBadge'
+import { lineFor } from '@/lib/lines'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -31,6 +33,12 @@ export function ProjectDetailPage() {
     <>
       <PageHeader
         title={p.name}
+        description={
+          <span className="inline-flex items-center gap-2">
+            <LineBadge projectId={p.id} projectName={p.name} size="sm" />
+            Linha {lineFor(p.id).name}
+          </span>
+        }
         actions={
           <>
             {p.archived_at && <StatusBadge>Arquivado em {formatDate(p.archived_at)}</StatusBadge>}

@@ -72,10 +72,10 @@ export function ConfirmDialog({
       onClick={(e) => {
         if (e.target === ref.current && !pending) onCancel()
       }}
-      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-md border border-border bg-card p-0 text-card-foreground shadow-lg backdrop:bg-foreground/40"
+      className="m-auto w-[min(28rem,calc(100vw-2rem))] rounded-sm border-2 border-foreground bg-card p-0 text-card-foreground shadow-[0_18px_40px_-12px_rgb(17_20_24/0.35)] backdrop:bg-foreground/45"
     >
       <div className="space-y-4 p-6">
-        <h2 id={titleId} className="text-lg font-semibold">
+        <h2 id={titleId} className="text-lg font-bold tracking-[-0.01em]">
           {title}
         </h2>
         <div id={descId} className="text-sm text-muted-foreground">

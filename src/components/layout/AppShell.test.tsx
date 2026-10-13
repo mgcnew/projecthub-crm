@@ -6,6 +6,7 @@ import { AppShell } from './AppShell'
 vi.mock('@/features/auth/auth-context', () => ({ useAuth: () => ({ signOut: vi.fn() }) }))
 vi.mock('@/features/notifications/api', () => ({ useUnreadCount: () => ({ data: 3 }) }))
 vi.mock('@/features/settings/TimezoneBoundary', () => ({ TimezoneBoundary: ({ children }: { children: React.ReactNode }) => <>{children}</> }))
+vi.mock('@/components/LineRegistry', () => ({ LineRegistry: ({ children }: { children: React.ReactNode }) => <>{children}</> }))
 
 function Page({ title, to }: { title: string; to?: string }) {
   return (

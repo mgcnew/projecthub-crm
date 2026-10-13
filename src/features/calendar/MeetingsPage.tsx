@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { LineBadge } from '@/components/LineBadge'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDateTime } from '@/lib/format'
@@ -33,13 +34,21 @@ export function MeetingsPage() {
       {q.isSuccess && count === 0 && <EmptyState title="Nenhuma reunião cadastrada" />}
       {q.isSuccess && count > 0 && (
         <>
-          <ul className="divide-y divide-border rounded-md border border-border bg-card">
+          <ul className="plate divide-y divide-border">
             {q.data.rows.map((m) => (
               <li key={m.id}>
-                <Link to={`/app/reunioes/${m.id}`} className="flex min-h-12 flex-wrap items-center justify-between gap-2 px-4 py-3 hover:bg-muted">
-                  <span>
-                    <span className="font-medium">{m.title}</span>
-                    <span className="ml-2 text-sm text-muted-foreground">{formatDateTime(m.starts_at)}</span>
+                <Link to={`/app/reunioes/${m.id}`} className="flex min-h-14 flex-wrap items-center gap-x-3 gap-y-2 px-4 py-3 hover:bg-muted/60 sm:px-5">
+                  <LineBadge
+                    projectId={m.project_id}
+                    projectName={(m.projects as unknown as { name: string } | null)?.name}
+                  />
+                  <span className="min-w-0 flex-1">
+                    <span className="block font-semibold">{m.title}</span>
+                    <span className="block text-sm text-muted-foreground tabular-nums">
+                      {formatDateTime(m.starts_at)}
+                      {(m.projects as unknown as { name: string } | null)?.name &&
+                        ` · ${(m.projects as unknown as { name: string }).name}`}
+                    </span>
                   </span>
                   <StatusBadge tone={m.status === 'cancelled' ? 'danger' : 'neutral'}>
                     {eventStatuses[m.status as keyof typeof eventStatuses] ?? m.status}
