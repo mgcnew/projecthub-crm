@@ -14,6 +14,7 @@ import { dueLabel } from '@/features/tasks/due'
 import { TaskTable, type TaskRowData } from '@/features/tasks/TaskTable'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { addDays, dayStartInstant, formatDateTime, formatMinutes, todayISO } from '@/lib/format'
+import { ActivityFeed } from './ActivityFeed'
 import { useActiveProjectCount, useOverdueTasks, useRecentUnread, useUpcomingTasks } from './api'
 
 type PlanTask = TaskRowData & { projects: { name: string } | null }
@@ -185,34 +186,40 @@ export function DashboardPage() {
         </Plate>
       </div>
 
-      <Plate
-        id="dash-notifications"
-        title="Notificações"
-        meta={unreadCount.data ? plural(unreadCount.data, 'não lida', 'não lidas') : undefined}
-        action={
-          <Button asChild variant="ghost" size="sm">
-            <Link to="/app/notificacoes">Ver todas</Link>
-          </Button>
-        }
-      >
-        {unread.isSuccess && unread.data.length === 0 && <p className="py-2 text-sm text-muted-foreground">Nenhuma notificação não lida.</p>}
-        {(unread.data?.length ?? 0) > 0 && (
-          <ul>
-            {unread.data!.map((n) => (
-              <li key={n.id} className="border-b border-border last:border-b-0">
-                <Link to={notificationHref(n) ?? '/app/notificacoes'} className="flex min-h-11 flex-wrap items-center gap-x-3 py-2 hover:underline">
-                  <span aria-hidden="true" className="size-2 rounded-full bg-foreground" />
-                  <span className="font-semibold">{n.title}</span>
-                  <span className="text-sm text-muted-foreground">
-                    {n.body ? `${n.body} · ` : ''}
-                    {formatDateTime(n.created_at)}
-                  </span>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </Plate>
+      <div className="grid items-start gap-6 lg:grid-cols-2">
+        <Plate
+          id="dash-notifications"
+          title="Notificações"
+          meta={unreadCount.data ? plural(unreadCount.data, 'não lida', 'não lidas') : undefined}
+          action={
+            <Button asChild variant="ghost" size="sm">
+              <Link to="/app/notificacoes">Ver todas</Link>
+            </Button>
+          }
+        >
+          {unread.isSuccess && unread.data.length === 0 && <p className="py-2 text-sm text-muted-foreground">Nenhuma notificação não lida.</p>}
+          {(unread.data?.length ?? 0) > 0 && (
+            <ul>
+              {unread.data!.map((n) => (
+                <li key={n.id} className="border-b border-border last:border-b-0">
+                  <Link to={notificationHref(n) ?? '/app/notificacoes'} className="flex min-h-11 flex-wrap items-center gap-x-3 py-2 hover:underline">
+                    <span aria-hidden="true" className="size-2 rounded-full bg-foreground" />
+                    <span className="font-semibold">{n.title}</span>
+                    <span className="text-sm text-muted-foreground">
+                      {n.body ? `${n.body} · ` : ''}
+                      {formatDateTime(n.created_at)}
+                    </span>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+        </Plate>
+
+        <Plate id="dash-activity" title="Atividade recente">
+          <ActivityFeed enabled={enabled} />
+        </Plate>
+      </div>
     </>
   )
 }

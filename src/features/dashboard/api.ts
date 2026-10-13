@@ -86,3 +86,58 @@ export function useActiveProjectCount(enabled: boolean) {
     },
   })
 }
+
+type ActivityRow = {
+  id: string
+  actor_id: string | null
+  entity_type: 'task' | 'project' | 'client' | 'calendar_event'
+  entity_id: string
+  action: string
+  changes: unknown
+  created_at: string
+}
+
+/**
+ * Atividade recente da organização (activity_logs) com o título atual de cada entidade, resolvido
+ * no momento da leitura por uma consulta por tipo presente (RLS aplicada; sem cópias, D052).
+ * Chave sob ['tasks'] para atualizar quando tarefas mudam nesta tela; demais mudanças entram ao remontar.
+ */
+export function useRecentActivity(enabled: boolean, limit = 8) {
+  return useQuery({
+    queryKey: ['tasks', 'activity-feed', limit],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('activity_logs')
+        .select('id, actor_id, entity_type, entity_id, action, changes, created_at')
+        .order('created_at', { ascending: false })
+        .limit(limit)
+      if (error) throw error
+      const rows = (data ?? []) as ActivityRow[]
+      const ids = (t: ActivityRow['entity_type']) => [...new Set(rows.filter((r) => r.entity_type === t).map((r) => r.entity_id))]
+      const entities = new Map<
+        string,
+        { title: string | null; projectId: string | null; projectName: string | null; eventType?: string | null }
+      >()
+      const nameOf = (rel: unknown) => (rel as { name: string } | null)?.name ?? null
+
+      const [tasks, projects, clients, events] = await Promise.all([
+        ids('task').length ? supabase.from('tasks').select('id, title, project_id, projects(name)').in('id', ids('task')) : null,
+        ids('project').length ? supabase.from('projects').select('id, name').in('id', ids('project')) : null,
+        ids('client').length ? supabase.from('clients').select('id, name').in('id', ids('client')) : null,
+        ids('calendar_event').length
+          ? supabase.from('calendar_events').select('id, title, event_type, project_id, projects(name)').in('id', ids('calendar_event'))
+          : null,
+      ])
+      for (const r of [tasks, projects, clients, events]) if (r?.error) throw r.error
+      for (const t of tasks?.data ?? [])
+        entities.set(t.id, { title: t.title, projectId: t.project_id, projectName: nameOf(t.projects) })
+      for (const p of projects?.data ?? []) entities.set(p.id, { title: p.name, projectId: p.id, projectName: p.name })
+      for (const c of clients?.data ?? []) entities.set(c.id, { title: c.name, projectId: null, projectName: null })
+      for (const e of events?.data ?? [])
+        entities.set(e.id, { title: e.title, projectId: e.project_id, projectName: nameOf(e.projects), eventType: e.event_type })
+
+      return rows.map((r) => ({ ...r, entity: entities.get(r.entity_id) ?? null }))
+    },
+  })
+}

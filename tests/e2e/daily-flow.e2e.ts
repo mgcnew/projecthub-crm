@@ -47,4 +47,11 @@ test('fluxo diário: cliente → projeto → tarefa planejada → concluir apare
   await page.goto('/app/tarefas')
   await page.getByLabel('Situação').selectOption('all').catch(() => undefined)
   await expect(page.getByRole('link', { name: /Preparar proposta/ })).toBeVisible({ timeout: 15_000 })
+
+  // A Central do dia registra o que mudou (trilha gravada no banco, título resolvido na leitura)
+  await page.goto('/app')
+  const feed = page.getByRole('region', { name: 'Atividade recente' })
+  await expect(feed.getByRole('link', { name: 'Preparar proposta' }).first()).toBeVisible()
+  await expect(feed.getByText(/Você alterou o status: A fazer → Concluída/)).toBeVisible()
+  await expect(feed.getByRole('link', { name: 'Site institucional' }).first()).toBeVisible()
 })
