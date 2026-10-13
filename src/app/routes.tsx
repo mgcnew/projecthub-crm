@@ -10,6 +10,7 @@ import { MeetingDetailPage } from '@/features/calendar/MeetingDetailPage'
 import { MeetingsPage } from '@/features/calendar/MeetingsPage'
 import { DashboardPage } from '@/features/dashboard/DashboardPage'
 import { NotificationsPage } from '@/features/notifications/NotificationsPage'
+import { SettingsPage } from '@/features/settings/SettingsPage'
 import { ClientDetailPage } from '@/features/clients/ClientDetailPage'
 import { ClientNewPage } from '@/features/clients/ClientNewPage'
 import { ClientsPage } from '@/features/clients/ClientsPage'
@@ -42,6 +43,7 @@ export const routes: RouteObject[] = [
               { path: '/app', element: <DashboardPage /> },
               { path: '/app/meu-dia', element: <MyDayPage /> },
               { path: '/app/notificacoes', element: <NotificationsPage /> },
+              { path: '/app/configuracoes', element: <SettingsPage /> },
               { path: '/app/agenda', element: <AgendaPage /> },
               { path: '/app/agenda/novo', element: <EventNewPage /> },
               { path: '/app/agenda/:id', element: <EventDetailPage /> },

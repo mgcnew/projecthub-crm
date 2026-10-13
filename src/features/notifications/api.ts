@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import type { TablesInsert } from '@/lib/database.types'
+import { fromLocalInput } from '@/lib/format'
 import { supabase } from '@/lib/supabase'
 
 export const NOTIFICATIONS_PAGE_SIZE = 20
@@ -36,7 +37,7 @@ export function useReminderMutations(orgId: string | undefined, target: Reminder
       const owner = target.kind === 'task' ? { task_id: target.id } : { event_id: target.id }
       const when =
         'remindAt' in v
-          ? { remind_at: new Date(v.remindAt).toISOString() }
+          ? { remind_at: fromLocalInput(v.remindAt)! }
           : { offset_minutes: v.offsetMinutes }
       const row: TablesInsert<'reminders'> = { organization_id: orgId, ...owner, ...when }
       const { error } = await supabase.from('reminders').insert(row)

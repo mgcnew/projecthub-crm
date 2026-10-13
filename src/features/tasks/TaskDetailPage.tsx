@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { TaskWorkBlocks } from '@/features/calendar/TaskWorkBlocks'
+import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { ReminderEditor } from '@/features/notifications/ReminderEditor'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { toLocalInput } from '@/lib/format'
@@ -119,6 +120,7 @@ export function TaskDetailPage() {
           />
         )}
       </section>
+      <ActivityTimeline entityType="task" entityId={t.id} />
     </>
   )
 }

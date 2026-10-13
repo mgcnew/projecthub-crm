@@ -6,8 +6,6 @@ export const eventStatuses = { scheduled: 'Agendado', completed: 'Concluído', c
 export const frequencies = { none: 'Não repete', daily: 'Diariamente', weekly: 'Semanalmente', monthly: 'Mensalmente' } as const
 export const weekdays = ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'] as const
 
-export const browserTimezone = () => Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC'
-
 export const eventFormSchema = z
   .object({
     title: z.string().trim().min(1, 'Informe o título').max(300, 'Máximo de 300 caracteres'),
@@ -25,7 +23,7 @@ export const eventFormSchema = z
     occurrence_limit: z.string().regex(/^\d*$/, 'Use apenas números'),
   })
   .superRefine((v, ctx) => {
-    if (v.start_at && v.end_at && new Date(v.end_at) <= new Date(v.start_at))
+    if (v.start_at && v.end_at && new Date(fromLocalInput(v.end_at)!) <= new Date(fromLocalInput(v.start_at)!))
       ctx.addIssue({ code: 'custom', path: ['end_at'], message: 'O fim deve ser posterior ao início' })
     if (v.frequency !== 'none' && v.ends_on && v.start_at && v.ends_on < v.start_at.slice(0, 10))
       ctx.addIssue({ code: 'custom', path: ['ends_on'], message: 'O término não pode ser anterior ao início' })

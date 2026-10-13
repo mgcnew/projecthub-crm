@@ -7,7 +7,7 @@ import { useUnreadCount } from '@/features/notifications/api'
 import { notificationHref } from '@/features/notifications/schema'
 import { useDayPlans, useSetTaskStatus } from '@/features/tasks/api'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
-import { addDays, formatDate, formatDateTime, todayISO } from '@/lib/format'
+import { addDays, dayStartInstant, formatDate, formatDateTime, formatTime, todayISO } from '@/lib/format'
 import { useActiveProjectCount, useOverdueTasks, useRecentUnread, useUpcomingTasks } from './api'
 
 type DashTask = {
@@ -20,7 +20,7 @@ type DashTask = {
   projects: { name: string } | null
 }
 
-const timeFmt = (iso: string) => new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+const timeFmt = formatTime
 const typeLabel: Record<string, string> = { event: 'Evento', meeting: 'Reunião', work_block: 'Bloco de foco' }
 
 function Tile({ label, value, tone }: { label: string; value: ReactNode; tone?: 'danger' }) {
@@ -77,8 +77,7 @@ export function DashboardPage() {
   const weekEnd = addDays(today, 7)
 
   const { from, to } = useMemo(() => {
-    const [y, m, d] = today.split('-').map(Number)
-    return { from: new Date(y, m - 1, d).toISOString(), to: new Date(y, m - 1, d + 1).toISOString() }
+    return { from: dayStartInstant(today), to: dayStartInstant(addDays(today, 1)) }
   }, [today])
 
   const overdue = useOverdueTasks(today, enabled)

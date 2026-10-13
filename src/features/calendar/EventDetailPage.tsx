@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
+import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { ReminderEditor } from '@/features/notifications/ReminderEditor'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { toLocalInput } from '@/lib/format'
@@ -106,6 +107,7 @@ export function EventDetailPage() {
         id={ev.id}
         closedReason={ev.status === 'cancelled' ? 'Eventos cancelados não geram novos avisos.' : undefined}
       />
+      <ActivityTimeline entityType="calendar_event" entityId={ev.id} />
     </>
   )
 }

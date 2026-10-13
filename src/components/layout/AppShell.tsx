@@ -3,6 +3,7 @@ import { NavLink, Outlet } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/features/auth/auth-context'
 import { useUnreadCount } from '@/features/notifications/api'
+import { TimezoneBoundary } from '@/features/settings/TimezoneBoundary'
 import { cn } from '@/lib/utils'
 
 const items = [
@@ -14,6 +15,7 @@ const items = [
   { to: '/app/projetos', label: 'Projetos', end: false },
   { to: '/app/clientes', label: 'Clientes', end: false },
   { to: '/app/notificacoes', label: 'Notificações', end: false },
+  { to: '/app/configuracoes', label: 'Configurações', end: false },
 ]
 const primaryMobile = items.slice(0, 4)
 const moreMobile = items.slice(4)
@@ -60,7 +62,9 @@ export function AppShell() {
       </aside>
 
       <main className="mx-auto w-full max-w-5xl space-y-6 px-4 pb-24 pt-6 lg:pb-8">
-        <Outlet />
+        <TimezoneBoundary>
+          <Outlet />
+        </TimezoneBoundary>
       </main>
 
       {moreOpen && (

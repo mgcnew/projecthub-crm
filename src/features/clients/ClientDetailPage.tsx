@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useProjectsByClient } from '@/features/projects/api'
 import { projectStatuses } from '@/features/projects/schema'
@@ -101,6 +102,7 @@ export function ClientDetailPage() {
           </ul>
         )}
       </section>
+      <ActivityTimeline entityType="client" entityId={c.id} />
     </>
   )
 }

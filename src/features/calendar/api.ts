@@ -1,8 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
-import { emptyToNull } from '@/lib/format'
+import { activeTimezone, emptyToNull } from '@/lib/format'
 import { supabase } from '@/lib/supabase'
 import {
-  browserTimezone,
   eventPayload,
   rulePayload,
   type EventFormValues,
@@ -47,7 +46,7 @@ export function useCreateEvent(orgId: string | undefined) {
   return useMutation({
     mutationFn: async (v: EventFormValues) => {
       if (!orgId) throw new Error('Organização não carregada')
-      const timezone = browserTimezone()
+      const timezone = activeTimezone()
       let ruleId: string | null = null
       if (v.frequency !== 'none') {
         const { data, error } = await supabase
@@ -86,7 +85,7 @@ export function useUpdateEvent(orgId: string | undefined, eventId: string, curre
   return useMutation({
     mutationFn: async (v: EventFormValues) => {
       if (!orgId) throw new Error('Organização não carregada')
-      const timezone = browserTimezone()
+      const timezone = activeTimezone()
       let ruleId = currentRuleId
       if (v.frequency === 'none') {
         ruleId = null
@@ -220,7 +219,7 @@ export function useCreateWorkBlock(orgId: string | undefined, taskId: string, ti
         title: `Foco: ${title}`.slice(0, 300),
         starts_at: startsAt,
         ends_at: endsAt,
-        timezone: browserTimezone(),
+        timezone: activeTimezone(),
       })
       if (error) throw error
     },

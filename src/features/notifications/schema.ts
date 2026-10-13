@@ -1,3 +1,5 @@
+import { fromLocalInput } from '@/lib/format'
+
 /** Antecedências oferecidas para lembretes de evento (limite do banco: 0–10080 min). */
 export const reminderOffsets = [
   { value: 0, label: 'No horário do evento' },
@@ -19,8 +21,9 @@ export function offsetLabel(minutes: number) {
 /** Valida o valor de <input type="datetime-local"> de um lembrete de tarefa. */
 export function validateReminderAt(local: string, now: Date = new Date()): string | null {
   if (!local) return 'Informe a data e a hora do lembrete.'
-  const at = new Date(local)
-  if (Number.isNaN(at.getTime())) return 'Data e hora inválidas.'
+  const iso = fromLocalInput(local)
+  if (!iso) return 'Data e hora inválidas.'
+  const at = new Date(iso)
   if (at.getTime() < now.getTime() - 60_000) return 'O lembrete deve ser no futuro.'
   return null
 }

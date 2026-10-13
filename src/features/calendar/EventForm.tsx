@@ -5,9 +5,9 @@ import { Field } from '@/components/form'
 import { controlClass, textareaClass } from '@/components/form-styles'
 import { useClientOptions } from '@/features/clients/api'
 import { useProjectOptions } from '@/features/projects/api'
+import { activeTimezone } from '@/lib/format'
 import { useUnsavedChangesGuard } from '@/lib/unsaved'
 import {
-  browserTimezone,
   eventFormSchema,
   eventStatuses,
   eventTypes,
@@ -115,7 +115,7 @@ export function EventForm({
 
         <fieldset className="space-y-3 rounded-md border border-border p-3">
           <legend className="px-1 text-sm font-medium">Repetição</legend>
-          <Field id="frequency" label="Frequência" hint={`Fuso: ${browserTimezone()}. Editar altera toda a série.`}>
+          <Field id="frequency" label="Frequência" hint={`Fuso: ${activeTimezone()}. Editar altera toda a série.`}>
             <select id="frequency" className={controlClass} {...register('frequency')}>
               {Object.entries(frequencies).map(([v, l]) => (
                 <option key={v} value={v}>

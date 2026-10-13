@@ -34,4 +34,4 @@ npm run test:integration     # JWT reais contra o Supabase local
 Usuário de desenvolvimento local: ver `supabase/seed.sql`.
 
 ## Status
-**Fases 0 a 5 concluídas** (tooling; identidade e RLS; clientes e projetos; tarefas e checklists; agenda, reuniões e recorrência mínima; lembretes com worker `pg_cron`, notificações internas e Dashboard). Falta a Fase 6 (mobile, acessibilidade, Playwright, revisão RLS, backup e deploy).
+**Fases 0 a 5 concluídas** (tooling; identidade e RLS; clientes e projetos; tarefas e checklists; agenda, reuniões e recorrência mínima; lembretes com worker `pg_cron`, notificações internas e Dashboard). **Fase 6 em andamento**: preferências (fuso) e histórico de atividades concluídos; faltam acessibilidade, Playwright, revisão RLS, backup e deploy.

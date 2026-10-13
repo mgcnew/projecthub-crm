@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
+import { addDays, dayStartInstant } from '@/lib/format'
 import { supabase } from '@/lib/supabase'
 
 // O Dashboard não mantém cópias: cada consulta lê a entidade de origem. As chaves ficam sob
@@ -36,8 +37,7 @@ export function useUpcomingTasks(today: string, endDate: string, enabled: boolea
     enabled,
     queryFn: async () => {
       const now = isoNoMs(new Date())
-      const [y, m, d] = endDate.split('-').map(Number)
-      const endIso = isoNoMs(new Date(y, m - 1, d + 1))
+      const endIso = isoNoMs(new Date(dayStartInstant(addDays(endDate, 1))))
       const { data, error } = await supabase
         .from('tasks')
         .select(taskColumns)

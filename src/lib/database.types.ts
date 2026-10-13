@@ -23,7 +23,27 @@ export type Database = {
           }
         },"public": {
           Tables: {
-            "calendar_events": {
+            "activity_logs": {
+                  Row: {
+                    "action": string,"actor_id": string | null,"changes": NonNullable<Json>,"created_at": string,"entity_id": string,"entity_type": string,"id": string,"organization_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "action": string,"actor_id"?: string | null,"changes"?: NonNullable<Json>,"created_at"?: string,"entity_id": string,"entity_type": string,"id"?: string,"organization_id": string
+                  }
+                  Update: {
+                    "action"?: string,"actor_id"?: string | null,"changes"?: NonNullable<Json>,"created_at"?: string,"entity_id"?: string,"entity_type"?: string,"id"?: string,"organization_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "activity_logs_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"calendar_events": {
                   Row: {
                     "client_id": string | null,"created_at": string,"description": string | null,"ends_at": string,"event_type": string,"id": string,"organization_id": string,"project_id": string | null,"recurrence_rule_id": string | null,"starts_at": string,"status": string,"task_id": string | null,"timezone": string,"title": string,"updated_at": string
                   }
@@ -488,6 +508,20 @@ isOneToOne: false
       referencedRelation: "projects"
       referencedColumns: ["organization_id","id"]
     }
+                  ]
+                },"user_preferences": {
+                  Row: {
+                    "timezone": string,"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "timezone": string,"updated_at"?: string,"user_id": string
+                  }
+                  Update: {
+                    "timezone"?: string,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    
                   ]
                 }
           }

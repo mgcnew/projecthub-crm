@@ -6,6 +6,7 @@ import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
 import { useArchiveProject, useProject, useUpdateProject } from './api'
 import { ProjectForm } from './ProjectForm'
+import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { ProjectLogs } from './ProjectLogs'
 
 export function ProjectDetailPage() {
@@ -83,6 +84,7 @@ export function ProjectDetailPage() {
       />
 
       <ProjectLogs projectId={p.id} />
+      <ActivityTimeline entityType="project" entityId={p.id} />
     </>
   )
 }

@@ -2,18 +2,16 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams } from 'react-router-dom'
 import { PageHeader } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
-import { toISODate } from '@/lib/format'
+import { fromLocalInput, toLocalInput } from '@/lib/format'
 import { useCreateEvent } from './api'
 import { EventForm } from './EventForm'
 import { eventDefaults } from './schema'
 
+/** Próxima hora cheia no fuso de trabalho, com duração de 1 h. */
 function defaultTimes() {
-  const now = new Date()
-  now.setMinutes(0, 0, 0)
-  now.setHours(now.getHours() + 1)
-  const end = new Date(now.getTime() + 60 * 60 * 1000)
-  const fmt = (d: Date) => `${toISODate(d)}T${String(d.getHours()).padStart(2, '0')}:00`
-  return { start: fmt(now), end: fmt(end) }
+  const now = toLocalInput(new Date().toISOString()).slice(0, 13) + ':00'
+  const start = new Date(fromLocalInput(now)!).getTime() + 60 * 60 * 1000
+  return { start: toLocalInput(new Date(start).toISOString()), end: toLocalInput(new Date(start + 60 * 60 * 1000).toISOString()) }
 }
 
 export function EventNewPage() {

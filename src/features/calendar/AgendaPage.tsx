@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
-import { addDays, formatDate, toISODate, todayISO } from '@/lib/format'
+import { addDays, dateInTz, dayStartInstant, formatDate, formatTime, toISODate, todayISO } from '@/lib/format'
 import { useOccurrences } from './api'
 
 function mondayOf(iso: string) {
@@ -13,8 +13,7 @@ function mondayOf(iso: string) {
   return toISODate(new Date(y, m - 1, d - shift))
 }
 
-const timeFmt = (iso: string) =>
-  new Date(iso).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })
+const timeFmt = formatTime
 
 const typeLabel: Record<string, string> = { event: 'Evento', meeting: 'Reunião', work_block: 'Bloco de foco' }
 
@@ -23,8 +22,7 @@ export function AgendaPage() {
   const [weekStart, setWeekStart] = useState(() => mondayOf(todayISO()))
 
   const { from, to } = useMemo(() => {
-    const [y, m, d] = weekStart.split('-').map(Number)
-    return { from: new Date(y, m - 1, d).toISOString(), to: new Date(y, m - 1, d + 7).toISOString() }
+    return { from: dayStartInstant(weekStart), to: dayStartInstant(addDays(weekStart, 7)) }
   }, [weekStart])
 
   const q = useOccurrences(from, to, Boolean(orgId))
@@ -34,7 +32,7 @@ export function AgendaPage() {
     const map = new Map<string, NonNullable<typeof data>>()
     for (let i = 0; i < 7; i++) map.set(addDays(weekStart, i), [])
     for (const o of data ?? []) {
-      const key = toISODate(new Date(o.occurrence_start))
+      const key = dateInTz(o.occurrence_start)
       map.get(key)?.push(o)
     }
     return [...map.entries()]

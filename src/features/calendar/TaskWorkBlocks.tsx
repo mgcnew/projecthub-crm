@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Field } from '@/components/form'
 import { controlClass } from '@/components/form-styles'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
-import { formatDateTime, toISODate } from '@/lib/format'
+import { formatDateTime, formatTime, fromLocalInput, todayISO } from '@/lib/format'
 import { useCancelEvent, useCreateWorkBlock, useWorkBlocks } from './api'
 
 /** Bloco de tempo: evento work_block da tarefa; independente do prazo e do dia planejado (D003/D004). */
@@ -12,7 +12,7 @@ export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitl
   const blocks = useWorkBlocks(taskId)
   const create = useCreateWorkBlock(orgId, taskId, taskTitle)
   const cancel = useCancelEvent()
-  const [date, setDate] = useState(toISODate(new Date()))
+  const [date, setDate] = useState(todayISO())
   const [time, setTime] = useState('09:00')
   const [minutes, setMinutes] = useState('60')
   const [error, setError] = useState<string | null>(null)
@@ -24,7 +24,7 @@ export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitl
       setError('Informe data, hora e duração em minutos.')
       return
     }
-    const start = new Date(`${date}T${time}`)
+    const start = new Date(fromLocalInput(`${date}T${time}`)!)
     const end = new Date(start.getTime() + mins * 60_000)
     try {
       await create.mutateAsync({ startsAt: start.toISOString(), endsAt: end.toISOString() })
@@ -46,7 +46,7 @@ export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitl
           {blocks.data!.map((b) => (
             <li key={b.id} className="flex min-h-11 items-center justify-between gap-2 px-4">
               <span className="text-sm">
-                {formatDateTime(b.starts_at)} → {new Date(b.ends_at).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
+                {formatDateTime(b.starts_at)} → {formatTime(b.ends_at)}
               </span>
               {canWrite && (
                 <Button variant="ghost" size="sm" onClick={() => cancel.mutate(b.id)}>
