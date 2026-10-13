@@ -185,6 +185,76 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"notification_deliveries": {
+                  Row: {
+                    "attempt_count": number,"channel": string,"created_at": string,"id": string,"last_error": string | null,"notification_id": string,"organization_id": string,"sent_at": string | null,"status": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "attempt_count"?: number,"channel": string,"created_at"?: string,"id"?: string,"last_error"?: string | null,"notification_id": string,"organization_id": string,"sent_at"?: string | null,"status": string
+                  }
+                  Update: {
+                    "attempt_count"?: number,"channel"?: string,"created_at"?: string,"id"?: string,"last_error"?: string | null,"notification_id"?: string,"organization_id"?: string,"sent_at"?: string | null,"status"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "notification_deliveries_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "notification_deliveries_organization_id_notification_id_fkey"
+      columns: ["organization_id","notification_id"]
+isOneToOne: false
+      referencedRelation: "notifications"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"notifications": {
+                  Row: {
+                    "body": string | null,"created_at": string,"event_id": string | null,"id": string,"occurrence_at": string,"organization_id": string,"read_at": string | null,"reminder_id": string | null,"task_id": string | null,"title": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body"?: string | null,"created_at"?: string,"event_id"?: string | null,"id"?: string,"occurrence_at": string,"organization_id": string,"read_at"?: string | null,"reminder_id"?: string | null,"task_id"?: string | null,"title": string,"user_id": string
+                  }
+                  Update: {
+                    "body"?: string | null,"created_at"?: string,"event_id"?: string | null,"id"?: string,"occurrence_at"?: string,"organization_id"?: string,"read_at"?: string | null,"reminder_id"?: string | null,"task_id"?: string | null,"title"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "notifications_organization_id_event_id_fkey"
+      columns: ["organization_id","event_id"]
+isOneToOne: false
+      referencedRelation: "calendar_events"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "notifications_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "notifications_organization_id_reminder_id_fkey"
+      columns: ["organization_id","reminder_id"]
+isOneToOne: false
+      referencedRelation: "reminders"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "notifications_organization_id_task_id_fkey"
+      columns: ["organization_id","task_id"]
+isOneToOne: false
+      referencedRelation: "tasks"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "notifications_organization_id_user_id_fkey"
+      columns: ["organization_id","user_id"]
+isOneToOne: false
+      referencedRelation: "organization_members"
+      referencedColumns: ["organization_id","user_id"]
+    }
+                  ]
                 },"organization_members": {
                   Row: {
                     "joined_at": string,"organization_id": string,"role": string,"status": string,"user_id": string
@@ -303,6 +373,44 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "organizations"
       referencedColumns: ["id"]
+    }
+                  ]
+                },"reminders": {
+                  Row: {
+                    "created_at": string,"event_id": string | null,"id": string,"offset_minutes": number | null,"organization_id": string,"remind_at": string | null,"status": string,"task_id": string | null,"updated_at": string,"user_id": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"event_id"?: string | null,"id"?: string,"offset_minutes"?: number | null,"organization_id": string,"remind_at"?: string | null,"status"?: string,"task_id"?: string | null,"updated_at"?: string,"user_id"?: string
+                  }
+                  Update: {
+                    "created_at"?: string,"event_id"?: string | null,"id"?: string,"offset_minutes"?: number | null,"organization_id"?: string,"remind_at"?: string | null,"status"?: string,"task_id"?: string | null,"updated_at"?: string,"user_id"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "reminders_organization_id_event_id_fkey"
+      columns: ["organization_id","event_id"]
+isOneToOne: false
+      referencedRelation: "calendar_events"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "reminders_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "reminders_organization_id_task_id_fkey"
+      columns: ["organization_id","task_id"]
+isOneToOne: false
+      referencedRelation: "tasks"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "reminders_organization_id_user_id_fkey"
+      columns: ["organization_id","user_id"]
+isOneToOne: false
+      referencedRelation: "organization_members"
+      referencedColumns: ["organization_id","user_id"]
     }
                   ]
                 },"task_plans": {

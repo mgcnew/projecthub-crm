@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { NavLink, Outlet } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/features/auth/auth-context'
+import { useUnreadCount } from '@/features/notifications/api'
 import { cn } from '@/lib/utils'
 
 const items = [
@@ -12,9 +13,22 @@ const items = [
   { to: '/app/reunioes', label: 'Reuniões', end: false },
   { to: '/app/projetos', label: 'Projetos', end: false },
   { to: '/app/clientes', label: 'Clientes', end: false },
+  { to: '/app/notificacoes', label: 'Notificações', end: false },
 ]
 const primaryMobile = items.slice(0, 4)
 const moreMobile = items.slice(4)
+
+function UnreadBadge({ count }: { count: number }) {
+  if (count <= 0) return null
+  return (
+    <span
+      aria-label={`${count} não lida${count > 1 ? 's' : ''}`}
+      className="ml-auto rounded-full bg-primary px-2 text-xs font-semibold text-primary-foreground"
+    >
+      {count > 99 ? '99+' : count}
+    </span>
+  )
+}
 
 function link({ isActive }: { isActive: boolean }) {
   return cn(
@@ -26,6 +40,7 @@ function link({ isActive }: { isActive: boolean }) {
 export function AppShell() {
   const { signOut } = useAuth()
   const [moreOpen, setMoreOpen] = useState(false)
+  const unread = useUnreadCount().data ?? 0
 
   return (
     <div className="min-h-dvh lg:grid lg:grid-cols-[15rem_1fr]">
@@ -35,6 +50,7 @@ export function AppShell() {
           {items.map((i) => (
             <NavLink key={i.to} to={i.to} end={i.end} className={link}>
               {i.label}
+              {i.to === '/app/notificacoes' && <UnreadBadge count={unread} />}
             </NavLink>
           ))}
         </nav>
@@ -53,6 +69,7 @@ export function AppShell() {
             {moreMobile.map((i) => (
               <NavLink key={i.to} to={i.to} className={link} onClick={() => setMoreOpen(false)}>
                 {i.label}
+                {i.to === '/app/notificacoes' && <UnreadBadge count={unread} />}
               </NavLink>
             ))}
             <Button variant="ghost" className="justify-start" onClick={() => void signOut()}>
@@ -87,6 +104,8 @@ export function AppShell() {
           onClick={() => setMoreOpen((o) => !o)}
         >
           Mais
+          {unread > 0 && <span className="sr-only"> ({unread} notificações não lidas)</span>}
+          {unread > 0 && <span aria-hidden="true" className="ml-1 size-2 rounded-full bg-primary" />}
         </button>
       </nav>
     </div>

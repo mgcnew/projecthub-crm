@@ -8,6 +8,8 @@ import { EventDetailPage } from '@/features/calendar/EventDetailPage'
 import { EventNewPage } from '@/features/calendar/EventNewPage'
 import { MeetingDetailPage } from '@/features/calendar/MeetingDetailPage'
 import { MeetingsPage } from '@/features/calendar/MeetingsPage'
+import { DashboardPage } from '@/features/dashboard/DashboardPage'
+import { NotificationsPage } from '@/features/notifications/NotificationsPage'
 import { ClientDetailPage } from '@/features/clients/ClientDetailPage'
 import { ClientNewPage } from '@/features/clients/ClientNewPage'
 import { ClientsPage } from '@/features/clients/ClientsPage'
@@ -18,7 +20,6 @@ import { MyDayPage } from '@/features/tasks/MyDayPage'
 import { TaskDetailPage } from '@/features/tasks/TaskDetailPage'
 import { TasksPage } from '@/features/tasks/TasksPage'
 import { TemplatesPage } from '@/features/tasks/TemplatesPage'
-import { AppHomePage } from '@/pages/AppHomePage'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 
 // Rotas de módulos entram junto com cada fase; nada de menu para módulo inexistente.
@@ -38,8 +39,9 @@ export const routes: RouteObject[] = [
           {
             element: <AppShell />,
             children: [
-              { path: '/app', element: <AppHomePage /> },
+              { path: '/app', element: <DashboardPage /> },
               { path: '/app/meu-dia', element: <MyDayPage /> },
+              { path: '/app/notificacoes', element: <NotificationsPage /> },
               { path: '/app/agenda', element: <AgendaPage /> },
               { path: '/app/agenda/novo', element: <EventNewPage /> },
               { path: '/app/agenda/:id', element: <EventDetailPage /> },

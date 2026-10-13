@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { TaskWorkBlocks } from '@/features/calendar/TaskWorkBlocks'
+import { ReminderEditor } from '@/features/notifications/ReminderEditor'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { toLocalInput } from '@/lib/format'
 import { useQuickCreateTask, useSubtasks, useTask, useUpdateTask } from './api'
@@ -76,6 +77,15 @@ export function TaskDetailPage() {
 
       <TaskPlanning taskId={t.id} />
       <TaskWorkBlocks taskId={t.id} taskTitle={t.title} />
+      <ReminderEditor
+        kind="task"
+        id={t.id}
+        closedReason={
+          t.status === 'done' || t.status === 'cancelled'
+            ? 'Tarefas concluídas ou canceladas não geram novos avisos.'
+            : undefined
+        }
+      />
       <TaskChecklist taskId={t.id} />
 
       <section aria-labelledby="subtasks-h" className="space-y-3">

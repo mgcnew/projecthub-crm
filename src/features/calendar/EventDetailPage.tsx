@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
+import { ReminderEditor } from '@/features/notifications/ReminderEditor'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { toLocalInput } from '@/lib/format'
 import { useCancelEvent, useEvent, useUpdateEvent } from './api'
@@ -99,6 +100,11 @@ export function EventDetailPage() {
             setError('Não foi possível salvar. Verifique os dados e tente novamente.')
           }
         }}
+      />
+      <ReminderEditor
+        kind="event"
+        id={ev.id}
+        closedReason={ev.status === 'cancelled' ? 'Eventos cancelados não geram novos avisos.' : undefined}
       />
     </>
   )
