@@ -1,0 +1,17 @@
+# Fora do upload da Vercel (CLI): nada daqui entra no build do front.
+node_modules
+.git
+.claude
+.impeccable
+.github
+backups
+supabase
+docs
+tests
+test-results
+playwright-report
+coverage
+*.log
+.env
+.env.*
+!.env.production.example
