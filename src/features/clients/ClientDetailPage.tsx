@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { LinkedEvents } from '@/features/calendar/LinkedEvents'
 import { LinkedTasks } from '@/features/tasks/LinkedTasks'
@@ -21,6 +22,7 @@ export function ClientDetailPage() {
   const projects = useProjectsByClient(id)
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [confirmArchive, setConfirmArchive] = useState(false)
 
   if (q.isPending) return <LoadingState />
   if (q.isError) return <ErrorState message="Não foi possível carregar o cliente." onRetry={() => q.refetch()} />
@@ -41,10 +43,11 @@ export function ClientDetailPage() {
                 variant="outline"
                 disabled={archive.isPending}
                 onClick={async () => {
+                  if (!c.archived_at) return setConfirmArchive(true)
                   setError(null)
                   try {
-                    await archive.mutateAsync(!c.archived_at)
-                    setMessage(c.archived_at ? 'Cliente restaurado.' : 'Cliente arquivado.')
+                    await archive.mutateAsync(false)
+                    setMessage('Cliente restaurado.')
                   } catch {
                     setError('Não foi possível alterar o arquivamento.')
                   }
@@ -57,6 +60,25 @@ export function ClientDetailPage() {
         }
       />
       {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+      <ConfirmDialog
+        open={confirmArchive}
+        title={`Arquivar “${c.name}”?`}
+        description="O cliente sai das listas ativas. Os projetos, tarefas e reuniões dele não são alterados e o histórico continua preservado. Você pode restaurá-lo a qualquer momento."
+        confirmLabel="Arquivar cliente"
+        pending={archive.isPending}
+        onCancel={() => setConfirmArchive(false)}
+        onConfirm={async () => {
+          setError(null)
+          try {
+            await archive.mutateAsync(true)
+            setMessage('Cliente arquivado.')
+          } catch {
+            setError('Não foi possível alterar o arquivamento.')
+          } finally {
+            setConfirmArchive(false)
+          }
+        }}
+      />
 
       <ClientForm
         key={c.updated_at}

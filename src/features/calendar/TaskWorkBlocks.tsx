@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Button } from '@/components/ui/button'
+import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { Field } from '@/components/form'
 import { controlClass } from '@/components/form-styles'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -16,6 +17,7 @@ export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitl
   const [time, setTime] = useState('09:00')
   const [minutes, setMinutes] = useState('60')
   const [error, setError] = useState<string | null>(null)
+  const [cancelling, setCancelling] = useState<{ id: string; starts_at: string } | null>(null)
 
   const submit = async () => {
     setError(null)
@@ -49,7 +51,7 @@ export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitl
                 {formatDateTime(b.starts_at)} → {formatTime(b.ends_at)}
               </span>
               {canWrite && (
-                <Button variant="ghost" size="sm" onClick={() => cancel.mutate(b.id)}>
+                <Button variant="ghost" size="sm" onClick={() => setCancelling(b)}>
                   Cancelar
                 </Button>
               )}
@@ -76,6 +78,29 @@ export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitl
         </div>
       )}
       {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
+      <ConfirmDialog
+        open={cancelling !== null}
+        title="Cancelar este bloco de tempo?"
+        description={
+          cancelling
+            ? `O bloco de ${formatDateTime(cancelling.starts_at)} deixa a agenda. O prazo e o dia planejado da tarefa não mudam.`
+            : ''
+        }
+        confirmLabel="Cancelar bloco"
+        cancelLabel="Manter bloco"
+        pending={cancel.isPending}
+        onCancel={() => setCancelling(null)}
+        onConfirm={async () => {
+          if (!cancelling) return
+          try {
+            await cancel.mutateAsync(cancelling.id)
+          } catch {
+            setError('Não foi possível cancelar o bloco.')
+          } finally {
+            setCancelling(null)
+          }
+        }}
+      />
     </section>
   )
 }

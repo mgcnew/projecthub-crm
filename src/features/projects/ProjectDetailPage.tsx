@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
@@ -19,6 +20,7 @@ export function ProjectDetailPage() {
   const archive = useArchiveProject(id)
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [confirmArchive, setConfirmArchive] = useState(false)
 
   if (q.isPending) return <LoadingState />
   if (q.isError) return <ErrorState message="Não foi possível carregar o projeto." onRetry={() => q.refetch()} />
@@ -42,10 +44,11 @@ export function ProjectDetailPage() {
                 variant="outline"
                 disabled={archive.isPending}
                 onClick={async () => {
+                  if (!p.archived_at) return setConfirmArchive(true)
                   setError(null)
                   try {
-                    await archive.mutateAsync(!p.archived_at)
-                    setMessage(p.archived_at ? 'Projeto restaurado.' : 'Projeto arquivado.')
+                    await archive.mutateAsync(false)
+                    setMessage('Projeto restaurado.')
                   } catch {
                     setError('Não foi possível alterar o arquivamento.')
                   }
@@ -58,6 +61,25 @@ export function ProjectDetailPage() {
         }
       />
       {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+      <ConfirmDialog
+        open={confirmArchive}
+        title={`Arquivar “${p.name}”?`}
+        description="O projeto sai das listas ativas, mas tarefas, reuniões e histórico continuam preservados. Você pode restaurá-lo a qualquer momento."
+        confirmLabel="Arquivar projeto"
+        pending={archive.isPending}
+        onCancel={() => setConfirmArchive(false)}
+        onConfirm={async () => {
+          setError(null)
+          try {
+            await archive.mutateAsync(true)
+            setMessage('Projeto arquivado.')
+          } catch {
+            setError('Não foi possível alterar o arquivamento.')
+          } finally {
+            setConfirmArchive(false)
+          }
+        }}
+      />
 
       <ProjectForm
         key={p.updated_at}

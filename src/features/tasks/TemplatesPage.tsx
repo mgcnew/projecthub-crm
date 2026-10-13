@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { Field } from '@/components/form'
 import { controlClass, textareaClass } from '@/components/form-styles'
 import { EmptyState, ErrorState, LoadingState, PageHeader } from '@/components/states'
@@ -16,6 +17,7 @@ export function TemplatesPage() {
   const [category, setCategory] = useState('')
   const [items, setItems] = useState('')
   const [error, setError] = useState<string | null>(null)
+  const [deleting, setDeleting] = useState<{ id: string; name: string } | null>(null)
 
   const parsed = items.split('\n').map((l) => l.trim()).filter(Boolean)
 
@@ -81,7 +83,7 @@ export function TemplatesPage() {
                     {t.category && <p className="text-sm text-muted-foreground">{t.category}</p>}
                   </div>
                   {canWrite && (
-                    <Button variant="outline" size="sm" disabled={del.isPending} onClick={() => del.mutate(t.id)}>
+                    <Button variant="outline" size="sm" disabled={del.isPending} onClick={() => setDeleting({ id: t.id, name: t.name })}>
                       Excluir
                     </Button>
                   )}
@@ -96,6 +98,22 @@ export function TemplatesPage() {
           })}
         </ul>
       )}
+      <ConfirmDialog
+        open={deleting !== null}
+        title={`Excluir o modelo “${deleting?.name ?? ''}”?`}
+        description="O modelo é removido definitivamente. Checklists já aplicados a tarefas não mudam, porque os itens foram copiados. Esta ação não pode ser desfeita."
+        confirmLabel="Excluir modelo"
+        pending={del.isPending}
+        onCancel={() => setDeleting(null)}
+        onConfirm={async () => {
+          if (!deleting) return
+          try {
+            await del.mutateAsync(deleting.id)
+          } finally {
+            setDeleting(null)
+          }
+        }}
+      />
     </>
   )
 }

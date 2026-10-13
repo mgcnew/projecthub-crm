@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
+import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { ReminderEditor } from '@/features/notifications/ReminderEditor'
@@ -17,6 +18,7 @@ export function EventDetailPage() {
   const cancel = useCancelEvent()
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [confirmCancel, setConfirmCancel] = useState(false)
   const ev = q.data
   const update = useUpdateEvent(orgId, id, ev?.recurrence_rule_id ?? null)
 
@@ -67,15 +69,7 @@ export function EventDetailPage() {
               <Button
                 variant="outline"
                 disabled={cancel.isPending}
-                onClick={async () => {
-                  setError(null)
-                  try {
-                    await cancel.mutateAsync(ev.id)
-                    setMessage('Evento cancelado.')
-                  } catch {
-                    setError('Não foi possível cancelar.')
-                  }
-                }}
+                onClick={() => setConfirmCancel(true)}
               >
                 Cancelar evento
               </Button>
@@ -84,6 +78,30 @@ export function EventDetailPage() {
         }
       />
       {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+      <ConfirmDialog
+        open={confirmCancel}
+        title={`Cancelar “${ev.title}”?`}
+        description={
+          ev.recurrence_rule_id
+            ? 'O evento sai da agenda e deixa de gerar lembretes. Como é uma série, todas as ocorrências são canceladas. Para reativar, altere a situação do evento.'
+            : 'O evento sai da agenda e deixa de gerar lembretes. Para reativar, altere a situação do evento.'
+        }
+        confirmLabel="Cancelar evento"
+        cancelLabel="Manter evento"
+        pending={cancel.isPending}
+        onCancel={() => setConfirmCancel(false)}
+        onConfirm={async () => {
+          setError(null)
+          try {
+            await cancel.mutateAsync(ev.id)
+            setMessage('Evento cancelado.')
+          } catch {
+            setError('Não foi possível cancelar.')
+          } finally {
+            setConfirmCancel(false)
+          }
+        }}
+      />
       <EventForm
         key={ev.updated_at}
         initial={initial}

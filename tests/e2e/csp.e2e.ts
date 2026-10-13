@@ -1,5 +1,5 @@
 import { expect, test } from '@playwright/test'
-import { createUser, login } from './helpers'
+import { apiSessionFor, createUser, login } from './helpers'
 
 // Roda contra o build de produção (vite preview) com os cabeçalhos de config/security-headers.ts.
 test('o build de produção funciona sob CSP estrita, sem violações', async ({ page }) => {
@@ -49,6 +49,15 @@ test('o build de produção funciona sob CSP estrita, sem violações', async ({
   await page.getByLabel('Nova tarefa para este dia').fill('Tarefa sob CSP')
   await page.keyboard.press('Enter')
   await expect(page.getByRole('checkbox', { name: 'Concluir Tarefa sob CSP' })).toBeVisible()
+
+  // Diálogo de confirmação (<dialog> nativo): abre e fecha sob CSP sem violações.
+  const { client, orgId } = await apiSessionFor(user)
+  const c = await client.from('clients').insert({ organization_id: orgId, name: 'Cliente CSP' }).select('id').single()
+  await page.goto(`/app/clientes/${c.data!.id}`)
+  await page.getByRole('button', { name: 'Arquivar' }).click()
+  await expect(page.getByRole('alertdialog')).toBeVisible()
+  await page.keyboard.press('Escape')
+  await expect(page.getByRole('alertdialog')).toBeHidden()
 
   expect(violations, 'violações de CSP').toEqual([])
   expect(consoleErrors.filter((e) => /Content Security Policy|Refused to/i.test(e))).toEqual([])

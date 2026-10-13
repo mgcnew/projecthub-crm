@@ -28,15 +28,16 @@ test('projeto e cliente enxergam as tarefas e reuniões vinculadas', async ({ pa
   // "Ver todas" abre a lista já filtrada pelo projeto
   await tasks.getByRole('link', { name: 'Ver todas' }).click()
   await expect(page).toHaveURL(/\/app\/tarefas\?projeto=/)
-  await expect(page.getByLabel('Projeto')).toHaveValue(p.data!.id)
+  await expect(page.getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
   await expect(page.getByRole('link', { name: /Revisar escopo/ })).toBeVisible()
   await expect(page.getByText('Tarefa solta')).toHaveCount(0)
 
   // Nova reunião a partir do projeto: projeto e cliente já selecionados
   await page.goto(`/app/projetos/${p.data!.id}`)
   await page.getByRole('link', { name: 'Nova reunião' }).click()
-  await expect(page.getByLabel('Projeto')).toHaveValue(p.data!.id)
-  await expect(page.getByLabel('Cliente')).toHaveValue(c.data!.id)
+  await expect(page.getByRole('heading', { name: 'Nova reunião', level: 1 })).toBeVisible()
+  await expect(page.getByLabel('Projeto', { exact: true })).toHaveValue(p.data!.id)
+  await expect(page.getByLabel('Cliente', { exact: true })).toHaveValue(c.data!.id)
   await page.getByLabel('Título *').fill('Kickoff do projeto')
   await page.getByRole('button', { name: 'Criar' }).click()
   await expect(page.getByRole('heading', { name: 'Kickoff do projeto' })).toBeVisible()
