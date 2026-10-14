@@ -7,6 +7,9 @@ import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { ErrorState, LoadingState, StatusBadge } from '@/components/states'
 import { EntityView, type EntityTab } from '@/components/entity/EntityView'
 import { LinkedAccess } from '@/features/access/LinkedAccess'
+import { ProjectFinance } from '@/features/finance/ProjectFinance'
+import { useProjectPayments } from '@/features/finance/api'
+import { formatMoneyInput } from '@/lib/money'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
 import { useArchiveProject, useProject, useUpdateProject } from './api'
@@ -21,6 +24,7 @@ export function ProjectDetailPage() {
   const { canWrite } = useCurrentWorkspace()
   const q = useProject(id)
   const update = useUpdateProject(id)
+  const payments = useProjectPayments(id)
   const archive = useArchiveProject(id)
   const [message, setMessage] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -61,6 +65,11 @@ export function ProjectDetailPage() {
           />
         </>
       ),
+    },
+    {
+      id: 'financeiro',
+      label: 'Financeiro',
+      content: <ProjectFinance project={p} />,
     },
     {
       id: 'acessos',
@@ -157,7 +166,11 @@ export function ProjectDetailPage() {
           priority: p.priority as 'medium',
           started_on: p.started_on ?? '',
           target_date: p.target_date ?? '',
+          contract_value: formatMoneyInput(p.contract_value_cents),
+          currency: p.currency as 'BRL',
+          billing_model: p.billing_model as 'fixed',
         }}
+        lockCurrency={(payments.data?.length ?? 0) > 0}
         readOnly={!canWrite}
         submitLabel="Salvar alterações"
         serverError={error}

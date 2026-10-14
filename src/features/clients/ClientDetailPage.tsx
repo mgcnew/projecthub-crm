@@ -3,6 +3,7 @@ import { Link, useParams } from 'react-router-dom'
 import { Button } from '@/components/ui/button'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { LinkedAccess } from '@/features/access/LinkedAccess'
+import { ClientFinance } from '@/features/finance/ClientFinance'
 import { ActivityTimeline } from '@/features/activity/ActivityTimeline'
 import { LinkedEvents } from '@/features/calendar/LinkedEvents'
 import { LinkedTasks } from '@/features/tasks/LinkedTasks'
@@ -50,6 +51,11 @@ export function ClientDetailPage() {
 
         </>
       ),
+    },
+    {
+      id: 'financeiro',
+      label: 'Financeiro',
+      content: <ClientFinance clientId={c.id} />,
     },
     {
       id: 'tarefas',

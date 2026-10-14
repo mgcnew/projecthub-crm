@@ -363,16 +363,42 @@ isOneToOne: false
       referencedColumns: ["organization_id","id"]
     }
                   ]
-                },"projects": {
+                },"project_payments": {
                   Row: {
-                    "archived_at": string | null,"client_id": string | null,"created_at": string,"description": string | null,"id": string,"name": string,"organization_id": string,"priority": string,"started_on": string | null,"status": string,"target_date": string | null,"updated_at": string
+                    "amount_cents": number,"created_at": string,"description": string | null,"due_date": string,"id": string,"invoice_number": string | null,"kind": string,"notes": string | null,"organization_id": string,"paid_on": string | null,"payment_method": string | null,"project_id": string,"status": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "archived_at"?: string | null,"client_id"?: string | null,"created_at"?: string,"description"?: string | null,"id"?: string,"name": string,"organization_id": string,"priority"?: string,"started_on"?: string | null,"status"?: string,"target_date"?: string | null,"updated_at"?: string
+                    "amount_cents": number,"created_at"?: string,"description"?: string | null,"due_date": string,"id"?: string,"invoice_number"?: string | null,"kind"?: string,"notes"?: string | null,"organization_id": string,"paid_on"?: string | null,"payment_method"?: string | null,"project_id": string,"status"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "archived_at"?: string | null,"client_id"?: string | null,"created_at"?: string,"description"?: string | null,"id"?: string,"name"?: string,"organization_id"?: string,"priority"?: string,"started_on"?: string | null,"status"?: string,"target_date"?: string | null,"updated_at"?: string
+                    "amount_cents"?: number,"created_at"?: string,"description"?: string | null,"due_date"?: string,"id"?: string,"invoice_number"?: string | null,"kind"?: string,"notes"?: string | null,"organization_id"?: string,"paid_on"?: string | null,"payment_method"?: string | null,"project_id"?: string,"status"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "project_payments_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "project_payments_organization_id_project_id_fkey"
+      columns: ["organization_id","project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"projects": {
+                  Row: {
+                    "archived_at": string | null,"billing_model": string,"client_id": string | null,"contract_value_cents": number | null,"created_at": string,"currency": string,"description": string | null,"id": string,"name": string,"organization_id": string,"priority": string,"started_on": string | null,"status": string,"target_date": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "archived_at"?: string | null,"billing_model"?: string,"client_id"?: string | null,"contract_value_cents"?: number | null,"created_at"?: string,"currency"?: string,"description"?: string | null,"id"?: string,"name": string,"organization_id": string,"priority"?: string,"started_on"?: string | null,"status"?: string,"target_date"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "archived_at"?: string | null,"billing_model"?: string,"client_id"?: string | null,"contract_value_cents"?: number | null,"created_at"?: string,"currency"?: string,"description"?: string | null,"id"?: string,"name"?: string,"organization_id"?: string,"priority"?: string,"started_on"?: string | null,"status"?: string,"target_date"?: string | null,"updated_at"?: string
                   }
                   Relationships: [
                     {

@@ -74,9 +74,9 @@
 5. Storage privado e políticas de arquivos (quando arquivos entrarem no MVP).
 
 ## Estado implementado (2026-10-13)
-As 19 tabelas do MVP existem, mais `access_entries` (D086, fora da lista original): 20 no total, todas com RLS, políticas e privilégios por coluna. O esquema vem de **12 migrações**
+As 19 tabelas do MVP existem, mais `access_entries` (D086, fora da lista original): 21 no total, todas com RLS, políticas e privilégios por coluna. O esquema vem de **13 migrações**
 (`supabase/migrations`), agrupadas por fase em vez das 001–010 lógicas acima (D025). O banco hospedado recebeu as
-mesmas 12 (D081; a 12ª, `access_directory`, conferida por hash em 2026-10-13).
+mesmas 13 (D081; conferidas por hash com `scripts/db-fingerprint.sql`).
 
 ### Divergências da especificação
 | Tabela / coluna | Especificado | Implementado | Decisão |
@@ -90,6 +90,8 @@ mesmas 12 (D081; a 12ª, `access_directory`, conferida por hash em 2026-10-13).
 | `recurrence_occurrences` | Cogitada | **Não criada**: sem exceções por ocorrência | D040 |
 | Políticas `mfa_required` | Não previstas | Restritiva em toda tabela de `public`; exige `aal2` de quem tem fator TOTP verificado | D082 |
 | `access_entries` | Não prevista | Diretório de acessos (URL, usuário, item no gerenciador), **sem coluna de segredo**; sem trilha de atividade | D086, D087 |
+| `project_payments` | Não prevista (financeiro era "futuro") | Parcelas do projeto (adiantamento, parcelas, saldo) com vencimento e situação; valores em centavos | D093–D095 |
+| `projects.contract_value_cents`, `currency`, `billing_model` | Não previstos | Valor do projeto, moeda (`BRL|USD|EUR`) e modelo de cobrança | D093 |
 
 ### Funções (todas em `private`, exceto a de leitura da agenda)
 `set_updated_at`, `protect_last_owner`, `is_active_member`, `is_active_owner`, `mfa_satisfied`,

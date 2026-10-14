@@ -41,7 +41,7 @@ select is(
   (select coalesce(string_agg(table_name, ', ' order by table_name), '')
      from information_schema.role_table_grants
     where table_schema = 'public' and grantee = 'authenticated' and privilege_type = 'DELETE'),
-  'access_entries, checklist_items, checklist_template_items, checklist_templates, reminders, task_plans',
+  'access_entries, checklist_items, checklist_template_items, checklist_templates, project_payments, reminders, task_plans',
   'DELETE concedido apenas às tabelas sem histórico de negócio');
 
 -- 6) Colunas de identidade/tenancy nunca são atualizáveis pelo cliente

@@ -6,7 +6,9 @@ import { controlClass, textareaClass } from '@/components/form-styles'
 import { withCurrentOption } from '@/components/option-list'
 import { useUnsavedChangesGuard } from '@/lib/unsaved'
 import { useClientOptions } from '@/features/clients/api'
+import { currencyLabels } from '@/lib/money'
 import {
+  billingModels,
   projectDefaults,
   projectFormSchema,
   projectPriorities,
@@ -19,10 +21,13 @@ export function ProjectForm({
   readOnly,
   submitLabel,
   serverError,
+  lockCurrency,
   onSubmit,
 }: {
   initial?: ProjectFormValues
   readOnly?: boolean
+  /** Projeto com parcelas: a moeda não muda (o banco também recusa). */
+  lockCurrency?: boolean
   submitLabel: string
   serverError?: string | null
   onSubmit: (values: ProjectFormValues) => Promise<void>
@@ -94,6 +99,43 @@ export function ProjectForm({
             />
           </Field>
         </div>
+        <fieldset className="space-y-4 border-t border-border pt-4">
+          <legend className="section-title pr-2">Valor</legend>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Field id="contract_value" label="Valor do projeto" error={err('contract_value')} hint="Ex.: 5.000,00. Opcional.">
+              <input
+                id="contract_value"
+                inputMode="decimal"
+                autoComplete="off"
+                className={controlClass}
+                aria-invalid={inv('contract_value')}
+                {...register('contract_value')}
+              />
+            </Field>
+            <Field
+              id="currency"
+              label="Moeda"
+              hint={lockCurrency ? 'Fixa: o projeto já tem parcelas.' : undefined}
+            >
+              <select id="currency" className={controlClass} disabled={lockCurrency} {...register('currency')}>
+                {Object.entries(currencyLabels).map(([v, l]) => (
+                  <option key={v} value={v}>
+                    {l}
+                  </option>
+                ))}
+              </select>
+            </Field>
+            <Field id="billing_model" label="Modelo de cobrança">
+              <select id="billing_model" className={controlClass} {...register('billing_model')}>
+                {Object.entries(billingModels).map(([v, l]) => (
+                  <option key={v} value={v}>
+                    {l}
+                  </option>
+                ))}
+              </select>
+            </Field>
+          </div>
+        </fieldset>
         <Field id="description" label="Descrição" error={err('description')}>
           <textarea id="description" className={textareaClass} {...register('description')} />
         </Field>

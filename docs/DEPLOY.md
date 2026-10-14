@@ -30,7 +30,7 @@ você pode fazer (contas, chaves, domínio). Eu nunca uso nem peço senhas ou ch
 
 ## 1. Supabase hospedado (você)
 
-> **Já feito em 2026-10-13 (passos 1 a 3):** projeto `gnissqsrpzadthapdpue` (sa-east-1) com as 12 migrações
+> **Já feito em 2026-10-13 (passos 1 a 3):** projeto `gnissqsrpzadthapdpue` (sa-east-1) com as 13 migrações
 > aplicadas (a 11ª, `mfa_enforcement`, conferida por hash e teste de fumaça com leitura e escrita em aal1
 > bloqueadas; a 12ª, `access_directory`, conferida por hash), `pg_cron` ativo com o job `process-due-reminders` e histórico registrado em
 > `supabase_migrations.schema_migrations`. As migrações foram aplicadas por SQL via MCP (a CLI deste ambiente

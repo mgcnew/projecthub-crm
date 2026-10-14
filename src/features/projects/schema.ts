@@ -1,5 +1,6 @@
 import { z } from 'zod'
 import { emptyToNull } from '@/lib/format'
+import { parseMoney } from '@/lib/money'
 
 export const projectStatuses = {
   planning: 'Planejamento',
@@ -8,6 +9,8 @@ export const projectStatuses = {
   completed: 'Concluído',
   cancelled: 'Cancelado',
 } as const
+
+export const billingModels = { fixed: 'Valor fechado', hourly: 'Por hora', monthly: 'Mensal' } as const
 
 export const projectPriorities = { low: 'Baixa', medium: 'Média', high: 'Alta', urgent: 'Urgente' } as const
 
@@ -22,6 +25,12 @@ export const projectFormSchema = z
     priority: z.enum(['low', 'medium', 'high', 'urgent']),
     started_on: isoDate,
     target_date: isoDate,
+    contract_value: z
+      .string()
+      .trim()
+      .refine((v) => v === '' || parseMoney(v) !== null, 'Valor inválido. Use, por exemplo, 1.500,00'),
+    currency: z.enum(['BRL', 'USD', 'EUR']),
+    billing_model: z.enum(['fixed', 'hourly', 'monthly']),
   })
   .refine((v) => !v.started_on || !v.target_date || v.target_date >= v.started_on, {
     path: ['target_date'],
@@ -38,6 +47,9 @@ export const projectDefaults: ProjectFormValues = {
   priority: 'medium',
   started_on: '',
   target_date: '',
+  contract_value: '',
+  currency: 'BRL',
+  billing_model: 'fixed',
 }
 
 export function projectPayload(v: ProjectFormValues) {
@@ -49,6 +61,9 @@ export function projectPayload(v: ProjectFormValues) {
     priority: v.priority,
     started_on: emptyToNull(v.started_on),
     target_date: emptyToNull(v.target_date),
+    contract_value_cents: v.contract_value.trim() === '' ? null : parseMoney(v.contract_value),
+    currency: v.currency,
+    billing_model: v.billing_model,
   }
 }
 
