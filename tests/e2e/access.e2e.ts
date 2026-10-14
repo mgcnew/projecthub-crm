@@ -36,7 +36,7 @@ test('acessos: cadastrar, copiar com 1 clique, ver no projeto, arquivar e exclui
   await expectNoViolations(page, 'novo acesso')
 
   await root.getByLabel('Serviço').fill('Supabase — painel')
-  await root.getByLabel('Categoria').fill('Banco de dados')
+  await root.getByRole('textbox', { name: 'Categoria' }).fill('Banco de dados')
   await root.getByLabel('Usuário ou e-mail').fill('eu@exemplo.com')
   await root.getByLabel('Item no gerenciador de senhas').fill('Supabase (pessoal)')
   await root.getByLabel('Projeto').selectOption(projectId)

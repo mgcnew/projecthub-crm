@@ -26,7 +26,8 @@ test('lembrete de tarefa dispara pelo worker e aparece como notificação', asyn
     .poll(
       async () => {
         await page.reload()
-        return page.getByRole('navigation', { name: 'Principal' }).first().getByText(/1 não lida/).count()
+        // O contador fica no sino do cabeçalho (nome acessível "Notificações, 1 não lida").
+        return page.getByRole('link', { name: /Notificações, 1 não lida/ }).count()
       },
       { timeout: 130_000, intervals: [10_000] },
     )
