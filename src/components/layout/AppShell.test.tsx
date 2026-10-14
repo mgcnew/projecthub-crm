@@ -1,4 +1,4 @@
-import { act, render, screen } from '@testing-library/react'
+import { act, render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { RouterProvider, createMemoryRouter, Link } from 'react-router-dom'
 import { AppShell } from './AppShell'
@@ -89,8 +89,27 @@ describe('AppShell — acessibilidade', () => {
 
     await userEvent.click(more)
     expect(more).toHaveAttribute('aria-expanded', 'true')
+    expect(within(screen.getByRole('navigation', { name: 'Mais opções' })).getByRole('link', { name: /Notificações/ })).toBeInTheDocument()
     await userEvent.keyboard('{Escape}')
     expect(more).toHaveAttribute('aria-expanded', 'false')
+  })
+
+  it('recolhe a sidebar, lembra a preferência e mantém notificações no sino do topo', async () => {
+    localStorage.clear()
+    renderShell()
+
+    const primaryNav = screen.getAllByRole('navigation', { name: 'Principal' })[0]
+    expect(within(primaryNav).queryByRole('link', { name: 'Notificações' })).not.toBeInTheDocument()
+    expect(screen.getByRole('link', { name: 'Notificações, 3 não lidas' })).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Recolher menu lateral' }))
+    expect(screen.getByRole('button', { name: 'Expandir menu lateral' })).toHaveAttribute('aria-expanded', 'false')
+    expect(localStorage.getItem('projecthub:sidebar-collapsed')).toBe('true')
+    expect(within(primaryNav).getByRole('link', { name: 'Início' })).toBeInTheDocument()
+
+    await userEvent.click(screen.getByRole('button', { name: 'Expandir menu lateral' }))
+    expect(screen.getByRole('button', { name: 'Recolher menu lateral' })).toHaveAttribute('aria-expanded', 'true')
+    expect(localStorage.getItem('projecthub:sidebar-collapsed')).toBe('false')
   })
 
   it('Ctrl+K abre e fecha a busca global em qualquer tela', async () => {

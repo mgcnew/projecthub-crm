@@ -34,7 +34,7 @@ O que a spec original previa e o que existe. Decisões de origem entre parêntes
 | Spec original | Implementado |
 |---|---|
 | Fonte Inter; paleta azul `#2563EB` | Hanken Grotesk auto-hospedada; tinta sobre claro, cor de **linha** por projeto, vermelho só para "agora" e atraso (D069–D071) |
-| Sidebar 240/64 px recolhível; topbar 56 px | Sidebar fixa de 236 px (14,75 rem), sem topbar (título e ações no cabeçalho da página); **não é recolhível** |
+| Sidebar 240/64 px recolhível; topbar 56 px | Sidebar desktop recolhível (236/64 px), preferência lembrada no navegador; barra superior de 56 px com sino e contador de não lidas (D088) |
 | Painel contextual opcional de 360–420 px | Registros em **painel lateral de ~670 px** com abas, expansível para modal central; abaixo de 1024 px são página inteira (D074, D075) |
 | "Formulários longos em página" | No desktop abrem em painel; página inteira só no celular/tablet (D074) |
 | Navegação inferior Início/Agenda/Criar/Tarefas/Menu | Início, Meu dia, Agenda, Tarefas e "Mais"; a captura rápida fica na própria lista/tela, sem botão central "Criar" (D046) |
@@ -49,7 +49,7 @@ Além do mapa original: `/login`, `/recuperar-senha`, `/redefinir-senha` (sem se
 ### Componentes compartilhados: nome na spec → onde está
 | Spec | Código |
 |---|---|
-| AppShell, SidebarNav, MobileBottomNav | `src/components/layout/AppShell.tsx` (sidebar e navegação inferior no mesmo arquivo) |
+| AppShell, SidebarNav, MobileBottomNav, TopBar | `src/components/layout/AppShell.tsx` (sidebar, barra superior e navegação inferior no mesmo arquivo) |
 | PageHeader, StatusBadge, EmptyState, ErrorState, LoadingSkeleton | `src/components/states.tsx` (`LoadingState`) |
 | FilterBar, ConfirmDialog | `src/components/FilterBar.tsx`, `src/components/ConfirmDialog.tsx` |
 | EntityDrawer | `src/components/entity/` (`EntityOverlay`, `EntityView`) |
@@ -60,7 +60,7 @@ Além do mapa original: `/login`, `/recuperar-senha`, `/redefinir-senha` (sem se
 
 Sem componente compartilhado (a função existe, inline em cada tela): `DataTable` (tabelas por feature),
 `PriorityIndicator`, `DateTimePicker` (campos nativos `datetime-local`), `EntitySelector` (`<select>` nativos com
-`option-list`) e `RecurrenceEditor` (em `EventDetailPage`). `TopBar` não existe.
+`option-list`) e `RecurrenceEditor` (em `EventDetailPage`).
 
 ### Regras: situação
 | Regra | Situação |
@@ -71,4 +71,3 @@ Sem componente compartilhado (a função existe, inline em cada tela): `DataTabl
 | Filtros úteis e persistência de preferências | Atendida (filtros e ordenação lembrados nas listas) |
 | Estados loading/empty/error/permission/offline | Atendida (leitura somente para quem não escreve; banner offline) |
 | WCAG 2.2 AA, teclado, foco | Verificada por axe em desktop e celular (E2E) |
-

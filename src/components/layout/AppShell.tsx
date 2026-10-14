@@ -8,7 +8,10 @@ import {
   House,
   KeyRound,
   ListChecks,
+  LogOut,
   MoreHorizontal,
+  PanelLeftClose,
+  PanelLeftOpen,
   Search,
   Settings,
   UsersRound,
@@ -26,6 +29,7 @@ import { matchEntityRoute } from '@/lib/entityRoutes'
 import { cn } from '@/lib/utils'
 import { useIsDesktop } from '@/lib/useMediaQuery'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
+import { usePersistedState } from '@/lib/usePersistedState'
 
 // Pictogramas como na sinalização: o ícone acompanha o nome, nunca o substitui.
 const items: { to: string; label: string; end: boolean; icon: LucideIcon }[] = [
@@ -42,7 +46,9 @@ const items: { to: string; label: string; end: boolean; icon: LucideIcon }[] = [
 ]
 const primaryMobile = items.slice(0, 4)
 const moreMobile = items.slice(4)
+const desktopItems = items.filter((item) => item.to !== '/app/notificacoes')
 const APP_NAME = 'ProjectHub CRM'
+const validateSidebarCollapsed = (value: unknown): boolean | null => (typeof value === 'boolean' ? value : null)
 
 function UnreadBadge({ count }: { count: number }) {
   if (count <= 0) return null
@@ -103,6 +109,11 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
   const { signOut } = useAuth()
   const [moreOpen, setMoreOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
+  const [sidebarCollapsed, setSidebarCollapsed] = usePersistedState(
+    'projecthub:sidebar-collapsed',
+    false,
+    validateSidebarCollapsed,
+  )
   const unread = useUnreadCount().data ?? 0
   const online = useOnlineStatus()
   const main = useRef<HTMLElement>(null)
@@ -155,7 +166,12 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
   }, [])
 
   return (
-    <div className="min-h-dvh lg:grid lg:grid-cols-[14.75rem_1fr]">
+    <div
+      className={cn(
+        'min-h-dvh lg:grid lg:transition-[grid-template-columns] lg:duration-200 lg:ease-out',
+        sidebarCollapsed ? 'lg:grid-cols-[4rem_minmax(0,1fr)]' : 'lg:grid-cols-[14.75rem_minmax(0,1fr)]',
+      )}
+    >
       <a
         href="#conteudo"
         className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border-2 focus:border-foreground focus:bg-card focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
@@ -167,38 +183,104 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
         Pular para o conteúdo
       </a>
 
-      <aside className="sticky top-0 hidden h-dvh border-r border-border bg-card px-3 py-5 lg:flex lg:flex-col lg:gap-1">
-        <p className="flex items-center gap-2.5 px-3 pb-5 text-[1.0625rem] font-bold tracking-[-0.01em]">
-          <span aria-hidden="true" className="inline-flex size-[1.375rem] items-center justify-center bg-foreground text-[0.8125rem] text-card">
+      <aside
+        className={cn(
+          'sticky top-0 hidden h-dvh border-r border-border bg-card py-5 lg:flex lg:flex-col lg:gap-1',
+          sidebarCollapsed ? 'px-2' : 'px-3',
+        )}
+      >
+        <div className={cn('flex min-h-11 items-center', sidebarCollapsed ? 'flex-col gap-2' : 'gap-2.5 px-3 pb-5')}>
+          <span
+            aria-hidden="true"
+            className="inline-flex size-[1.375rem] shrink-0 items-center justify-center bg-foreground text-[0.8125rem] text-card"
+          >
             P
           </span>
-          ProjectHub
-        </p>
+          {!sidebarCollapsed && <span className="min-w-0 flex-1 text-[1.0625rem] font-bold tracking-[-0.01em]">ProjectHub</span>}
+          <button
+            type="button"
+            aria-label={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
+            aria-expanded={!sidebarCollapsed}
+            aria-controls="navegacao-principal"
+            title={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
+            onClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
+            className={cn(
+              'inline-flex size-9 shrink-0 items-center justify-center rounded-sm text-[#3b4148] hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
+              sidebarCollapsed && 'size-11',
+            )}
+          >
+            {sidebarCollapsed ? (
+              <PanelLeftOpen aria-hidden="true" className="size-[1.125rem]" strokeWidth={2} />
+            ) : (
+              <PanelLeftClose aria-hidden="true" className="size-[1.125rem]" strokeWidth={2} />
+            )}
+          </button>
+        </div>
         <button
           type="button"
           aria-keyshortcuts="Control+K Meta+K"
+          aria-label="Buscar"
+          title={sidebarCollapsed ? 'Buscar' : undefined}
           onClick={() => setSearchOpen(true)}
-          className="mb-2 flex min-h-11 items-center gap-3 rounded-sm border border-input bg-card px-3 text-sm font-semibold text-[#3b4148] hover:bg-muted"
+          className={cn(
+            'mb-2 flex min-h-11 items-center gap-3 rounded-sm border border-input bg-card text-sm font-semibold text-[#3b4148] hover:bg-muted',
+            sidebarCollapsed ? 'justify-center px-0' : 'px-3',
+          )}
         >
           <Search aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
-          Buscar
-          <kbd className="ml-auto text-xs font-semibold text-muted-foreground">Ctrl K</kbd>
+          <span className={sidebarCollapsed ? 'sr-only' : ''}>Buscar</span>
+          {!sidebarCollapsed && <kbd className="ml-auto text-xs font-semibold text-muted-foreground">Ctrl K</kbd>}
         </button>
-        <nav aria-label="Principal" className="flex flex-col gap-0.5">
-          {items.map((i) => (
-            <NavLink key={i.to} to={i.to} end={i.end} className={link}>
+        <nav id="navegacao-principal" aria-label="Principal" className="flex flex-col gap-0.5">
+          {desktopItems.map((i) => (
+            <NavLink
+              key={i.to}
+              to={i.to}
+              end={i.end}
+              title={sidebarCollapsed ? i.label : undefined}
+              className={(state) => cn(link(state), sidebarCollapsed && 'justify-center px-0')}
+            >
               <i.icon aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
-              {i.label}
-              {i.to === '/app/notificacoes' && <UnreadBadge count={unread} />}
+              <span className={sidebarCollapsed ? 'sr-only' : ''}>{i.label}</span>
             </NavLink>
           ))}
         </nav>
-        <Button variant="ghost" className="mt-auto justify-start px-3" onClick={() => void signOut()}>
-          Sair
+        <Button
+          variant="ghost"
+          aria-label="Sair"
+          title={sidebarCollapsed ? 'Sair' : undefined}
+          className={cn('mt-auto', sidebarCollapsed ? 'justify-center px-0' : 'justify-start px-3')}
+          onClick={() => void signOut()}
+        >
+          <LogOut aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
+          <span className={sidebarCollapsed ? 'sr-only' : ''}>Sair</span>
         </Button>
       </aside>
 
       <div className="min-w-0">
+        <header className="sticky top-0 z-20 hidden h-14 items-center justify-end border-b border-border bg-background px-4 lg:flex lg:px-6">
+          <NavLink
+            to="/app/notificacoes"
+            aria-label={`Notificações${unread > 0 ? `, ${unread} não lida${unread > 1 ? 's' : ''}` : ''}`}
+            title="Notificações"
+            className={({ isActive }) =>
+              cn(
+                'relative inline-flex size-11 items-center justify-center rounded-sm text-[#3b4148] hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
+                isActive && 'bg-muted text-foreground',
+              )
+            }
+          >
+            <Bell aria-hidden="true" className="size-5" strokeWidth={2} />
+            {unread > 0 && (
+              <span
+                aria-hidden="true"
+                className="absolute top-0.5 right-0.5 min-w-5 rounded-sm border border-card bg-foreground px-1 text-center text-[0.6875rem] leading-4 font-bold tabular-nums text-card"
+              >
+                {unread > 99 ? '99+' : unread}
+              </span>
+            )}
+          </NavLink>
+        </header>
         {!online && (
           <p role="status" className="border-b-2 border-foreground bg-[#fff3b0] px-4 py-2 text-sm font-medium text-[#5c4700]">
             Sem conexão. Você pode continuar lendo, mas as alterações só serão salvas quando a conexão voltar.
