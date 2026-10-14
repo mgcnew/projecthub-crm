@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
-import { useForm } from 'react-hook-form'
+import { useForm, useWatch } from 'react-hook-form'
 import { Field } from '@/components/form'
 import { controlClass, textareaClass } from '@/components/form-styles'
 import { withCurrentOption } from '@/components/option-list'
@@ -26,12 +26,16 @@ export function AccessForm({
     register,
     handleSubmit,
     reset,
+    setValue,
+    control,
     formState: { errors, isDirty, isSubmitting },
   } = useForm<AccessFormValues>({ resolver: zodResolver(accessFormSchema), defaultValues: initial })
   const projects = useProjectOptions(true)
   const clients = useClientOptions(true)
   const projectOptions = withCurrentOption(projects.data, initial.project_id, projects.isPending, 'Projeto atual (arquivado)')
   const clientOptions = withCurrentOption(clients.data, initial.client_id, clients.isPending, 'Cliente atual (arquivado)')
+
+  const category = useWatch({ control, name: 'category' })
 
   useUnsavedChangesGuard(isDirty && !isSubmitting)
 
@@ -55,12 +59,26 @@ export function AccessForm({
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field id="category" label="Categoria" error={err('category')}>
-            <input id="category" list="access-categories" className={controlClass} {...register('category')} />
-            <datalist id="access-categories">
+            <input id="category" autoComplete="off" className={controlClass} {...register('category')} />
+            {/* Sugestões como botões: o <datalist> do navegador não segue o tema do sistema. */}
+            <div role="group" aria-label="Sugestões de categoria" className="flex flex-wrap gap-1.5 pt-1">
               {accessCategories.map((c) => (
-                <option key={c} value={c} />
+                <button
+                  key={c}
+                  type="button"
+                  aria-pressed={category === c}
+                  onClick={() => setValue('category', c, { shouldDirty: true, shouldValidate: true })}
+                  className={
+                    'min-h-9 rounded-sm border px-2.5 text-sm font-semibold pointer-coarse:min-h-11 ' +
+                    (category === c
+                      ? 'border-foreground bg-foreground text-card'
+                      : 'border-input bg-card hover:bg-muted')
+                  }
+                >
+                  {c}
+                </button>
               ))}
-            </datalist>
+            </div>
           </Field>
           <Field id="username" label="Usuário ou e-mail" error={err('username')}>
             <input id="username" autoComplete="off" className={controlClass} aria-invalid={inv('username')} {...register('username')} />

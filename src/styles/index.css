@@ -153,3 +153,81 @@
 .overlay-panel[open][data-expanded='true'] {
   animation: overlay-fade 120ms ease-out;
 }
+
+/*
+ * Dropdowns no tema do sistema (D088). `appearance: base-select` entrega ao CSS o botão e a lista aberta do
+ * <select> nativo (Chrome/Edge); teclado, leitor de tela e o seletor nativo do celular seguem iguais.
+ * Em navegadores sem suporte (Firefox, Safari) o bloco é ignorado e o select continua o do navegador.
+ */
+@supports (appearance: base-select) {
+  select,
+  select::picker(select) {
+    appearance: base-select;
+  }
+
+  select {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.5rem;
+    cursor: pointer;
+  }
+
+  select::picker-icon {
+    color: var(--foreground);
+    transition: rotate 120ms ease-out;
+  }
+  select:open::picker-icon {
+    rotate: 180deg;
+  }
+
+  /* A lista: placa branca com régua de tinta, como os menus e diálogos do app. */
+  select::picker(select) {
+    box-sizing: border-box;
+    border: 2px solid var(--foreground);
+    border-radius: var(--radius);
+    background: var(--card);
+    color: var(--foreground);
+    padding: 0.25rem;
+    margin-block: 0.25rem;
+    max-block-size: min(22rem, 60dvh);
+    box-shadow: 0 18px 40px -12px rgb(17 20 24 / 0.35);
+  }
+
+  select option {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-block-size: 2.5rem;
+    padding: 0.5rem 0.75rem;
+    border-radius: var(--radius);
+    font-weight: 500;
+    cursor: pointer;
+  }
+  select option:hover,
+  select option:focus-visible {
+    background: var(--muted);
+    outline: none;
+  }
+  /* Selecionado = placa de tinta, igual ao item ativo do menu. */
+  select option:checked {
+    background: var(--foreground);
+    color: var(--card);
+    font-weight: 700;
+  }
+  select option::checkmark {
+    content: '✓';
+    order: 1;
+    margin-inline-start: auto;
+  }
+  select option:disabled {
+    color: var(--muted-foreground);
+    cursor: not-allowed;
+  }
+
+  @media (pointer: coarse) {
+    select option {
+      min-block-size: 2.75rem;
+    }
+  }
+}

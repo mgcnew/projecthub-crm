@@ -285,6 +285,7 @@ Cantos retos: todo elemento retangular usa 2px de raio (placas, botões, campos,
 - **Style:** 44px de altura, fundo branco, borda de 1px na Régua de Campo, 2px de raio, texto 16px.
 - **Focus:** borda passa ao Azul da Linha 1 com contorno de 3px desse azul a 40%.
 - **Error / Disabled:** borda em Vermelho Atraso; desabilitado em Cinza Esmalte a 70%.
+- **Select:** nativo com `appearance: base-select`; botão como um campo (44px) e seta que gira ao abrir. A lista é uma placa branca com filete de 2px em tinta, itens de 40px (44px no celular), hover em Cinza Esmalte e o item selecionado em placa de tinta com ✓ (mesma gramática do item ativo do menu). Sem suporte (Firefox, Safari) cai no select do navegador. Sugestões de texto livre usam botões de sugestão, não `<datalist>`.
 - **Checkbox:** nativo com `accent-color` em azul profundo.
 
 ### Navigation
