@@ -41,17 +41,76 @@ export function ClientForm({
         <Field id="name" label="Nome *" error={err('name')}>
           <input id="name" className={controlClass} aria-invalid={inv('name')} {...register('name')} />
         </Field>
-        <Field id="company_name" label="Empresa" error={err('company_name')}>
-          <input id="company_name" className={controlClass} {...register('company_name')} />
-        </Field>
         <div className="grid gap-4 sm:grid-cols-2">
+          <Field id="company_name" label="Empresa" error={err('company_name')}>
+            <input id="company_name" className={controlClass} {...register('company_name')} />
+          </Field>
+          <Field id="legal_name" label="Razão social" error={err('legal_name')}>
+            <input id="legal_name" className={controlClass} {...register('legal_name')} />
+          </Field>
+          <Field id="tax_id" label="CPF ou CNPJ" error={err('tax_id')} hint="Para emitir nota e cobrar">
+            <input
+              id="tax_id"
+              inputMode="numeric"
+              autoComplete="off"
+              className={controlClass}
+              aria-invalid={inv('tax_id')}
+              {...register('tax_id')}
+            />
+          </Field>
+          <Field id="source" label="Origem" error={err('source')} hint="Indicação, rede social, site…">
+            <input id="source" autoComplete="off" className={controlClass} {...register('source')} />
+          </Field>
           <Field id="email" label="E-mail" error={err('email')}>
             <input id="email" type="email" className={controlClass} aria-invalid={inv('email')} {...register('email')} />
           </Field>
           <Field id="phone" label="Telefone" error={err('phone')}>
             <input id="phone" type="tel" className={controlClass} {...register('phone')} />
           </Field>
+          <Field id="billing_email" label="E-mail de cobrança" error={err('billing_email')}>
+            <input
+              id="billing_email"
+              type="email"
+              className={controlClass}
+              aria-invalid={inv('billing_email')}
+              {...register('billing_email')}
+            />
+          </Field>
+          <Field id="website" label="Site" error={err('website')} hint="Comece com https://">
+            <input
+              id="website"
+              type="url"
+              inputMode="url"
+              autoComplete="off"
+              className={controlClass}
+              aria-invalid={inv('website')}
+              {...register('website')}
+            />
+          </Field>
         </div>
+        <fieldset className="space-y-4 border-t border-border pt-4">
+          <legend className="section-title pr-2">Endereço</legend>
+          <Field id="address_line" label="Endereço" error={err('address_line')}>
+            <input id="address_line" autoComplete="off" className={controlClass} {...register('address_line')} />
+          </Field>
+          <div className="grid gap-4 sm:grid-cols-3">
+            <Field id="address_city" label="Cidade" error={err('address_city')}>
+              <input id="address_city" autoComplete="off" className={controlClass} {...register('address_city')} />
+            </Field>
+            <Field id="address_state" label="Estado" error={err('address_state')}>
+              <input id="address_state" autoComplete="off" className={controlClass} {...register('address_state')} />
+            </Field>
+            <Field id="address_postal_code" label="CEP" error={err('address_postal_code')}>
+              <input
+                id="address_postal_code"
+                inputMode="numeric"
+                autoComplete="off"
+                className={controlClass}
+                {...register('address_postal_code')}
+              />
+            </Field>
+          </div>
+        </fieldset>
         <Field id="status" label="Situação">
           <select id="status" className={controlClass} {...register('status')}>
             {Object.entries(clientStatuses).map(([v, l]) => (

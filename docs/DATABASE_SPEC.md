@@ -74,9 +74,9 @@
 5. Storage privado e políticas de arquivos (quando arquivos entrarem no MVP).
 
 ## Estado implementado (2026-10-13)
-As 19 tabelas do MVP existem, mais `access_entries` (D086, fora da lista original): 21 no total, todas com RLS, políticas e privilégios por coluna. O esquema vem de **13 migrações**
+As 19 tabelas do MVP existem, mais `access_entries` (D086, fora da lista original): 22 no total, todas com RLS, políticas e privilégios por coluna. O esquema vem de **14 migrações**
 (`supabase/migrations`), agrupadas por fase em vez das 001–010 lógicas acima (D025). O banco hospedado recebeu as
-mesmas 13 (D081; conferidas por hash com `scripts/db-fingerprint.sql`).
+mesmas 14 (D081; conferidas por hash com `scripts/db-fingerprint.sql`).
 
 ### Divergências da especificação
 | Tabela / coluna | Especificado | Implementado | Decisão |
@@ -91,6 +91,8 @@ mesmas 13 (D081; conferidas por hash com `scripts/db-fingerprint.sql`).
 | Políticas `mfa_required` | Não previstas | Restritiva em toda tabela de `public`; exige `aal2` de quem tem fator TOTP verificado | D082 |
 | `access_entries` | Não prevista | Diretório de acessos (URL, usuário, item no gerenciador), **sem coluna de segredo**; sem trilha de atividade | D086, D087 |
 | `project_payments` | Não prevista (financeiro era "futuro") | Parcelas do projeto (adiantamento, parcelas, saldo) com vencimento e situação; valores em centavos | D093–D095 |
+| `clients.legal_name`, `tax_id`, `billing_email`, `website`, `address_*`, `source` | Não previstos | Cadastro completo (documento fiscal, cobrança, endereço, origem); fora da trilha de atividade | D096, D097 |
+| `client_contacts` | Não prevista | Contatos do cliente (um principal por cliente) | D096 |
 | `projects.contract_value_cents`, `currency`, `billing_model` | Não previstos | Valor do projeto, moeda (`BRL|USD|EUR`) e modelo de cobrança | D093 |
 
 ### Funções (todas em `private`, exceto a de leitura da agenda)

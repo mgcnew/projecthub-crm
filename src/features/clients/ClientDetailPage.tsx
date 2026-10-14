@@ -14,6 +14,7 @@ import { projectStatuses } from '@/features/projects/schema'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
 import { useArchiveClient, useClient, useUpdateClient } from './api'
+import { ClientContacts } from './contacts/ClientContacts'
 import { ClientForm } from './ClientForm'
 
 export function ClientDetailPage() {
@@ -42,6 +43,11 @@ export function ClientDetailPage() {
           {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
         </>
       ),
+    },
+    {
+      id: 'contatos',
+      label: 'Contatos',
+      content: <ClientContacts clientId={c.id} />,
     },
     {
       id: 'projetos',
@@ -150,6 +156,15 @@ export function ClientDetailPage() {
           phone: c.phone ?? '',
           status: c.status as 'active' | 'inactive',
           notes: c.notes ?? '',
+          legal_name: c.legal_name ?? '',
+          tax_id: c.tax_id ?? '',
+          billing_email: c.billing_email ?? '',
+          website: c.website ?? '',
+          address_line: c.address_line ?? '',
+          address_city: c.address_city ?? '',
+          address_state: c.address_state ?? '',
+          address_postal_code: c.address_postal_code ?? '',
+          source: c.source ?? '',
         }}
         readOnly={!canWrite}
         submitLabel="Salvar alterações"
