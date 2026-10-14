@@ -16,6 +16,7 @@ import {
   weekdays,
   type EventFormValues,
 } from './schema'
+import { FormDateField, FormDateTimeField } from '@/components/form-fields'
 
 export function EventForm({
   initial,
@@ -83,10 +84,10 @@ export function EventForm({
             </select>
           </Field>
           <Field id="start_at" label="Início *" error={err('start_at')}>
-            <input id="start_at" type="datetime-local" className={controlClass} aria-invalid={inv('start_at')} {...register('start_at')} />
+            <FormDateTimeField id="start_at" control={control} name="start_at" clearable={false} />
           </Field>
           <Field id="end_at" label="Fim *" error={err('end_at')}>
-            <input id="end_at" type="datetime-local" className={controlClass} aria-invalid={inv('end_at')} {...register('end_at')} />
+            <FormDateTimeField id="end_at" control={control} name="end_at" clearable={false} />
           </Field>
           <Field id="project_id" label="Projeto">
             <select id="project_id" className={controlClass} {...register('project_id')}>
@@ -127,7 +128,7 @@ export function EventForm({
                 <input id="interval_value" inputMode="numeric" className={controlClass} aria-invalid={inv('interval_value')} {...register('interval_value')} />
               </Field>
               <Field id="ends_on" label="Termina em" error={err('ends_on')}>
-                <input id="ends_on" type="date" className={controlClass} aria-invalid={inv('ends_on')} {...register('ends_on')} />
+                <FormDateField id="ends_on" control={control} name="ends_on" />
               </Field>
               <Field id="occurrence_limit" label="Nº de ocorrências" error={err('occurrence_limit')}>
                 <input id="occurrence_limit" inputMode="numeric" className={controlClass} {...register('occurrence_limit')} />

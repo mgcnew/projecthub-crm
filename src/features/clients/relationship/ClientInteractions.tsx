@@ -23,6 +23,7 @@ import {
   type InteractionFormValues,
   type NextContactValues,
 } from './schema'
+import { FormDateField, FormDateTimeField } from '@/components/form-fields'
 
 function NextContact({ clientId, date, note, canWrite }: { clientId: string; date: string | null; note: string | null; canWrite: boolean }) {
   const save = useSaveNextContact(clientId)
@@ -31,6 +32,7 @@ function NextContact({ clientId, date, note, canWrite }: { clientId: string; dat
   const today = todayISO()
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<NextContactValues>({
@@ -88,7 +90,7 @@ function NextContact({ clientId, date, note, canWrite }: { clientId: string; dat
         <form onSubmit={submit} noValidate className="space-y-3">
           <div className="grid gap-4 sm:grid-cols-[12rem_1fr]">
             <Field id="next-date" label="Data *" error={errors.next_contact_on?.message}>
-              <input id="next-date" type="date" className={controlClass} {...register('next_contact_on')} />
+              <FormDateField id="next-date" control={control} name="next_contact_on" />
             </Field>
             <Field id="next-note" label="O que fazer" error={errors.next_contact_note?.message} hint="Ex.: cobrar retorno da proposta">
               <input id="next-note" autoComplete="off" className={controlClass} {...register('next_contact_note')} />
@@ -131,6 +133,7 @@ function InteractionForm({
   const contacts = useClientContacts(clientId)
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<InteractionFormValues>({ resolver: zodResolver(interactionFormSchema), defaultValues: initial })
@@ -148,7 +151,7 @@ function InteractionForm({
             </select>
           </Field>
           <Field id="int-when" label="Quando *" error={errors.occurred_at?.message}>
-            <input id="int-when" type="datetime-local" className={controlClass} {...register('occurred_at')} />
+            <FormDateTimeField id="int-when" control={control} name="occurred_at" clearable={false} />
           </Field>
           <Field id="int-contact" label="Com quem">
             <select id="int-contact" className={controlClass} {...register('contact_id')}>

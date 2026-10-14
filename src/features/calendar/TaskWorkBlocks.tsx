@@ -6,6 +6,7 @@ import { controlClass } from '@/components/form-styles'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDateTime, formatTime, fromLocalInput, todayISO } from '@/lib/format'
 import { useCancelEvent, useCreateWorkBlock, useWorkBlocks } from './api'
+import { DateField, TimeField } from '@/components/DateTimeField'
 
 /** Bloco de tempo: evento work_block da tarefa; independente do prazo e do dia planejado (D003/D004). */
 export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitle: string }) {
@@ -62,10 +63,10 @@ export function TaskWorkBlocks({ taskId, taskTitle }: { taskId: string; taskTitl
       {canWrite && (
         <div className="grid gap-3 sm:grid-cols-4">
           <Field id="wb-date" label="Dia">
-            <input id="wb-date" type="date" className={controlClass} value={date} onChange={(e) => setDate(e.target.value)} />
+            <DateField id="wb-date" value={date} onChange={setDate} clearable={false} />
           </Field>
           <Field id="wb-time" label="Início">
-            <input id="wb-time" type="time" className={controlClass} value={time} onChange={(e) => setTime(e.target.value)} />
+            <TimeField id="wb-time" value={time} onChange={setTime} clearable={false} />
           </Field>
           <Field id="wb-min" label="Duração (min)">
             <input id="wb-min" inputMode="numeric" className={controlClass} value={minutes} onChange={(e) => setMinutes(e.target.value)} />

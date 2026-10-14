@@ -21,6 +21,8 @@ import {
   type PaymentFormValues,
 } from './schema'
 import { summarize } from './summary'
+import { DateField } from '@/components/DateTimeField'
+import { FormDateField } from '@/components/form-fields'
 
 type ProjectLite = { id: string; name: string; currency: string; contract_value_cents: number | null }
 
@@ -169,14 +171,7 @@ function PaymentItem({ p, currency, canWrite, today }: { p: PaymentRow; currency
             <label htmlFor={`paid-${p.id}`} className="text-sm font-medium">
               Recebida em
             </label>
-            <input
-              id={`paid-${p.id}`}
-              type="date"
-              required
-              value={paidOn}
-              onChange={(e) => setPaidOn(e.target.value)}
-              className={controlClass}
-            />
+            <DateField id={`paid-${p.id}`} value={paidOn} onChange={setPaidOn} clearable={false} />
           </div>
           <Button type="submit" disabled={!paidOn || update.isPending}>
             Confirmar recebimento
@@ -229,6 +224,7 @@ function Generator({
   const [error, setError] = useState<string | null>(null)
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<GeneratorValues>({
@@ -278,13 +274,13 @@ function Generator({
           <input id="gen-pct" inputMode="numeric" autoComplete="off" className={controlClass} {...register('advance_percent')} />
         </Field>
         <Field id="gen-adv-due" label="Vencimento do adiantamento *" error={errors.advance_due?.message}>
-          <input id="gen-adv-due" type="date" className={controlClass} {...register('advance_due')} />
+          <FormDateField id="gen-adv-due" control={control} name="advance_due" clearable={false} />
         </Field>
         <Field id="gen-n" label="Número de parcelas *" error={errors.installments?.message}>
           <input id="gen-n" inputMode="numeric" autoComplete="off" className={controlClass} {...register('installments')} />
         </Field>
         <Field id="gen-first" label="Vencimento da 1ª parcela *" error={errors.first_due?.message} hint="As demais seguem mês a mês">
-          <input id="gen-first" type="date" className={controlClass} {...register('first_due')} />
+          <FormDateField id="gen-first" control={control} name="first_due" clearable={false} />
         </Field>
       </fieldset>
       {error && (

@@ -48,6 +48,14 @@ test('o build de produção funciona sob CSP estrita, sem violações', async ({
     await expect(page.getByRole('heading', { name: heading }).first()).toBeVisible()
   }
 
+  // Seletor de data e hora (Popover API + posicionamento por CSSOM): abre, escolhe e fecha sem violações.
+  await page.goto('/app/agenda/novo')
+  await page.getByRole('button', { name: 'Abrir calendário' }).first().click()
+  const picker = page.getByRole('dialog', { name: 'Escolher data e hora' })
+  await expect(picker.getByRole('grid')).toBeVisible()
+  await picker.getByRole('option', { name: '10:00' }).click()
+  await expect(picker).toBeHidden()
+
   // QR code do autenticador: imagem data: SVG vinda do Auth precisa carregar sob `img-src 'self' data:`.
   await page.goto('/app/configuracoes')
   await page.getByRole('button', { name: 'Ativar verificação em duas etapas' }).click()

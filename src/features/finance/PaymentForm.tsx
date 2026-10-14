@@ -4,6 +4,7 @@ import { Field } from '@/components/form'
 import { controlClass, textareaClass } from '@/components/form-styles'
 import { Button } from '@/components/ui/button'
 import { paymentFormSchema, paymentKinds, type PaymentFormValues } from './schema'
+import { FormDateField } from '@/components/form-fields'
 
 /** Formulário de parcela (nova ou edição). O valor é digitado em formato brasileiro e vira centavos. */
 export function PaymentForm({
@@ -23,6 +24,7 @@ export function PaymentForm({
 }) {
   const {
     register,
+    control,
     handleSubmit,
     formState: { errors, isSubmitting },
   } = useForm<PaymentFormValues>({ resolver: zodResolver(paymentFormSchema), defaultValues: initial })
@@ -56,7 +58,7 @@ export function PaymentForm({
             />
           </Field>
           <Field id="pay-due" label="Vencimento *" error={err('due_date')}>
-            <input id="pay-due" type="date" className={controlClass} aria-invalid={inv('due_date')} {...register('due_date')} />
+            <FormDateField id="pay-due" control={control} name="due_date" clearable={false} />
           </Field>
           <Field id="pay-method" label="Forma de pagamento" error={err('payment_method')} hint="Pix, boleto, transferência…">
             <input id="pay-method" autoComplete="off" className={controlClass} {...register('payment_method')} />

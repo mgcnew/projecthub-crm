@@ -15,6 +15,7 @@ import {
   taskStatuses,
   type TaskFormValues,
 } from './schema'
+import { FormDateField, FormDateTimeField } from '@/components/form-fields'
 
 export function TaskForm({
   initial = taskDefaults,
@@ -107,12 +108,12 @@ export function TaskForm({
           </Field>
           {deadline === 'date' && (
             <Field id="due_date" label="Data do prazo" error={err('due_date')}>
-              <input id="due_date" type="date" className={controlClass} aria-invalid={inv('due_date')} {...register('due_date')} />
+              <FormDateField id="due_date" control={control} name="due_date" />
             </Field>
           )}
           {deadline === 'datetime' && (
             <Field id="due_at" label="Data e hora do prazo" error={err('due_at')}>
-              <input id="due_at" type="datetime-local" className={controlClass} aria-invalid={inv('due_at')} {...register('due_at')} />
+              <FormDateTimeField id="due_at" control={control} name="due_at" />
             </Field>
           )}
           <Field id="estimated_minutes" label="Estimativa (minutos)" error={err('estimated_minutes')}>

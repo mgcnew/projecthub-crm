@@ -13,6 +13,7 @@ import { addDays, dayStartInstant, formatMinutes, todayISO } from '@/lib/format'
 import { useDayPlans, useOpenTaskOptions, usePlanMutations, useQuickCreateTask, useSetTaskStatus } from './api'
 import { QuickCapture } from './QuickCapture'
 import { TaskTable, type TaskRowData } from './TaskTable'
+import { DateField } from '@/components/DateTimeField'
 
 /** Capacidade de referência do dia (horas de trabalho) para a soma das estimativas. */
 const DAY_CAPACITY_MIN = 6 * 60
@@ -72,12 +73,13 @@ export function MyDayPage() {
             <Button variant="outline" size="icon" onClick={() => setDate(addDays(date, -1))} aria-label="Dia anterior">
               <ChevronLeft aria-hidden="true" />
             </Button>
-            <input
-              type="date"
+            <DateField
+              id="my-day-date"
               aria-label="Dia"
-              className={`${controlClass} h-9 w-auto max-lg:h-11`}
+              className="w-44"
               value={date}
-              onChange={(e) => e.target.value && setDate(e.target.value)}
+              onChange={(v) => v && setDate(v)}
+              clearable={false}
             />
             <Button variant="outline" size="icon" onClick={() => setDate(addDays(date, 1))} aria-label="Próximo dia">
               <ChevronRight aria-hidden="true" />

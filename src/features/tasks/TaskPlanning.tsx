@@ -1,10 +1,10 @@
 import { useState } from 'react'
 import { X } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { controlClass } from '@/components/form-styles'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate, todayISO } from '@/lib/format'
 import { usePlanMutations, useTaskPlans } from './api'
+import { DateField } from '@/components/DateTimeField'
 
 /** Dia planejado: independente do prazo (D003). */
 export function TaskPlanning({ taskId }: { taskId: string }) {
@@ -43,12 +43,13 @@ export function TaskPlanning({ taskId }: { taskId: string }) {
       )}
       {canWrite && (
         <div className="flex gap-2">
-          <input
-            type="date"
+          <DateField
+            id="plan-date"
             aria-label="Dia planejado"
-            className={controlClass}
+            className="min-w-0 flex-1"
             value={date}
-            onChange={(e) => setDate(e.target.value)}
+            onChange={setDate}
+            clearable={false}
           />
           <Button
             variant="outline"

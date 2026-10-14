@@ -15,6 +15,7 @@ import {
   projectStatuses,
   type ProjectFormValues,
 } from './schema'
+import { FormDateField } from '@/components/form-fields'
 
 export function ProjectForm({
   initial = projectDefaults,
@@ -35,6 +36,7 @@ export function ProjectForm({
   const clients = useClientOptions(true)
   const {
     register,
+    control,
     handleSubmit,
     reset,
     formState: { errors, isDirty, isSubmitting },
@@ -87,16 +89,10 @@ export function ProjectForm({
             </select>
           </Field>
           <Field id="started_on" label="Início" error={err('started_on')}>
-            <input id="started_on" type="date" className={controlClass} {...register('started_on')} />
+            <FormDateField id="started_on" control={control} name="started_on" />
           </Field>
           <Field id="target_date" label="Prazo" error={err('target_date')}>
-            <input
-              id="target_date"
-              type="date"
-              className={controlClass}
-              aria-invalid={inv('target_date')}
-              {...register('target_date')}
-            />
+            <FormDateField id="target_date" control={control} name="target_date" />
           </Field>
         </div>
         <fieldset className="space-y-4 border-t border-border pt-4">

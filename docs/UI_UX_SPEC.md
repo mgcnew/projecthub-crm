@@ -56,12 +56,13 @@ Além do mapa original: `/login`, `/recuperar-senha`, `/redefinir-senha` (sem se
 | QuickCreate | `src/features/tasks/QuickCapture.tsx` |
 | ActivityTimeline, ChecklistEditor, ReminderEditor | `features/activity`, `features/tasks/TaskChecklist.tsx`, `features/notifications/ReminderEditor.tsx` |
 | Busca global | `src/features/search/` |
+| Seletores de data, data e hora, horário (tema do sistema) | `src/components/DateTimeField.tsx`, `src/components/datetime/`, `src/components/form-fields.tsx` |
 | Acessos (cópia em 1 clique) | `src/features/access/`, `src/components/CopyButton.tsx` |
 | Financeiro (projeto e cliente), A receber | `src/features/finance/`, `src/lib/money.ts` |
 | Contatos, interações, documentos do cliente; Contatos a fazer | `src/features/clients/contacts/`, `src/features/clients/relationship/` |
 
 Sem componente compartilhado (a função existe, inline em cada tela): `DataTable` (tabelas por feature),
-`PriorityIndicator`, `DateTimePicker` (campos nativos `datetime-local`), `EntitySelector` (`<select>` nativos com
+`PriorityIndicator`, `EntitySelector` (`<select>` nativos com
 `option-list`) e `RecurrenceEditor` (em `EventDetailPage`).
 
 ### Regras: situação

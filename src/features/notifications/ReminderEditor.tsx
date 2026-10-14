@@ -6,6 +6,7 @@ import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDateTime } from '@/lib/format'
 import { useReminderMutations, useReminders, type ReminderTarget } from './api'
 import { offsetLabel, reminderOffsets, validateReminderAt } from './schema'
+import { DateTimeField } from '@/components/DateTimeField'
 
 /**
  * Lembretes de uma tarefa (instante absoluto) ou de um evento (antecedência aplicada a cada ocorrência).
@@ -75,13 +76,7 @@ export function ReminderEditor({ kind, id, closedReason }: ReminderTarget & { cl
         <div className="grid gap-3 sm:grid-cols-[1fr_auto]">
           {kind === 'task' ? (
             <Field id="reminder-at" label="Avisar em">
-              <input
-                id="reminder-at"
-                type="datetime-local"
-                className={controlClass}
-                value={at}
-                onChange={(e) => setAt(e.target.value)}
-              />
+              <DateTimeField id="reminder-at" value={at} onChange={setAt} clearable={false} />
             </Field>
           ) : (
             <Field id="reminder-offset" label="Avisar" hint="Vale para cada ocorrência, inclusive em séries.">

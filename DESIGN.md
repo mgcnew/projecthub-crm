@@ -286,6 +286,7 @@ Cantos retos: todo elemento retangular usa 2px de raio (placas, botões, campos,
 - **Focus:** borda passa ao Azul da Linha 1 com contorno de 3px desse azul a 40%.
 - **Error / Disabled:** borda em Vermelho Atraso; desabilitado em Cinza Esmalte a 70%.
 - **Select:** nativo com `appearance: base-select`; botão como um campo (44px) e seta que gira ao abrir. A lista é uma placa branca com filete de 2px em tinta, itens de 40px (44px no celular), hover em Cinza Esmalte e o item selecionado em placa de tinta com ✓ (mesma gramática do item ativo do menu). Sem suporte (Firefox, Safari) cai no select do navegador. Sugestões de texto livre usam botões de sugestão, não `<datalist>`.
+- **Data e hora:** campo de texto com máscara (`dd/mm/aaaa`, `dd/mm/aaaa hh:mm`, `hh:mm`) e botão à direita (44px). O calendário é uma placa branca com filete de 2px em tinta: domingo a sábado, dia selecionado em placa de tinta, hoje com contorno de 2px, dias de outros meses esmaecidos; ao lado, a lista de horários de 15 em 15 min. Abre na camada superior (por cima de painéis e diálogos) e fecha com Esc sem fechar o painel. Mesma gramática do Select.
 - **Checkbox:** nativo com `accent-color` em azul profundo.
 
 ### Navigation
