@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-10-13T16:14:46+00:00",
+  "generatedAt": "2026-10-14",
   "title": "Design System: ProjectHub CRM",
   "extensions": {
     "colorMeta": {
@@ -51,22 +51,22 @@
       },
       "primary": {
         "role": "primary",
-        "displayName": "Tinta de Placa (ação)",
-        "canonical": "oklch(19.0% 0.009 255.6)",
+        "displayName": "Azul Profundo (ação e navegação)",
+        "canonical": "oklch(45.2% 0.141 253.9)",
         "tonalRamp": [
-          "oklch(15% 0.009 255.6)",
-          "oklch(25% 0.009 255.6)",
-          "oklch(35% 0.009 255.6)",
-          "oklch(45% 0.009 255.6)",
-          "oklch(55% 0.009 255.6)",
-          "oklch(65% 0.009 255.6)",
-          "oklch(80% 0.009 255.6)",
-          "oklch(95% 0.009 255.6)"
+          "oklch(15% 0.049 253.9)",
+          "oklch(25% 0.079 253.9)",
+          "oklch(35% 0.111 253.9)",
+          "oklch(45% 0.141 253.9)",
+          "oklch(55% 0.141 253.9)",
+          "oklch(65% 0.141 253.9)",
+          "oklch(80% 0.103 253.9)",
+          "oklch(95% 0.023 253.9)"
         ]
       },
       "primary-foreground": {
         "role": "neutral",
-        "displayName": "Branco sobre tinta",
+        "displayName": "Branco sobre azul profundo",
         "canonical": "oklch(100.0% 0.000 89.9)",
         "tonalRamp": [
           "oklch(15% 0.000 89.9)",

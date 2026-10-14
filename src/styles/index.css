@@ -4,7 +4,7 @@
 /*
  * Mundo "Linhas do Metrô" (direção escolhida em 2026-10-13; contrato em .impeccable/surfaces/).
  * Placas esmaltadas da sinalização do Metrô de São Paulo: fundo cinza-claro, placas brancas, tinta
- * quase preta, réguas frias. A cor de linha é reservada aos projetos; o vermelho marca "agora" e atraso.
+ * quase preta, réguas frias. Azul profundo identifica ações e navegação; cores de linha identificam projetos; vermelho marca "agora" e atraso.
  * Tema claro padrão (D005). Contrastes de texto conferidos para AA.
  */
 :root {
@@ -14,8 +14,9 @@
   --card-foreground: #111418;
   --popover: #ffffff;
   --popover-foreground: #111418;
-  /* Primário é a própria tinta da placa: ação principal em preto sólido. */
-  --primary: #111418;
+  /* Azul profundo: ações, seleção e marca (D091); branco sobre azul tem contraste AA. */
+  --primary: #0455a1;
+  --primary-hover: #034580;
   --primary-foreground: #ffffff;
   /* Azul da Linha 1 para links, foco e informação (7,45:1 sobre branco). */
   --primary-strong: #0455a1;
@@ -55,6 +56,7 @@
   --color-popover: var(--popover);
   --color-popover-foreground: var(--popover-foreground);
   --color-primary: var(--primary);
+  --color-primary-hover: var(--primary-hover);
   --color-primary-foreground: var(--primary-foreground);
   --color-primary-strong: var(--primary-strong);
   --color-secondary: var(--secondary);
@@ -96,7 +98,7 @@
     outline-offset: 2px;
   }
   input[type='checkbox'] {
-    accent-color: var(--foreground);
+    accent-color: var(--primary);
   }
   h1,
   h2,

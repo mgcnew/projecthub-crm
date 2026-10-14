@@ -34,7 +34,7 @@ export async function apiSessionFor(user: TestUser) {
 export async function login(page: Page, user: TestUser) {
   await page.goto('/login')
   await page.getByLabel('E-mail').fill(user.email)
-  await page.getByLabel('Senha').fill(user.password)
+  await page.getByLabel('Senha', { exact: true }).fill(user.password)
   await page.getByRole('button', { name: 'Entrar' }).click()
   await expect(page.getByRole('heading', { name: 'Central do dia' })).toBeVisible()
 }

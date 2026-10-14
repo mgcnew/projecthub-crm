@@ -63,7 +63,7 @@ function UnreadBadge({ count }: { count: number }) {
 function link({ isActive }: { isActive: boolean }) {
   return cn(
     'flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm font-semibold',
-    isActive ? 'bg-foreground text-card' : 'text-[#3b4148] hover:bg-muted',
+    isActive ? 'bg-primary text-primary-foreground' : 'text-[#3b4148] hover:bg-muted',
   )
 }
 
@@ -192,7 +192,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
         <div className={cn('flex min-h-11 items-center', sidebarCollapsed ? 'flex-col gap-2' : 'gap-2.5 px-3 pb-5')}>
           <span
             aria-hidden="true"
-            className="inline-flex size-[1.375rem] shrink-0 items-center justify-center bg-foreground text-[0.8125rem] text-card"
+            className="inline-flex size-[1.375rem] shrink-0 items-center justify-center bg-primary text-[0.8125rem] text-card"
           >
             P
           </span>
@@ -274,7 +274,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
             {unread > 0 && (
               <span
                 aria-hidden="true"
-                className="absolute top-0.5 right-0.5 min-w-5 rounded-sm border border-card bg-foreground px-1 text-center text-[0.6875rem] leading-4 font-bold tabular-nums text-card"
+                className="absolute top-0.5 right-0.5 min-w-5 rounded-sm border border-card bg-primary px-1 text-center text-[0.6875rem] leading-4 font-bold tabular-nums text-card"
               >
                 {unread > 99 ? '99+' : unread}
               </span>
@@ -356,7 +356,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           aria-controls="menu-mais"
           className={cn(
             'relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-sm px-1 text-xs font-semibold',
-            moreOpen ? 'bg-foreground text-card' : 'text-[#3b4148]',
+            moreOpen ? 'bg-primary text-primary-foreground' : 'text-[#3b4148]',
           )}
           onClick={() => setMoreOpen((o) => !o)}
         >
@@ -364,7 +364,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           Mais
           {unread > 0 && <span className="sr-only"> ({unread} notificações não lidas)</span>}
           {unread > 0 && (
-            <span aria-hidden="true" className="absolute top-2 right-[calc(50%-1.1rem)] size-2.5 rounded-full bg-foreground ring-2 ring-card" />
+            <span aria-hidden="true" className="absolute top-2 right-[calc(50%-1.1rem)] size-2.5 rounded-full bg-primary ring-2 ring-card" />
           )}
         </button>
       </nav>

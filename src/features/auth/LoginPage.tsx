@@ -1,3 +1,4 @@
+import { ArrowRight, Eye, EyeOff } from 'lucide-react'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
@@ -14,6 +15,7 @@ export function LoginPage() {
   const { session, loading, needsSecondFactor } = useAuth()
   const location = useLocation()
   const state = location.state as { from?: string; notice?: string } | null
+  const [showPassword, setShowPassword] = useState(false)
   const [formError, setFormError] = useState<string | null>(null)
   const {
     register,
@@ -49,7 +51,7 @@ export function LoginPage() {
           {state.notice}
         </p>
       )}
-      <form onSubmit={onSubmit} noValidate className="space-y-4">
+      <form onSubmit={onSubmit} noValidate className="space-y-6">
         <div className="space-y-1.5">
           <label htmlFor="email" className="text-sm font-semibold">
             E-mail
@@ -57,6 +59,8 @@ export function LoginPage() {
           <input
             id="email"
             type="email"
+            autoCapitalize="none"
+            spellCheck={false}
             autoComplete="username"
             className={controlClass}
             aria-invalid={errors.email ? true : undefined}
@@ -74,15 +78,26 @@ export function LoginPage() {
           <label htmlFor="password" className="text-sm font-semibold">
             Senha
           </label>
-          <input
-            id="password"
-            type="password"
-            autoComplete="current-password"
-            className={controlClass}
-            aria-invalid={errors.password ? true : undefined}
-            aria-describedby={errors.password ? 'password-error' : undefined}
-            {...register('password')}
-          />
+          <div className="relative">
+            <input
+              id="password"
+              type={showPassword ? 'text' : 'password'}
+              autoComplete="current-password"
+              className={`${controlClass} pr-12`}
+              aria-invalid={errors.password ? true : undefined}
+              aria-describedby={errors.password ? 'password-error' : undefined}
+              {...register('password')}
+            />
+            <button
+              type="button"
+              aria-label={showPassword ? 'Ocultar senha' : 'Mostrar senha'}
+              aria-controls="password"
+              onClick={() => setShowPassword((visible) => !visible)}
+              className="absolute inset-y-0 right-0 flex w-11 items-center justify-center rounded-sm text-muted-foreground hover:bg-muted hover:text-foreground focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ring"
+            >
+              {showPassword ? <EyeOff aria-hidden="true" size={18} /> : <Eye aria-hidden="true" size={18} />}
+            </button>
+          </div>
           {errors.password && (
             <p id="password-error" className="text-sm text-destructive">
               {errors.password.message}
@@ -96,14 +111,17 @@ export function LoginPage() {
           </p>
         )}
 
-        <Button type="submit" className="h-11 w-full" disabled={isSubmitting}>
-          {isSubmitting ? 'Entrando…' : 'Entrar'}
-        </Button>
-        <p className="text-sm">
-          <Link to="/recuperar-senha" className="inline-block py-2.5 font-semibold text-primary-strong underline">
-            Esqueci a senha
-          </Link>
-        </p>
+        <div className="space-y-3 pt-2">
+          <Button type="submit" className="h-12 w-full justify-between px-4" disabled={isSubmitting || loading}>
+            {isSubmitting ? 'Entrando…' : loading ? 'Carregando…' : 'Entrar'}
+            <ArrowRight aria-hidden="true" size={18} />
+          </Button>
+          <p className="text-center text-sm">
+            <Link to="/recuperar-senha" className="inline-flex min-h-11 items-center font-semibold text-primary-strong underline underline-offset-4 hover:text-foreground">
+              Esqueci a senha
+            </Link>
+          </p>
+        </div>
       </form>
     </AuthLayout>
   )

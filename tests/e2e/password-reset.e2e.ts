@@ -58,11 +58,11 @@ test('esqueci a senha: link por e-mail, nova senha e login com ela', async ({ pa
 
   // A senha antiga deixa de valer e a nova entra.
   await page.getByLabel('E-mail').fill(user.email)
-  await page.getByLabel('Senha').fill(user.password)
+  await page.getByLabel('Senha', { exact: true }).fill(user.password)
   await page.getByRole('button', { name: 'Entrar' }).click()
   await expect(page.getByRole('alert')).toHaveText('E-mail ou senha incorretos.')
 
-  await page.getByLabel('Senha').fill(NEW_PASSWORD)
+  await page.getByLabel('Senha', { exact: true }).fill(NEW_PASSWORD)
   await page.getByRole('button', { name: 'Entrar' }).click()
   await expect(page.getByRole('heading', { name: 'Central do dia' })).toBeVisible()
 })
@@ -84,7 +84,7 @@ test('com verificação em duas etapas, a recuperação pede o código antes da 
 
   // Nova senha + código para entrar.
   await page.getByLabel('E-mail').fill(user.email)
-  await page.getByLabel('Senha').fill(NEW_PASSWORD)
+  await page.getByLabel('Senha', { exact: true }).fill(NEW_PASSWORD)
   await page.getByRole('button', { name: 'Entrar' }).click()
   await expect(page.getByRole('heading', { level: 1, name: 'Verificação em duas etapas' })).toBeVisible()
   await page.getByLabel('Código de verificação').fill(totp(secret))

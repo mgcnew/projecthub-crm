@@ -28,3 +28,6 @@ backups/
 # Impeccable: capturas de revisão e estado do servidor de decisão (regeneráveis)
 .impeccable/review/
 .impeccable/questions/
+
+# Engine local do Impeccable (baixado pelo launcher; não versionar binário)
+.agents/skills/impeccable/scripts/bin/

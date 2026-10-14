@@ -14,10 +14,24 @@ test.describe('autenticação', () => {
     await expect(page.getByRole('heading', { name: 'Entrar' })).toBeVisible()
   })
 
+  test('mostrar e ocultar senha preserva o valor sem enviar o formulário', async ({ page }) => {
+    await page.goto('/login')
+    const password = page.getByLabel('Senha', { exact: true })
+    await password.fill('senha-digitada-123')
+    await page.getByRole('button', { name: 'Mostrar senha', exact: true }).click()
+    await expect(password).toHaveAttribute('type', 'text')
+    await expect(password).toHaveValue('senha-digitada-123')
+    await page.getByRole('button', { name: 'Ocultar senha', exact: true }).click()
+    await expect(password).toHaveAttribute('type', 'password')
+    await expect(password).toHaveValue('senha-digitada-123')
+    await expect(page).toHaveURL(/\/login/)
+    await expect(page.getByRole('alert')).toHaveCount(0)
+  })
+
   test('senha incorreta mostra erro genérico e não entra', async ({ page }) => {
     await page.goto('/login')
     await page.getByLabel('E-mail').fill(user.email)
-    await page.getByLabel('Senha').fill('senha-errada-123')
+    await page.getByLabel('Senha', { exact: true }).fill('senha-errada-123')
     await page.getByRole('button', { name: 'Entrar' }).click()
     await expect(page.getByRole('alert')).toHaveText('E-mail ou senha incorretos.')
     await expect(page).toHaveURL(/\/login/)

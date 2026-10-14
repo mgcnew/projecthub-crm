@@ -5,7 +5,8 @@ colors:
   background: "#f2f4f5"
   foreground: "#111418"
   card: "#ffffff"
-  primary: "#111418"
+  primary: "#0455a1"
+  primary-hover: "#034580"
   primary-foreground: "#ffffff"
   primary-strong: "#0455a1"
   muted: "#e8ecef"
@@ -165,13 +166,13 @@ components:
 
 O sistema empresta a sinalização do Metrô de São Paulo: placas esmaltadas brancas sobre um fundo cinza-claro frio, tinta quase preta, réguas finas e selos circulares de linha. Projetos e clientes são linhas; o dia é uma linha de estações (os compromissos) onde essas linhas se cruzam. A pessoa lê o dia como um trajeto: onde está agora, qual é a próxima estação, que linhas passam hoje e o que vence.
 
-A densidade é de painel de operação, não de vitrine: tabelas com números tabulares, placas de seção com título em caixa alta e contagem ao lado, uma única grotesca em pesos firmes. A ênfase vem de tinta, peso e preenchimento, não de cor. A cor é um recurso escasso e com dono: pertence às linhas dos projetos, e o vermelho pertence ao "agora" e ao atraso.
+A densidade é de painel de operação, não de vitrine: tabelas com números tabulares, placas de seção com título em caixa alta e contagem ao lado, uma única grotesca em pesos firmes. A ênfase vem de peso e preenchimento. Azul profundo identifica ações, seleção e marca; as demais cores pertencem às linhas dos projetos, e o vermelho pertence ao "agora" e ao atraso.
 
-O mundo recusa o arranjo padrão da categoria: cartões brancos com indicadores grandes no topo, pílulas coloridas de status e um acento azul genérico em tudo. A navegação não usa cor de linha (o arco-íris no menu foi descartado de propósito); ela usa placa preta sólida para o item ativo.
+O mundo recusa o arranjo padrão da categoria: cartões brancos com indicadores grandes no topo, pílulas coloridas de status e cor espalhada sem significado. A navegação usa uma única cor primária: azul profundo para o item ativo.
 
 **Key Characteristics:**
-- Fundo cinza frio, placas brancas com régua de 1px, tinta quase preta como cor de ação.
-- Sete cores de linha mais a Prata, atribuídas aos projetos; nada mais na interface é colorido.
+- Fundo cinza frio, placas brancas com régua de 1px, azul profundo como cor de ação.
+- Sete cores de linha mais a Prata, atribuídas aos projetos; azul profundo também identifica ações e navegação.
 - Vermelho só para o marcador "agora" e para atraso.
 - Cantos retos (2px) em tudo que é placa; círculos só em selos de linha e estações.
 - Filete de 2px em tinta sob cabeçalhos de página e de tabela.
@@ -179,10 +180,11 @@ O mundo recusa o arranjo padrão da categoria: cartões brancos com indicadores 
 
 ## Colors
 
-Neutros frios de sinalização, tinta como primária e uma paleta de linhas que funciona como identidade dos projetos, nunca como decoração.
+Neutros frios de sinalização, azul profundo como primário, tinta para leitura e uma paleta de linhas que funciona como identidade dos projetos, nunca como decoração.
 
 ### Primary
-- **Tinta de Placa** (foreground / primary): texto, botão primário, item ativo da navegação, selo de situação "perigo", filete de cabeçalho. A ação principal é tinta sólida, não azul.
+- **Tinta de Placa** (foreground): texto, selo de situação "perigo" e filete de cabeçalho.
+- **Azul Profundo** (primary): botão principal, navegação ativa, marca, seleção de resultado da busca e painel de autenticação. Branco sobre #0455a1; hover #034580.
 - **Azul da Linha 1** (primary-strong): links, anel de foco (3px) e seleção de texto (com 20% de opacidade). 7,45:1 sobre branco.
 
 ### Secondary
@@ -204,7 +206,7 @@ Neutros frios de sinalização, tinta como primária e uma paleta de linhas que 
 - **Trilho** (track): o trilho cinza da Linha do dia, sob os segmentos coloridos.
 
 ### Named Rules
-**The Line Ownership Rule.** Cor de linha pertence a projetos. Não pinte áreas do menu, botões, títulos ou status com cores de linha; se algo não é um projeto, é tinta ou cinza.
+**The Line Ownership Rule.** Cor de linha pertence a projetos. Cores de linha identificam projetos; o azul profundo também é a cor primária de ações, marca e navegação. As demais cores de projeto não pintam menu, botões ou status.
 
 **The Red Is Now Rule.** Vermelho aparece só no "agora" e no atraso. A paleta de linhas exclui o vermelho de propósito, para que nenhum projeto seja confundido com urgência.
 
@@ -261,7 +263,7 @@ Cantos retos: todo elemento retangular usa 2px de raio (placas, botões, campos,
 
 ### Buttons
 - **Shape:** retos (2px), 36px de altura no desktop e 44px abaixo de 1024px, texto 14px/600.
-- **Primary:** tinta sólida com texto branco; hover clareia para `#2a3038`.
+- **Primary:** azul profundo com texto branco; hover escurece para `#034580`.
 - **Outline:** placa branca com borda de 1px em tinta; hover em Cinza Esmalte. É o par natural do primário ("Novo evento" ao lado de "Planejar o dia").
 - **Destructive:** Vermelho Atraso sólido com texto branco, hover `#931016`; só dentro de confirmações.
 - **Ghost / Link:** ghost só ganha Cinza Esmalte no hover; link usa o Azul da Linha 1 com sublinhado no hover.
@@ -283,11 +285,11 @@ Cantos retos: todo elemento retangular usa 2px de raio (placas, botões, campos,
 - **Style:** 44px de altura, fundo branco, borda de 1px na Régua de Campo, 2px de raio, texto 16px.
 - **Focus:** borda passa ao Azul da Linha 1 com contorno de 3px desse azul a 40%.
 - **Error / Disabled:** borda em Vermelho Atraso; desabilitado em Cinza Esmalte a 70%.
-- **Checkbox:** nativo com `accent-color` em tinta.
+- **Checkbox:** nativo com `accent-color` em azul profundo.
 
 ### Navigation
-- **Desktop:** rail branco de 236px; marca "P" em quadrado preto ao lado de "ProjectHub" (17px/700). Itens de 44px com pictograma de 18px e rótulo 14px/600 em Tinta de Menu; hover em Cinza Esmalte; ativo é placa sólida em tinta com texto branco. Contagem de não lidas é um selo contornado na cor do texto. "Sair" fica no pé do rail.
-- **Mobile:** barra inferior branca com filete de 2px em tinta no topo, cinco colunas (quatro destinos e "Mais"), ícone de 20px sobre rótulo de 12px, 56px de altura; ativo em placa de tinta. "Mais" abre uma folha com os demais destinos.
+- **Desktop:** rail branco de 236px; marca "P" em quadrado azul profundo ao lado de "ProjectHub" (17px/700). Itens de 44px com pictograma de 18px e rótulo 14px/600 em Tinta de Menu; hover em Cinza Esmalte; ativo é placa sólida em azul profundo com texto branco. Contagem de não lidas é um selo contornado na cor do texto. "Sair" fica no pé do rail.
+- **Mobile:** barra inferior branca com filete de 2px em tinta no topo, cinco colunas (quatro destinos e "Mais"), ícone de 20px sobre rótulo de 12px, 56px de altura; ativo em placa azul profundo. "Mais" abre uma folha com os demais destinos.
 - O pictograma acompanha o nome, nunca o substitui.
 
 ### Painel de registro
@@ -308,7 +310,7 @@ A assinatura do sistema. Um trilho de 8px em Trilho atravessa o dia; cada compro
 ## Do's and Don'ts
 
 ### Do:
-- **Do** usar tinta sólida (#111418) para a ação principal e para o item ativo da navegação.
+- **Do** usar azul profundo (#0455a1) para a ação principal e para o item ativo da navegação.
 - **Do** dar a cada projeto seu selo de linha, com inicial, sempre que ele aparecer em lista, tabela ou na Linha do dia.
 - **Do** contornar a Linha Amarela com 1px de tinta e escrever sobre ela em tinta.
 - **Do** encerrar cabeçalhos de página e de tabela com filete de 2px em tinta.
@@ -317,9 +319,12 @@ A assinatura do sistema. Um trilho de 8px em Trilho atravessa o dia; cada compro
 - **Do** colocar a data e o contexto abaixo do título da página.
 
 ### Don't:
-- **Don't** usar cores de linha na navegação, em botões ou em status; a cor pertence aos projetos.
+- **Don't** usar as demais cores de projeto na navegação, em botões ou em status; azul profundo é a exceção aprovada como primário.
 - **Don't** usar vermelho fora do "agora" e do atraso, nem incluí-lo na paleta de linhas.
 - **Don't** colocar sombra em placas, selos ou botões; sombra só em diálogo e folha flutuante.
 - **Don't** arredondar placas, botões ou campos além de 2px; círculos são só para selos e estações.
 - **Don't** abrir a página com uma faixa de indicadores grandes em cartões; o topo da Central do dia é a Linha do dia.
 - **Don't** pôr rótulos em caixa alta acima do título da página; caixa alta espaçada é só para títulos de placa.
+
+## Autenticação
+A moldura de login, recuperação/redefinição e MFA usa uma composição de até 1240px, centralizada sobre Cinza de Plataforma no desktop. Painel em Azul Profundo com marca, mensagem e diagrama de estações neutro; formulário em Placa Branca, com largura máxima de 384px. O diagrama não atribui cores de projeto a decoração. Abaixo de 1024px, marca e formulário ocupam uma coluna branca. Campos mantêm 44px; o botão principal do login tem 48px, e o controle de visibilidade da senha tem alvo de 44px.

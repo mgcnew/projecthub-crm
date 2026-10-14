@@ -159,7 +159,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                   onClick={() => choose(i)}
                   className={
                     'flex min-h-12 cursor-pointer items-baseline gap-3 px-4 py-2 ' +
-                    (isActive ? 'bg-foreground text-card' : 'hover:bg-muted')
+                    (isActive ? 'bg-primary text-primary-foreground' : 'hover:bg-muted')
                   }
                 >
                   <span className="min-w-0 flex-1 truncate font-semibold">{h.title}</span>

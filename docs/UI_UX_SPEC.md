@@ -33,7 +33,7 @@ O que a spec original previa e o que existe. Decisões de origem entre parêntes
 ### Onde o implementado difere da especificação
 | Spec original | Implementado |
 |---|---|
-| Fonte Inter; paleta azul `#2563EB` | Hanken Grotesk auto-hospedada; tinta sobre claro, cor de **linha** por projeto, vermelho só para "agora" e atraso (D069–D071) |
+| Fonte Inter; paleta azul `#2563EB` | Hanken Grotesk auto-hospedada; azul profundo nas ações/navegação (D091), tinta no texto sobre claro, cor de **linha** por projeto, vermelho só para "agora" e atraso (D069–D071) |
 | Sidebar 240/64 px recolhível; topbar 56 px | Sidebar desktop recolhível (236/64 px), preferência lembrada no navegador; barra superior de 56 px com sino e contador de não lidas (D088) |
 | Painel contextual opcional de 360–420 px | Registros em **painel lateral de ~670 px** com abas, expansível para modal central; abaixo de 1024 px são página inteira (D074, D075) |
 | "Formulários longos em página" | No desktop abrem em painel; página inteira só no celular/tablet (D074) |
@@ -71,3 +71,8 @@ Sem componente compartilhado (a função existe, inline em cada tela): `DataTabl
 | Filtros úteis e persistência de preferências | Atendida (filtros e ordenação lembrados nas listas) |
 | Estados loading/empty/error/permission/offline | Atendida (leitura somente para quem não escreve; banner offline) |
 | WCAG 2.2 AA, teclado, foco | Verificada por axe em desktop e celular (E2E) |
+
+### Autenticação (2026-10-14, D090)
+Moldura compartilhada: no desktop, composição centralizada de até 1240px com painel em azul profundo (D091), diagrama neutro e coluna branca para o formulário (até 384px); no celular/tablet, somente marca e formulário em uma coluna. Preserva Hanken Grotesk, cantos de 2px, réguas e foco do sistema. Login oferece mostrar/ocultar senha por botão de 44px, com nome acessível que acompanha o estado. Recuperação, redefinição e segunda etapa usam a mesma moldura; os fluxos existentes permanecem.
+
+Cor primária global (D091): azul profundo #0455A1, hover #034580, texto branco sobre ações e seleção; texto de conteúdo continua #111418.
