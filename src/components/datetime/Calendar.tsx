@@ -105,11 +105,11 @@ export function Calendar({
                         'mx-auto flex size-10 items-center justify-center rounded-sm text-sm tabular-nums pointer-coarse:size-11',
                         'focus-visible:outline-[3px] focus-visible:outline-ring/60',
                         isSelected
-                          ? 'bg-foreground font-bold text-card'
+                          ? 'bg-primary font-bold text-primary-foreground'
                           : inMonth
                             ? 'font-medium hover:bg-muted'
                             : 'text-muted-foreground hover:bg-muted',
-                        isToday && !isSelected && 'border-2 border-foreground font-bold',
+                        isToday && !isSelected && 'border-2 border-primary font-bold text-primary-strong',
                       )}
                     >
                       {Number(iso.slice(8))}

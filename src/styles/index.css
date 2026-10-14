@@ -184,7 +184,7 @@
   /* A lista: placa branca com régua de tinta, como os menus e diálogos do app. */
   select::picker(select) {
     box-sizing: border-box;
-    border: 2px solid var(--foreground);
+    border: 2px solid var(--primary);
     border-radius: var(--radius);
     background: var(--card);
     color: var(--foreground);
@@ -209,10 +209,10 @@
     background: var(--muted);
     outline: none;
   }
-  /* Selecionado = placa de tinta, igual ao item ativo do menu. */
+  /* Selecionado = azul primário, igual ao item ativo do menu. */
   select option:checked {
-    background: var(--foreground);
-    color: var(--card);
+    background: var(--primary);
+    color: var(--primary-foreground);
     font-weight: 700;
   }
   select option::checkmark {

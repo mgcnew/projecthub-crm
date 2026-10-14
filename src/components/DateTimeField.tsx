@@ -264,7 +264,7 @@ function PickerField({
               {mode === 'datetime' && (
                 <button
                   type="button"
-                  className="min-h-10 rounded-sm border border-foreground bg-foreground px-3 text-sm font-semibold text-card pointer-coarse:min-h-11"
+                  className="min-h-10 rounded-sm bg-primary px-3 text-sm font-semibold text-primary-foreground hover:bg-primary-hover pointer-coarse:min-h-11"
                   onClick={() => {
                     setOpen(false)
                     toggle.current?.focus()

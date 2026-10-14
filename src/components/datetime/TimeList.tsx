@@ -69,7 +69,7 @@ export function TimeList({
             className={cn(
               'block min-h-10 w-full px-3 text-left text-sm tabular-nums pointer-coarse:min-h-11',
               'focus-visible:outline-[3px] focus-visible:-outline-offset-2 focus-visible:outline-ring/60',
-              selected ? 'bg-foreground font-bold text-card' : 'hover:bg-muted',
+              selected ? 'bg-primary font-bold text-primary-foreground' : 'hover:bg-muted',
             )}
           >
             {hm}

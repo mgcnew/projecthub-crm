@@ -71,7 +71,7 @@ export function AccessForm({
                   className={
                     'min-h-9 rounded-sm border px-2.5 text-sm font-semibold pointer-coarse:min-h-11 ' +
                     (category === c
-                      ? 'border-foreground bg-foreground text-card'
+                      ? 'border-primary bg-primary text-primary-foreground'
                       : 'border-input bg-card hover:bg-muted')
                   }
                 >

@@ -163,7 +163,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                   }
                 >
                   <span className="min-w-0 flex-1 truncate font-semibold">{h.title}</span>
-                  <span className={'shrink-0 text-xs ' + (isActive ? 'text-card' : 'text-muted-foreground')}>
+                  <span className={'shrink-0 text-xs ' + (isActive ? 'text-primary-foreground' : 'text-muted-foreground')}>
                     {h.subtitle}
                   </span>
                 </div>
