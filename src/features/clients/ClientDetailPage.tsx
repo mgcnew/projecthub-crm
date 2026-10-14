@@ -15,6 +15,8 @@ import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
 import { useArchiveClient, useClient, useUpdateClient } from './api'
 import { ClientContacts } from './contacts/ClientContacts'
+import { ClientDocuments } from './relationship/ClientDocuments'
+import { ClientInteractions } from './relationship/ClientInteractions'
 import { ClientForm } from './ClientForm'
 
 export function ClientDetailPage() {
@@ -59,6 +61,13 @@ export function ClientDetailPage() {
       ),
     },
     {
+      id: 'interacoes',
+      label: 'Interações',
+      content: (
+        <ClientInteractions clientId={c.id} nextContactOn={c.next_contact_on} nextContactNote={c.next_contact_note} />
+      ),
+    },
+    {
       id: 'financeiro',
       label: 'Financeiro',
       content: <ClientFinance clientId={c.id} />,
@@ -80,6 +89,11 @@ export function ClientDetailPage() {
           <LinkedEvents scope={clientScope} link={{ clientId: c.id }} ready={projects.isSuccess} />
         </>
       ),
+    },
+    {
+      id: 'documentos',
+      label: 'Documentos',
+      content: <ClientDocuments clientId={c.id} />,
     },
     {
       id: 'acessos',

@@ -6,6 +6,7 @@ import { Plate } from '@/components/Plate'
 import { EmptyState, ErrorState, LoadingState, PageHeader } from '@/components/states'
 import { Button } from '@/components/ui/button'
 import { useOccurrences, useWorkBlockProjects } from '@/features/calendar/api'
+import { FollowUpsPlate } from '@/features/clients/relationship/FollowUpsPlate'
 import { ReceivablesPlate } from '@/features/finance/ReceivablesPlate'
 import { occurrenceToStop } from '@/features/calendar/stops'
 import { useUnreadCount } from '@/features/notifications/api'
@@ -188,6 +189,7 @@ export function DashboardPage() {
       </div>
 
       <ReceivablesPlate today={today} endDate={weekEnd} enabled={enabled} />
+      <FollowUpsPlate today={today} endDate={weekEnd} enabled={enabled} />
 
       <div className="grid items-start gap-6 lg:grid-cols-2">
         <Plate

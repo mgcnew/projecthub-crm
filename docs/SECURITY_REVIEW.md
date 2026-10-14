@@ -52,6 +52,7 @@ Nenhuma política de RLS foi relaxada e nenhum dado foi alterado (critério de p
   3660 dias contêm o custo (D041), mas não há teste de carga.
 - **Perfis de co-membros** continuam invisíveis (D023): a trilha de atividade mostra "Outro membro".
 - **Diretório de acessos (D086):** guarda URL e usuário (dado pessoal, não segredo), sem senha por desenho; o conteúdo **não é criptografado** e entra no backup. Risco residual: o usuário colar uma senha em "Observações" (a tela avisa, mas não há como detectar). Cofre criptografado fica como etapa futura.
+- **Dados financeiros e pessoais do cliente (D093–D099):** valores, CPF/CNPJ, e-mail de cobrança e endereço ficam fora de `activity_logs` e da busca global; protegidos por RLS e MFA no banco. Não são criptografados em repouso além do que o provedor já faz, e entram nos backups. Documentos são só links; telefone e WhatsApp abrem `tel:` e `wa.me` (nunca enviam dados).
 - **MFA (D082–D084):** TOTP disponível em Configurações e **imposto no banco** quando ativado (política restritiva `mfa_required` + aal2). Residual: sem códigos de recuperação (perda do aplicativo exige remoção do fator pelo administrador, ver RUNBOOK) e sem limite de tentativas próprio além do rate limit do Auth.
 - **Não coberto:** pentest externo, testes de carga/DoS, revisão de Edge Functions (não há), integração com
   provedores externos (não há), cadeia de suprimentos além do `npm audit`.

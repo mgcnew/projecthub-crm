@@ -199,16 +199,80 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
-                },"clients": {
+                },"client_documents": {
                   Row: {
-                    "address_city": string | null,"address_line": string | null,"address_postal_code": string | null,"address_state": string | null,"archived_at": string | null,"billing_email": string | null,"company_name": string | null,"created_at": string,"email": string | null,"id": string,"legal_name": string | null,"name": string,"notes": string | null,"organization_id": string,"phone": string | null,"source": string | null,"status": string,"tax_id": string | null,"updated_at": string,"website": string | null
+                    "client_id": string,"created_at": string,"id": string,"kind": string,"notes": string | null,"organization_id": string,"project_id": string | null,"title": string,"updated_at": string,"url": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "address_city"?: string | null,"address_line"?: string | null,"address_postal_code"?: string | null,"address_state"?: string | null,"archived_at"?: string | null,"billing_email"?: string | null,"company_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"legal_name"?: string | null,"name": string,"notes"?: string | null,"organization_id": string,"phone"?: string | null,"source"?: string | null,"status"?: string,"tax_id"?: string | null,"updated_at"?: string,"website"?: string | null
+                    "client_id": string,"created_at"?: string,"id"?: string,"kind"?: string,"notes"?: string | null,"organization_id": string,"project_id"?: string | null,"title": string,"updated_at"?: string,"url": string
                   }
                   Update: {
-                    "address_city"?: string | null,"address_line"?: string | null,"address_postal_code"?: string | null,"address_state"?: string | null,"archived_at"?: string | null,"billing_email"?: string | null,"company_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"legal_name"?: string | null,"name"?: string,"notes"?: string | null,"organization_id"?: string,"phone"?: string | null,"source"?: string | null,"status"?: string,"tax_id"?: string | null,"updated_at"?: string,"website"?: string | null
+                    "client_id"?: string,"created_at"?: string,"id"?: string,"kind"?: string,"notes"?: string | null,"organization_id"?: string,"project_id"?: string | null,"title"?: string,"updated_at"?: string,"url"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "client_documents_organization_id_client_id_fkey"
+      columns: ["organization_id","client_id"]
+isOneToOne: false
+      referencedRelation: "clients"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "client_documents_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "client_documents_organization_id_project_id_fkey"
+      columns: ["organization_id","project_id"]
+isOneToOne: false
+      referencedRelation: "projects"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"client_interactions": {
+                  Row: {
+                    "client_id": string,"contact_id": string | null,"created_at": string,"id": string,"kind": string,"occurred_at": string,"organization_id": string,"summary": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "client_id": string,"contact_id"?: string | null,"created_at"?: string,"id"?: string,"kind"?: string,"occurred_at"?: string,"organization_id": string,"summary": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "client_id"?: string,"contact_id"?: string | null,"created_at"?: string,"id"?: string,"kind"?: string,"occurred_at"?: string,"organization_id"?: string,"summary"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "client_interactions_organization_id_client_id_contact_id_fkey"
+      columns: ["organization_id","client_id","contact_id"]
+isOneToOne: false
+      referencedRelation: "client_contacts"
+      referencedColumns: ["organization_id","client_id","id"]
+    },{
+      foreignKeyName: "client_interactions_organization_id_client_id_fkey"
+      columns: ["organization_id","client_id"]
+isOneToOne: false
+      referencedRelation: "clients"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "client_interactions_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"clients": {
+                  Row: {
+                    "address_city": string | null,"address_line": string | null,"address_postal_code": string | null,"address_state": string | null,"archived_at": string | null,"billing_email": string | null,"company_name": string | null,"created_at": string,"email": string | null,"id": string,"legal_name": string | null,"name": string,"next_contact_note": string | null,"next_contact_on": string | null,"notes": string | null,"organization_id": string,"phone": string | null,"source": string | null,"status": string,"tax_id": string | null,"updated_at": string,"website": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "address_city"?: string | null,"address_line"?: string | null,"address_postal_code"?: string | null,"address_state"?: string | null,"archived_at"?: string | null,"billing_email"?: string | null,"company_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"legal_name"?: string | null,"name": string,"next_contact_note"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"organization_id": string,"phone"?: string | null,"source"?: string | null,"status"?: string,"tax_id"?: string | null,"updated_at"?: string,"website"?: string | null
+                  }
+                  Update: {
+                    "address_city"?: string | null,"address_line"?: string | null,"address_postal_code"?: string | null,"address_state"?: string | null,"archived_at"?: string | null,"billing_email"?: string | null,"company_name"?: string | null,"created_at"?: string,"email"?: string | null,"id"?: string,"legal_name"?: string | null,"name"?: string,"next_contact_note"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"organization_id"?: string,"phone"?: string | null,"source"?: string | null,"status"?: string,"tax_id"?: string | null,"updated_at"?: string,"website"?: string | null
                   }
                   Relationships: [
                     {
