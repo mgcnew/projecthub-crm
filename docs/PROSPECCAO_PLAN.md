@@ -151,7 +151,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
 ### 7.0 Fundação (Aqui) — feita junto com este plano
 - Documento mestre, `DECISIONS` (D104–D109), Fase 7 no `IMPLEMENTATION_PLAN`, regras no `AGENTS.md`.
 
-### 7.1 Leads e supressão (Codex, revisão da RLS aqui)
+### 7.1 Leads e supressão (Codex, revisão da RLS aqui) — **feita aqui** (D111, D112)
 - **Escopo:** migração `leads`, `suppression_list`, `outreach_settings`; RLS, `mfa_required`, privilégios por coluna;
   normalização de telefone (`src/lib/phone.ts`, E.164, padrão +55); lista e painel do lead (criar, editar,
   arquivar, temperatura, etapa, gancho); menu "Prospecção".

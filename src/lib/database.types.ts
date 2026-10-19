@@ -283,6 +283,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"leads": {
+                  Row: {
+                    "address_line": string | null,"archived_at": string | null,"city": string | null,"company_name": string,"contact_name": string | null,"converted_client_id": string | null,"created_at": string,"email": string | null,"has_whatsapp": boolean | null,"hook": string | null,"id": string,"lost_reason": string | null,"next_contact_on": string | null,"notes": string | null,"opted_out_at": string | null,"organization_id": string,"phone": string | null,"segment": string | null,"source": string,"stage": string,"state": string | null,"temperature": string,"updated_at": string,"website": string | null,"whatsapp_checked_at": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name": string,"contact_name"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id": string,"phone"?: string | null,"segment"?: string | null,"source": string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
+                  }
+                  Update: {
+                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name"?: string,"contact_name"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id"?: string,"phone"?: string | null,"segment"?: string | null,"source"?: string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "leads_organization_id_converted_client_id_fkey"
+      columns: ["organization_id","converted_client_id"]
+isOneToOne: false
+      referencedRelation: "clients"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "leads_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"meetings": {
                   Row: {
                     "agenda": string | null,"calendar_event_id": string,"created_at": string,"decisions": string | null,"id": string,"notes": string | null,"organization_id": string,"updated_at": string
@@ -412,6 +438,26 @@ isOneToOne: false
                   }
                   Relationships: [
                     
+                  ]
+                },"outreach_settings": {
+                  Row: {
+                    "draft_provider": string,"email_daily_limit": number,"email_from": string | null,"email_reply_to": string | null,"organization_id": string,"paused": boolean,"updated_at": string,"weekdays_only": boolean,"whatsapp_daily_limit": number,"window_end": string,"window_start": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "draft_provider"?: string,"email_daily_limit"?: number,"email_from"?: string | null,"email_reply_to"?: string | null,"organization_id": string,"paused"?: boolean,"updated_at"?: string,"weekdays_only"?: boolean,"whatsapp_daily_limit"?: number,"window_end"?: string,"window_start"?: string
+                  }
+                  Update: {
+                    "draft_provider"?: string,"email_daily_limit"?: number,"email_from"?: string | null,"email_reply_to"?: string | null,"organization_id"?: string,"paused"?: boolean,"updated_at"?: string,"weekdays_only"?: boolean,"whatsapp_daily_limit"?: number,"window_end"?: string,"window_start"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "outreach_settings_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: true
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
                   ]
                 },"profiles": {
                   Row: {
@@ -561,6 +607,26 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "organization_members"
       referencedColumns: ["organization_id","user_id"]
+    }
+                  ]
+                },"suppression_list": {
+                  Row: {
+                    "channel": string,"created_at": string,"id": string,"organization_id": string,"reason": string,"value": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "channel": string,"created_at"?: string,"id"?: string,"organization_id": string,"reason": string,"value": string
+                  }
+                  Update: {
+                    "channel"?: string,"created_at"?: string,"id"?: string,"organization_id"?: string,"reason"?: string,"value"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "suppression_list_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
     }
                   ]
                 },"task_plans": {
