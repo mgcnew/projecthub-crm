@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form'
 import { Link, Navigate, useLocation } from 'react-router-dom'
 import { controlClass } from '@/components/form-styles'
 import { Button } from '@/components/ui/button'
+import { getRemember, getRememberedEmail, saveRememberedEmail, setRemember } from '@/lib/authStorage'
 import { supabase } from '@/lib/supabase'
 import { useAuth } from './auth-context'
 import { AuthLayout } from './AuthLayout'
@@ -21,7 +22,11 @@ export function LoginPage() {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm<LoginValues>({ resolver: zodResolver(loginSchema) })
+  } = useForm<LoginValues>({
+    resolver: zodResolver(loginSchema),
+    // Pré-preenche o e-mail lembrado e a última escolha (a senha nunca é guardada).
+    defaultValues: { email: getRememberedEmail(), password: '', remember: getRemember() },
+  })
 
   // Com sessão completa (aal2, ou sem MFA) segue para o app; a navegação sai do próprio estado de sessão.
   if (!loading && session && !needsSecondFactor) {
@@ -39,9 +44,16 @@ export function LoginPage() {
 
   const onSubmit = handleSubmit(async (values) => {
     setFormError(null)
-    const { error } = await supabase.auth.signInWithPassword(values)
+    const { email, password, remember } = values
+    // A escolha vale antes do login: é ela que decide onde a sessão nova será gravada.
+    setRemember(remember)
+    const { error } = await supabase.auth.signInWithPassword({ email, password })
     // Mensagem genérica: não revela se o e-mail existe.
-    if (error) setFormError('E-mail ou senha incorretos.')
+    if (error) {
+      setFormError('E-mail ou senha incorretos.')
+      return
+    }
+    saveRememberedEmail(remember ? email : null)
   })
 
   return (
@@ -103,6 +115,16 @@ export function LoginPage() {
               {errors.password.message}
             </p>
           )}
+        </div>
+
+        <div className="space-y-1">
+          <label className="flex min-h-11 items-center gap-3 text-sm font-semibold">
+            <input type="checkbox" className="size-5" {...register('remember')} />
+            Lembrar de mim neste dispositivo
+          </label>
+          <p className="pl-8 text-sm text-muted-foreground">
+            Mantém você conectado e guarda só o e-mail, nunca a senha. Não use em computador compartilhado.
+          </p>
         </div>
 
         {formError && (

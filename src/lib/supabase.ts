@@ -1,5 +1,6 @@
 import { createClient } from '@supabase/supabase-js'
 import type { Database } from './database.types'
+import { authStorage } from './authStorage'
 import { parseEnv } from './env'
 
 const parsed = parseEnv(import.meta.env)
@@ -10,7 +11,9 @@ if (!parsed.success) {
 }
 
 // Somente a chave publicável: o acesso aos dados é decidido por RLS, nunca por segredo no cliente.
+// A sessão fica onde o usuário escolheu em "Lembrar de mim" (localStorage ou só a aba): ver authStorage.
 export const supabase = createClient<Database>(
   parsed.data.VITE_SUPABASE_URL,
   parsed.data.VITE_SUPABASE_PUBLISHABLE_KEY,
+  { auth: { storage: authStorage } },
 )
