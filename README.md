@@ -4,7 +4,7 @@ Central pessoal de projetos, clientes, tarefas, agenda e reuniões, multitenant 
 (React + TypeScript + Vite no front; Supabase Auth/Postgres/RLS no back).
 
 ## Decisão sobre o Supabase
-O esquema é **materializado por migrações SQL versionadas** (`supabase/migrations`, 15 até aqui), nunca por
+O esquema é **materializado por migrações SQL versionadas** (`supabase/migrations`, 16 até aqui), nunca por
 alterações manuais no painel. O banco é especificado em `docs/DATABASE_SPEC.md` (veja ali a seção "Estado
 implementado" com os desvios).
 

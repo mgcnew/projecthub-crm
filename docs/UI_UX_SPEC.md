@@ -44,7 +44,7 @@ O que a spec original previa e o que existe. Decisões de origem entre parêntes
 ### Rotas
 Além do mapa original: `/login`, `/recuperar-senha`, `/redefinir-senha` (sem sessão); `/app/tarefas/modelos`,
 `/app/agenda/novo`, `/app/agenda/:id`, `/app/reunioes/:eventId`, `/app/clientes/novo`, `/app/projetos/novo`,
-`/app/acessos`, `/app/acessos/novo` e `/app/acessos/:id` (diretório de acessos, D086).
+`/app/acessos`, `/app/acessos/novo` e `/app/acessos/:id` (diretório de acessos, D086); `/app/prospeccao`, `/app/prospeccao/leads/novo` e `/app/prospeccao/leads/:id` (Fase 7, D112).
 
 ### Componentes compartilhados: nome na spec → onde está
 | Spec | Código |
