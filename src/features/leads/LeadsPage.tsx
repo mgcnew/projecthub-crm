@@ -45,9 +45,14 @@ export function LeadsPage() {
         description="Leads para divulgar seus sistemas. Lead frio só por e-mail; WhatsApp a partir de morno."
         actions={
           canWrite && (
-            <Button asChild>
-              <Link to="/app/prospeccao/leads/novo">Novo lead</Link>
-            </Button>
+            <>
+              <Button asChild variant="outline">
+                <Link to="/app/prospeccao/importar">Importar planilha</Link>
+              </Button>
+              <Button asChild>
+                <Link to="/app/prospeccao/leads/novo">Novo lead</Link>
+              </Button>
+            </>
           )
         }
       />
@@ -108,11 +113,11 @@ export function LeadsPage() {
       {q.isSuccess && count === 0 && (
         <EmptyState
           title="Nenhum lead encontrado"
-          description={filtered ? 'Ajuste os filtros.' : 'Cadastre o primeiro lead. A importação de planilhas chega na próxima etapa.'}
+          description={filtered ? 'Ajuste os filtros.' : 'Importe uma planilha ou cadastre o primeiro lead.'}
           action={
             canWrite && !filtered ? (
               <Button asChild>
-                <Link to="/app/prospeccao/leads/novo">Novo lead</Link>
+                <Link to="/app/prospeccao/importar">Importar planilha</Link>
               </Button>
             ) : undefined
           }

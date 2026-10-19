@@ -43,4 +43,4 @@ Parar e pedir revisão se houver: mudança de modelo de tenancy, relaxamento de 
 
 Pendências sem relação com a Vercel: ensaio real de backup/restauração contra o banco hospedado (RUNBOOK),
 política de senha/SMTP/Redirect URLs no painel do Supabase e ativação do MFA na conta.
-| 7 Prospecção e envio | Aprovada; 7.0 e 7.1 (leads e supressão) feitas, 7.2–7.10 a implementar (`docs/PROSPECCAO_PLAN.md`) |
+| 7 Prospecção e envio | Aprovada; 7.0, 7.1 (leads e supressão) e 7.2 (importação) feitas, 7.3–7.10 a implementar (`docs/PROSPECCAO_PLAN.md`) |

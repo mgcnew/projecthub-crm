@@ -1,4 +1,5 @@
 import type { RouteObject } from 'react-router-dom'
+import { ImportPage } from '@/features/leads/import/ImportPage'
 import { LeadDetailPage } from '@/features/leads/LeadDetailPage'
 import { LeadNewPage } from '@/features/leads/LeadNewPage'
 import { LeadsPage } from '@/features/leads/LeadsPage'
@@ -43,6 +44,7 @@ export const appRoutes: RouteObject[] = [
   { path: '/app/clientes/novo', element: <ClientNewPage /> },
   { path: '/app/clientes/:id', element: <ClientDetailPage /> },
   { path: '/app/prospeccao', element: <LeadsPage /> },
+  { path: '/app/prospeccao/importar', element: <ImportPage /> },
   { path: '/app/prospeccao/leads/novo', element: <LeadNewPage /> },
   { path: '/app/prospeccao/leads/:id', element: <LeadDetailPage /> },
   { path: '/app/acessos', element: <AccessesPage /> },

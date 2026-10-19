@@ -161,7 +161,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
 - **Testes:** pgTAP (isolamento, owner, únicos, CHECKs), unitários do telefone, integração com Auth real, E2E
   desktop e celular com axe.
 
-### 7.2 Importação CSV (Codex)
+### 7.2 Importação CSV (Codex) — **feita aqui** (D113, D114)
 - **Escopo:** leitor de CSV próprio e testado (aspas, `;` ou `,`, UTF-8 com BOM); mapeamento de colunas com
   sugestão automática (empresa, telefone, e-mail, site, endereço, cidade, UF, segmento, contato); pré-visualização;
   validação por linha; duplicados (pular ou atualizar campos vazios); origem obrigatória; `lead_imports` com
