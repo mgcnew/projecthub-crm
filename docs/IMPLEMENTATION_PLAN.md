@@ -24,6 +24,9 @@ Worker confiável, notificações internas, Dashboard com dados reais, ações s
 ### Fase 6 — Mobile e publicação
 Responsividade, acessibilidade, Playwright, revisão RLS, backup/restauração e deploy. Critério: testes passam, fluxo mobile completo e ambiente de produção protegido.
 
+### Fase 7 — Prospecção e envio (aprovada em 2026-10-19)
+Leads com temperatura e funil, importação CSV, catálogo de sistemas, modelos com variação, fila com aprovação, e-mail (Resend), WhatsApp (Evolution, só morno/quente), respostas, conversão em cliente e métricas. Plano detalhado e etapas 7.0–7.10 em `docs/PROSPECCAO_PLAN.md`. Critério: nada é enviado sem aprovação; supressão respeitada em todos os canais; nenhuma chave fora das Edge Functions; testes sem falar com serviços reais.
+
 ## Critérios de parada
 Parar e pedir revisão se houver: mudança de modelo de tenancy, relaxamento de RLS, nova integração com credenciais, exclusão destrutiva, migração não reversível, biblioteca de alto impacto ou desvio significativo do escopo.
 
@@ -40,4 +43,4 @@ Parar e pedir revisão se houver: mudança de modelo de tenancy, relaxamento de 
 
 Pendências sem relação com a Vercel: ensaio real de backup/restauração contra o banco hospedado (RUNBOOK),
 política de senha/SMTP/Redirect URLs no painel do Supabase e ativação do MFA na conta.
-
+| 7 Prospecção e envio | Aprovada; 7.0 (fundação) feita, 7.1–7.10 a implementar (`docs/PROSPECCAO_PLAN.md`) |

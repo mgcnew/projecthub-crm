@@ -21,7 +21,10 @@ Central pessoal de gestão de projetos, clientes, compromissos, tarefas, reuniõ
 8. Interface responsiva e permissões testadas.
 
 ## Futuro (não criar agora)
-Prospecção Maps, funil comercial, WhatsApp, integrações de calendário, biblioteca avançada, cofre de credenciais, financeiro, automações, IA e gestão SaaS de planos/equipes.
+Prospecção pelo Google Maps, integrações de calendário, biblioteca avançada, cofre de credenciais criptografado, contabilidade (despesas, impostos, fluxo de caixa), automações, IA ligada por padrão e gestão SaaS de planos/equipes.
+
+## Fase 7 aprovada (2026-10-19, D104)
+Prospecção com funil comercial e envio por e-mail (Resend) e WhatsApp (Evolution), conforme `docs/PROSPECCAO_PLAN.md`. Financeiro por projeto (recebíveis) já foi entregue (D093).
 
 ## Regras de produto
 - Um dado de negócio pertence a uma organização.
