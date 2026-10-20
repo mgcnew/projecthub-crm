@@ -17,6 +17,7 @@ import { TaskTable, type TaskRowData } from '@/features/tasks/TaskTable'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { addDays, dayStartInstant, formatDateTime, formatMinutes, todayISO } from '@/lib/format'
 import { ActivityFeed } from './ActivityFeed'
+import { StatCards } from './StatCards'
 import { useActiveProjectCount, useOverdueTasks, useRecentUnread, useUpcomingTasks } from './api'
 
 type PlanTask = TaskRowData & { projects: { name: string } | null }
@@ -103,6 +104,14 @@ export function DashboardPage() {
         />
       )}
 
+      <StatCards
+        today={today}
+        weekEnd={weekEnd}
+        enabled={enabled}
+        planned={plans.isSuccess ? { total: planned.length, done: doneCount, remainingMinutes: estimate } : undefined}
+        overdueCount={overdue.data?.count}
+      />
+
       <Plate
         id="dash-line"
         title="Linha do dia"
@@ -136,6 +145,7 @@ export function DashboardPage() {
           {plans.isPending && <LoadingState />}
           {plans.isSuccess && planned.length === 0 && (
             <EmptyState
+              inset
               title="Nada planejado para hoje"
               description="Escolha no Meu dia o que você vai fazer hoje; o prazo de cada tarefa não muda."
               action={
@@ -208,7 +218,7 @@ export function DashboardPage() {
               {unread.data!.map((n) => (
                 <li key={n.id} className="border-b border-border last:border-b-0">
                   <Link to={notificationHref(n) ?? '/app/notificacoes'} className="flex min-h-11 flex-wrap items-center gap-x-3 py-2 hover:underline">
-                    <span aria-hidden="true" className="size-2 rounded-full bg-foreground" />
+                    <span aria-hidden="true" className="size-2 rounded-full bg-primary" />
                     <span className="font-semibold">{n.title}</span>
                     <span className="text-sm text-muted-foreground">
                       {n.body ? `${n.body} · ` : ''}

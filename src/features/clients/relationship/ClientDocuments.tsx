@@ -174,7 +174,7 @@ export function ClientDocuments({ clientId }: { clientId: string }) {
                   target="_blank"
                   rel="noopener noreferrer"
                   aria-label={`Abrir ${d.title} em nova aba`}
-                  className="inline-flex min-h-11 items-center gap-1.5 rounded-sm border border-input bg-card px-2.5 text-sm font-semibold hover:bg-muted"
+                  className="inline-flex min-h-11 items-center gap-1.5 rounded-md border border-border-strong bg-card px-2.5 text-sm font-semibold hover:bg-muted"
                 >
                   <ExternalLink aria-hidden="true" className="size-4" />
                   Abrir

@@ -1,0 +1,61 @@
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>Bilhete de viagem</title>
+<link href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;font-family:'Hanken Grotesk',sans-serif;background:#f4f6f9;color:#16181d;display:grid;grid-template-columns:240px 1fr}
+.mono{font-family:'IBM Plex Mono',monospace;font-variant-numeric:tabular-nums}
+.rail{background:#fff;border-right:1px solid #e4e7ec;padding:20px 14px;display:flex;flex-direction:column;gap:4px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:17px;padding:4px 8px 18px}
+.logo{width:28px;height:28px;border-radius:8px;background:#0455a1;color:#fff;display:grid;place-items:center}
+.nav{display:flex;align-items:center;gap:12px;height:40px;padding:0 12px;border-radius:10px;font-size:14px;font-weight:600;color:#3d434d}
+.nav.on{background:#e8f0fa;color:#0455a1;box-shadow:inset 3px 0 0 #0455a1}.ic{width:18px;height:18px;border-radius:5px;border:2px solid currentColor;opacity:.75}
+.main{padding:24px 30px;display:flex;flex-direction:column;gap:18px;overflow:hidden}
+.head{display:flex;justify-content:space-between;align-items:flex-end}
+h1{font-size:28px;font-weight:700;letter-spacing:-.02em}.sub{color:#626b77;font-size:15px}
+.btn{height:38px;padding:0 16px;border-radius:10px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;border:1px solid #cfd5dd;background:#fff;margin-left:8px}.btn.p{background:#0455a1;color:#fff;border-color:#0455a1}
+.stubs{display:grid;grid-template-columns:repeat(4,1fr);gap:14px}
+.stub{background:#fff;border:1px solid #e4e7ec;border-radius:14px;display:grid;grid-template-columns:1fr 64px;overflow:hidden}
+.stub .a{padding:14px 16px}.stub .b{border-left:2px dashed #d5dae1;display:grid;place-items:center;color:#0455a1;font-size:11px;writing-mode:vertical-rl;letter-spacing:.12em;font-weight:600}
+.lab{font-size:12px;color:#626b77;letter-spacing:.06em;text-transform:uppercase;font-weight:600}.num{font-size:28px;font-weight:600;margin-top:4px}
+.route{background:#fff;border:1px solid #e4e7ec;border-radius:14px;padding:16px 22px}
+.rt{display:flex;justify-content:space-between;margin-bottom:8px}.rt b{font-size:15px}.rt span{font-size:13px;color:#626b77}
+.path{position:relative;height:104px}
+.line{position:absolute;left:0;right:0;top:50px;border-top:2px dashed #b8c3d1}
+.done{position:absolute;left:0;top:49px;height:4px;border-radius:2px;background:#0455a1}
+.stop{position:absolute;top:42px;width:18px;height:18px;border-radius:50%;background:#fff;border:4px solid #0455a1;transform:translateX(-50%)}
+.stop.f{background:#0455a1}
+.sl{position:absolute;font-size:13px;font-weight:600;white-space:nowrap}.sl small{display:block;color:#626b77;font-weight:500}
+.plane{position:absolute;top:36px;font-size:12px;font-weight:700;color:#c8332b;transform:translateX(-50%);background:#fff;border:2px solid #c8332b;border-radius:99px;padding:2px 8px}
+.cols{display:grid;grid-template-columns:1.3fr 1fr;gap:16px}
+.h2{font-size:15px;font-weight:700;margin-bottom:10px;display:flex;justify-content:space-between}.h2 span{font-weight:500;color:#626b77;font-size:13px}
+.coupon{background:#fff;border:1px solid #e4e7ec;border-radius:12px;display:grid;grid-template-columns:1fr auto;align-items:center;padding:12px 16px;margin-bottom:10px;position:relative}
+.coupon:before,.coupon:after{content:"";position:absolute;right:150px;width:16px;height:16px;border-radius:50%;background:#f4f6f9;border:1px solid #e4e7ec}
+.coupon:before{top:-9px}.coupon:after{bottom:-9px}
+.coupon b{font-size:14px;display:block}.coupon small{font-size:12.5px;color:#626b77}
+.right{width:140px;text-align:right}
+.stamp{display:inline-block;font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;border:2px solid;border-radius:8px;padding:3px 8px;transform:rotate(-4deg)}
+</style></head><body>
+<aside class="rail"><div class="brand"><span class="logo">P</span>ProjectHub</div>
+<div class="nav on"><span class="ic"></span>Início</div><div class="nav"><span class="ic"></span>Meu dia</div><div class="nav"><span class="ic"></span>Agenda</div><div class="nav"><span class="ic"></span>Tarefas</div><div class="nav"><span class="ic"></span>Reuniões</div><div class="nav"><span class="ic"></span>Projetos</div><div class="nav"><span class="ic"></span>Clientes</div><div class="nav"><span class="ic"></span>Prospecção</div><div class="nav"><span class="ic"></span>Acessos</div><div class="nav"><span class="ic"></span>Configurações</div></aside>
+<main class="main">
+<div class="head"><div><h1>Central do dia</h1><p class="sub">Quarta-feira, 14 de outubro</p></div><div><span class="btn">Novo evento</span><span class="btn p">Planejar o dia</span></div></div>
+<div class="stubs">
+<div class="stub"><div class="a"><div class="lab">Planejado hoje</div><div class="num mono">3/5</div></div><div class="b">HOJE</div></div>
+<div class="stub"><div class="a"><div class="lab">Vencidas</div><div class="num mono" style="color:#c8332b">2</div></div><div class="b" style="color:#c8332b">ATRASO</div></div>
+<div class="stub"><div class="a"><div class="lab">A receber · 7 dias</div><div class="num mono">R$ 4.500</div></div><div class="b">7 DIAS</div></div>
+<div class="stub"><div class="a"><div class="lab">Contatos a fazer</div><div class="num mono">3</div></div><div class="b" style="color:#5b3f8f">RETORNO</div></div></div>
+<section class="route"><div class="rt"><b>Linha do dia</b><span class="mono">07:00 → 19:00</span></div>
+<div class="path"><div class="line"></div><div class="done" style="width:52%"></div>
+<div class="stop f" style="left:20%"></div><div class="sl" style="left:17%;top:0">Kickoff do site<small class="mono">10:00</small></div>
+<div class="stop f" style="left:42%"></div><div class="sl" style="left:39%;top:70px">Foco: revisar escopo<small class="mono">13:00</small></div>
+<div class="stop" style="left:60%"></div><div class="sl" style="left:57%;top:0">Alinhamento Beta<small class="mono">15:00</small></div>
+<div class="stop" style="left:80%"></div><div class="sl" style="left:77%;top:70px">Dentista<small class="mono">17:30</small></div>
+<div class="plane mono" style="left:52%">14:20</div></div></section>
+<div class="cols"><section><div class="h2">Planejado hoje<span>3 de 5</span></div>
+<div class="coupon"><div><b>Enviar proposta da Acme</b><small>App de pedidos · prazo hoje</small></div><div class="right"><span class="stamp" style="color:#0455a1">Em andamento</span></div></div>
+<div class="coupon"><div><b>Revisar layout da home</b><small>Site institucional · 16/10</small></div><div class="right"><span class="stamp" style="color:#626b77">A fazer</span></div></div>
+<div class="coupon"><div><b>Responder o contador</b><small>Sem projeto</small></div><div class="right"><span class="stamp" style="color:#1a7f45">Concluída</span></div></div></section>
+<section><div class="h2">A receber<span>7 dias</span></div>
+<div class="coupon"><div><b>Parcela 2/3</b><small>App de pedidos · venceu 11/10</small></div><div class="right"><b class="mono">R$ 1.500,00</b><span class="stamp" style="color:#c8332b">Atrasada</span></div></div>
+<div class="coupon"><div><b>Saldo final</b><small>Site institucional · 18/10</small></div><div class="right"><b class="mono">R$ 3.000,00</b><span class="stamp" style="color:#5b3f8f">Prevista</span></div></div></section></div>
+</main></body></html>

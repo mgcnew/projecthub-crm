@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FilterBar } from '@/components/FilterBar'
 import { controlClass } from '@/components/form-styles'
-import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
+import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge, type Tone } from '@/components/states'
 import { Button } from '@/components/ui/button'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
@@ -13,6 +13,16 @@ import { TemperatureBadge } from './TemperatureBadge'
 
 type Remembered = Pick<LeadListParams, 'temperature' | 'stage' | 'archived'>
 const DEFAULTS: Remembered = { temperature: '', stage: '', archived: 'active' }
+// Etapa do funil: avança do neutro ao azul/roxo; ganho verde, perdido vermelho.
+const stageTone: Record<Stage, Tone> = {
+  new: 'neutral',
+  contacted: 'info',
+  replied: 'info',
+  meeting: 'violet',
+  proposal: 'violet',
+  won: 'success',
+  lost: 'danger',
+}
 const oneOf =
   <T extends string>(values: readonly T[]) =>
   (v: unknown): v is T =>
@@ -53,7 +63,7 @@ export function LeadsPage() {
       />
 
       <FilterBar
-        className="md:grid-cols-[minmax(0,1fr)_11rem_11rem_12rem]"
+        className="md:grid-cols-[minmax(0,1fr)_13rem_11rem_12rem]"
         activeCount={(params.temperature ? 1 : 0) + (params.stage ? 1 : 0) + (params.archived !== 'active' ? 1 : 0)}
         search={
           <input
@@ -140,7 +150,7 @@ export function LeadsPage() {
                     )}
                     {l.opted_out_at && <StatusBadge>Não contatar</StatusBadge>}
                     {l.archived_at && <StatusBadge>Arquivado</StatusBadge>}
-                    <StatusBadge>{stages[l.stage as Stage] ?? l.stage}</StatusBadge>
+                    <StatusBadge tone={stageTone[l.stage as Stage] ?? 'neutral'}>{stages[l.stage as Stage] ?? l.stage}</StatusBadge>
                     <TemperatureBadge value={l.temperature} />
                   </span>
                 </Link>

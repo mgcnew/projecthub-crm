@@ -63,10 +63,10 @@ export function EntityOverlay({ children, onClose }: { children: ReactNode; onCl
         if (e.target === ref.current) onClose()
       }}
       className={cn(
-        'overlay-panel fixed bg-card p-0 text-card-foreground backdrop:bg-foreground/45 open:flex open:flex-col',
+        'overlay-panel fixed bg-card p-0 text-card-foreground backdrop:bg-foreground/35 open:flex open:flex-col',
         expanded
-          ? 'inset-0 m-auto h-[min(50rem,92dvh)] w-[min(66rem,94vw)] border-2 border-foreground'
-          : 'inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-[min(42rem,100vw)] border-l-2 border-foreground',
+          ? 'inset-0 m-auto h-[min(50rem,92dvh)] w-[min(66rem,94vw)] rounded-xl border border-border shadow-pop'
+          : 'inset-y-0 right-0 left-auto m-0 h-dvh max-h-none w-[min(42rem,100vw)] border-l border-border shadow-pop',
       )}
     >
       <div className="absolute top-3 right-3 z-20 flex gap-1">

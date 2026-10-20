@@ -169,7 +169,7 @@ export function MyDayPage() {
         {plans.isPending && <LoadingState />}
         {plans.isError && <ErrorState message="Não foi possível carregar o dia." onRetry={() => plans.refetch()} />}
         {plans.isSuccess && tasks.length === 0 && (
-          <EmptyState title="Nada planejado para este dia" description="Capture uma tarefa ou planeje uma existente. Planejar não muda o prazo." />
+          <EmptyState inset title="Nada planejado para este dia" description="Capture uma tarefa ou planeje uma existente. Planejar não muda o prazo." />
         )}
         {tasks.length > 0 && (
           <TaskTable

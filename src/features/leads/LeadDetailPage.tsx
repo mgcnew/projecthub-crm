@@ -85,7 +85,7 @@ export function LeadDetailPage() {
           content: (
             <>
               {lead.opted_out_at && (
-                <p role="status" className="border border-foreground bg-card px-3 py-2 text-sm font-medium">
+                <p role="status" className="rounded-lg bg-tone-info-bg px-3 py-2 text-sm font-medium text-tone-info">
                   {leadAsked
                     ? 'O próprio lead pediu para não ser contatado. Ele não recebe mensagens em nenhum canal.'
                     : 'Marcado como "não contatar": e-mail e telefone dele estão bloqueados para envio em todos os canais.'}

@@ -42,7 +42,7 @@ export function AccessList({ rows, showLinks = true }: { rows: AccessRow[]; show
                 target="_blank"
                 rel="noopener noreferrer"
                 aria-label={`Abrir ${a.name} em nova aba`}
-                className="inline-flex min-h-11 items-center gap-1.5 rounded-sm border border-input bg-card px-2.5 text-sm font-semibold hover:bg-muted"
+                className="inline-flex min-h-11 items-center gap-1.5 rounded-md border border-border-strong bg-card px-2.5 text-sm font-semibold hover:bg-muted"
               >
                 <ExternalLink aria-hidden="true" className="size-4" />
                 Abrir

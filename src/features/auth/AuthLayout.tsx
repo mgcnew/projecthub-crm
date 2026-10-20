@@ -1,3 +1,4 @@
+import voltierLogo from '@/assets/brand/voltier-logo.webp'
 import type { ReactNode } from 'react'
 
 /** Moldura compartilhada das telas sem sessão, com sinalização e formulário responsivos. */
@@ -12,11 +13,13 @@ export function AuthLayout({
 }) {
   return (
     <div className="flex min-h-dvh items-center justify-center bg-background lg:p-8 xl:p-12">
-      <div className="grid min-h-dvh w-full max-w-[1240px] bg-card lg:min-h-[min(760px,calc(100dvh-4rem))] lg:grid-cols-[0.95fr_1.05fr] lg:border lg:border-border">
+      <div className="grid min-h-dvh w-full max-w-[1240px] bg-card lg:min-h-[min(760px,calc(100dvh-4rem))] lg:grid-cols-[0.95fr_1.05fr] lg:overflow-hidden lg:rounded-2xl lg:border lg:border-border lg:shadow-pop">
         <aside aria-hidden="true" className="relative hidden flex-col justify-between overflow-hidden bg-primary p-10 text-primary-foreground lg:flex xl:p-12">
-          <p className="flex items-center gap-3 text-xl font-bold tracking-[-0.01em]">
-            <span className="inline-flex size-9 items-center justify-center bg-card text-lg text-primary">P</span>
-            ProjectHub
+          {/* A marca tem texto escuro: no painel azul ela vai sobre uma pastilha branca. */}
+          <p className="flex">
+            <span className="inline-flex items-center rounded-xl bg-card px-4 py-2.5 shadow-card">
+              <img src={voltierLogo} alt="" width={139} height={40} className="h-10 w-auto" />
+            </span>
           </p>
 
           <div className="my-16">
@@ -45,13 +48,12 @@ export function AuthLayout({
         </aside>
 
         <main className="flex min-w-0 flex-col px-6 py-8 sm:px-12 lg:px-12 lg:py-10 xl:px-16">
-          <p className="flex items-center gap-3 text-lg font-bold tracking-[-0.01em]">
-            <span aria-hidden="true" className="inline-flex size-8 items-center justify-center bg-primary text-base text-primary-foreground lg:hidden">P</span>
-            <span className="lg:text-sm lg:text-muted-foreground">ProjectHub<span className="font-normal"> CRM</span></span>
+          <p className="flex lg:hidden">
+            <img src={voltierLogo} alt="Voltier" width={139} height={40} className="h-10 w-auto" />
           </p>
           <div className="flex flex-1 items-center py-12 sm:py-16 lg:py-12">
             <div className="mx-auto w-full max-w-sm space-y-8">
-              <header className="space-y-3 border-b-2 border-rule-strong pb-6">
+              <header className="space-y-3 pb-2">
                 <h1 className="text-[1.875rem] leading-tight font-bold tracking-[-0.02em]">{title}</h1>
                 {subtitle && <p className="max-w-xs leading-relaxed text-muted-foreground">{subtitle}</p>}
               </header>

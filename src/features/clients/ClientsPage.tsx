@@ -111,7 +111,7 @@ export function ClientsPage() {
                   </span>
                   <span className="flex gap-2">
                     {c.archived_at && <StatusBadge>Arquivado</StatusBadge>}
-                    <StatusBadge tone={c.status === 'active' ? 'neutral' : 'success'}>
+                    <StatusBadge tone={c.status === 'active' ? 'success' : 'neutral'}>
                       {clientStatuses[c.status as keyof typeof clientStatuses] ?? c.status}
                     </StatusBadge>
                   </span>

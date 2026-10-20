@@ -84,7 +84,7 @@ export function PickerPopover({
         if (next && !e.currentTarget.contains(next) && !anchor.current?.contains(next)) onClose('blur')
       }}
       className={cn(
-        'm-0 inset-auto w-[min(21rem,calc(100vw-1rem))] rounded-sm border-2 border-primary bg-card p-3 text-card-foreground shadow-[0_18px_40px_-12px_rgb(17_20_24/0.35)]',
+        'm-0 inset-auto w-[min(21rem,calc(100vw-1rem))] rounded-xl border border-border bg-card p-3 text-card-foreground shadow-pop',
         className,
       )}
     >

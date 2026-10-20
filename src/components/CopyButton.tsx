@@ -30,7 +30,7 @@ export function CopyButton({ text, label, className }: { text: string; label: st
         aria-label={label}
         onClick={copy}
         className={cn(
-          'inline-flex min-h-11 items-center gap-1.5 rounded-sm border border-input bg-card px-2.5 text-sm font-semibold hover:bg-muted focus-visible:outline-[3px] focus-visible:outline-ring/40',
+          'inline-flex min-h-11 items-center gap-1.5 rounded-md border border-border-strong bg-card px-2.5 text-sm font-semibold hover:bg-muted focus-visible:outline-[3px] focus-visible:outline-ring/40',
           className,
         )}
       >

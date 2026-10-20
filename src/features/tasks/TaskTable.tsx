@@ -3,7 +3,7 @@ import { ArrowDown, ArrowUp } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { LineBadge } from '@/components/LineBadge'
 import { RowCheckbox } from '@/components/RowCheckbox'
-import { StatusBadge } from '@/components/states'
+import { StatusBadge, type Tone } from '@/components/states'
 import { formatMinutes } from '@/lib/format'
 import { cn } from '@/lib/utils'
 import { dueLabel } from './due'
@@ -21,7 +21,7 @@ export type TaskRowData = {
   projectName?: string | null
 }
 
-const statusTone: Record<string, 'neutral' | 'info' | 'success' | 'danger'> = {
+const statusTone: Record<string, Tone> = {
   todo: 'neutral',
   in_progress: 'info',
   done: 'success',
@@ -62,9 +62,9 @@ function SortHeader({
 }
 
 /**
- * Tabela de tarefas no vocabulário da sinalização: filete de 2px em tinta sob o cabeçalho, selo de
- * linha do projeto, prazo e estimativa em números tabulares. Abaixo de 768px as colunas viram uma
- * linha de metadados sob o título.
+ * Tabela de tarefas: cabeçalho em faixa cinza de borda a borda do cartão, selo de linha do projeto,
+ * prazo e estimativa em números tabulares. Abaixo de 768px as colunas viram uma linha de metadados
+ * sob o título.
  */
 export function TaskTable({
   rows,
@@ -93,10 +93,10 @@ export function TaskTable({
   actions?: (task: TaskRowData) => ReactNode
 }) {
   return (
-    <table className="w-full border-collapse text-sm md:table-fixed">
+    <table className="w-full border-collapse text-sm md:-mx-5 md:w-[calc(100%+2.5rem)] md:table-fixed md:[&_tr>*:first-child]:pl-5 md:[&_tr>*:last-child]:pr-5">
       <caption className="sr-only">{caption}</caption>
       <thead className="hidden md:table-header-group">
-        <tr className="border-b-2 border-rule-strong text-left text-xs font-semibold text-muted-foreground">
+        <tr className="border-b border-border bg-table-head text-left text-xs font-semibold text-muted-foreground">
           <th scope="col" className="w-11 py-2"><span className="sr-only">Concluir</span></th>
           <th scope="col" className="w-12 py-2">Linha</th>
           <SortHeader id="titulo" label="Tarefa" className="py-1" sort={sort} onSort={onSort} />

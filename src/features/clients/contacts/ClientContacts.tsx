@@ -14,7 +14,7 @@ import { useClientContacts, useDeleteContact, useSaveContact, type ContactRow } 
 import { contactDefaults, contactFormSchema, type ContactFormValues } from './schema'
 
 const linkClass =
-  'inline-flex min-h-11 items-center gap-1.5 rounded-sm border border-input bg-card px-2.5 text-sm font-semibold hover:bg-muted'
+  'inline-flex min-h-11 items-center gap-1.5 rounded-md border border-border-strong bg-card px-2.5 text-sm font-semibold hover:bg-muted'
 
 function ContactForm({
   initial,

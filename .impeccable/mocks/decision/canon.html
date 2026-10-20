@@ -1,64 +1,49 @@
-<!doctype html>
-<html lang="pt-BR"><head><meta charset="utf-8"><title>Padrão da categoria — Central do dia</title>
+<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><title>O padrão da categoria</title>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root{--bg:#F7F7F8;--w:#FFF;--ink:#111827;--t2:#374151;--t3:#6B7280;--rule:#E5E7EB;--blue:#2563EB;--red:#DC2626}
-*{box-sizing:border-box;margin:0}
-body{width:1440px;height:900px;overflow:hidden;background:var(--bg);color:var(--ink);font:400 14px/1.5 Inter,sans-serif;font-variant-numeric:tabular-nums}
-.shell{display:grid;grid-template-columns:240px 1fr;height:900px}
-.rail{background:var(--w);border-right:1px solid var(--rule);padding:18px 12px;display:flex;flex-direction:column;gap:2px}
-.brand{font-weight:700;font-size:15px;padding:4px 10px 18px;display:flex;gap:10px;align-items:center}
-.brand i{width:24px;height:24px;border-radius:7px;background:var(--blue)}
-.nav a{display:flex;align-items:center;height:38px;padding:0 10px;border-radius:8px;color:var(--t2);font-weight:500}
-.nav a.on{background:#EEF2FF;color:#1D4ED8}
-.nav a b{margin-left:auto;background:var(--blue);color:#fff;font-size:12px;border-radius:99px;padding:2px 8px}
-main{padding:28px 40px;display:grid;grid-template-rows:auto auto 1fr;gap:22px}
-.hd{display:flex;justify-content:space-between;align-items:end}
-.hd h1{font-size:24px;font-weight:600}.hd p{color:var(--t3)}
-.btn{height:36px;padding:0 14px;border-radius:8px;display:inline-flex;align-items:center;font-weight:500;border:1px solid var(--rule);background:var(--w)}
-.btn.p{background:var(--blue);color:#fff;border-color:var(--blue)}
-.kpis{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
-.kpi{background:var(--w);border:1px solid var(--rule);border-radius:12px;padding:16px}
-.kpi b{font-size:26px;font-weight:600;display:block}.kpi span{color:var(--t3);font-size:13px}
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;min-height:0}
-.card{background:var(--w);border:1px solid var(--rule);border-radius:12px;padding:16px 18px}
-.card h2{font-size:15px;font-weight:600;margin-bottom:8px;display:flex;justify-content:space-between}
-.card h2 a{font-size:13px;color:var(--blue);font-weight:500}
-.row{display:flex;gap:12px;align-items:center;min-height:44px;padding:8px 0;border-bottom:1px solid var(--rule)}
-.chk{width:18px;height:18px;border-radius:5px;border:1.5px solid #9CA3AF}
-.row .t{flex:1}.row small{color:var(--t3)}
-.pill{font-size:12px;border-radius:99px;padding:3px 10px;background:#F3F4F6;color:var(--t2)}
-.pill.r{background:#FEE2E2;color:#991B1B}
-.time{width:96px;color:var(--t3);font-size:13px}
+*{box-sizing:border-box;margin:0;padding:0}
+body{width:1440px;height:900px;overflow:hidden;font-family:Inter,sans-serif;background:#f7f7f8;color:#111827;display:grid;grid-template-columns:240px 1fr;font-variant-numeric:tabular-nums}
+.rail{background:#fff;border-right:1px solid #ececef;padding:20px 14px;display:flex;flex-direction:column;gap:2px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700;font-size:16px;padding:4px 8px 18px}
+.logo{width:28px;height:28px;border-radius:8px;background:#111827;color:#fff;display:grid;place-items:center}
+.sec{font-size:11px;color:#9ca3af;font-weight:600;padding:12px 12px 4px;text-transform:uppercase;letter-spacing:.06em}
+.nav{display:flex;align-items:center;gap:12px;height:38px;padding:0 12px;border-radius:8px;font-size:14px;font-weight:500;color:#4b5563}
+.nav.on{background:#0455a1;color:#fff}.ic{width:16px;height:16px;border-radius:4px;border:2px solid currentColor;opacity:.7}
+.main{padding:24px 32px;display:flex;flex-direction:column;gap:20px;overflow:hidden}
+.head{display:flex;justify-content:space-between;align-items:center}
+h1{font-size:24px;font-weight:700}.sub{color:#6b7280;font-size:14px}
+.btn{height:36px;padding:0 14px;border-radius:8px;font-weight:600;font-size:14px;display:inline-flex;align-items:center;border:1px solid #e5e7eb;background:#fff;margin-left:8px}.btn.p{background:#0455a1;color:#fff;border-color:#0455a1}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px}
+.s{background:#fff;border:1px solid #ececef;border-radius:12px;padding:18px 20px}
+.s .top{display:flex;justify-content:space-between;align-items:center;font-size:13px;color:#6b7280;font-weight:500}
+.si{width:32px;height:32px;border-radius:8px;display:grid;place-items:center}.si i{width:13px;height:13px;border-radius:3px;border:2px solid currentColor}
+.s b{font-size:28px;display:block;margin-top:10px}.s small{font-size:12.5px;color:#6b7280}
+.card{background:#fff;border:1px solid #ececef;border-radius:12px}
+.ch{display:flex;justify-content:space-between;align-items:center;padding:16px 20px;border-bottom:1px solid #f1f1f3}.ch b{font-size:15px}
+.tabs{display:flex;gap:4px;background:#f3f4f6;border-radius:8px;padding:3px;font-size:13px;font-weight:500}.tabs span{padding:5px 12px;border-radius:6px;color:#6b7280}.tabs .on{background:#fff;color:#111827;box-shadow:0 1px 2px rgba(0,0,0,.06)}
+table{width:100%;border-collapse:collapse;font-size:14px}th{text-align:left;font-size:12px;color:#6b7280;font-weight:500;padding:10px 20px;background:#fafafb}td{padding:13px 20px;border-top:1px solid #f1f1f3}
+.cb{width:16px;height:16px;border:1.5px solid #d1d5db;border-radius:4px;display:inline-block;vertical-align:middle}
+.pill{font-size:12px;font-weight:600;padding:4px 10px;border-radius:99px}
+.proj{display:inline-flex;align-items:center;gap:8px}.sw{width:8px;height:8px;border-radius:50%}
+.foot{display:flex;justify-content:space-between;padding:12px 20px;font-size:13px;color:#6b7280;border-top:1px solid #f1f1f3}
 </style></head><body>
-<div class="shell">
-<aside class="rail"><div class="brand"><i></i>ProjectHub CRM</div>
-  <nav class="nav"><a class="on">Início</a><a>Meu dia</a><a>Agenda</a><a>Tarefas</a><a>Reuniões</a><a>Projetos</a><a>Clientes</a><a>Notificações <b>2</b></a><a>Configurações</a></nav>
-</aside>
-<main>
-  <div class="hd"><div><h1>Central do dia</h1><p>terça-feira, 13 de outubro</p></div><div style="display:flex;gap:8px"><span class="btn">Abrir Meu dia</span><span class="btn p">Nova tarefa</span></div></div>
-  <div class="kpis"><div class="kpi"><b style="color:var(--red)">1</b><span>Tarefas atrasadas</span></div><div class="kpi"><b>1/4</b><span>Planejadas para hoje</span></div><div class="kpi"><b>3</b><span>Compromissos hoje</span></div><div class="kpi"><b>4</b><span>Projetos ativos</span></div></div>
-  <div class="grid">
-    <div class="card"><h2>Hoje <a>Abrir Meu dia</a></h2>
-      <div class="row"><span class="chk"></span><span class="t">Revisar escopo com a Acme</span><span class="pill">Alta</span></div>
-      <div class="row"><span class="chk"></span><span class="t">Atualizar contrato da Beta</span><span class="pill">Média</span></div>
-      <div class="row"><span class="chk"></span><span class="t">Ligar para o fornecedor</span><span class="pill">Baixa</span></div>
-      <div class="row"><span class="chk" style="background:var(--blue);border-color:var(--blue)"></span><span class="t" style="text-decoration:line-through;color:var(--t3)">Enviar proposta revisada</span></div>
-    </div>
-    <div class="card"><h2>Agenda de hoje <a>Abrir agenda</a></h2>
-      <div class="row"><span class="time">10:00–11:00</span><span class="t">Kickoff · Site institucional</span><span class="pill">Reunião</span></div>
-      <div class="row"><span class="time">14:00–16:00</span><span class="t">Foco: proposta Acme</span><span class="pill">Bloco</span></div>
-      <div class="row"><span class="time">17:30–18:30</span><span class="t">Dentista</span><span class="pill">Evento</span></div>
-    </div>
-    <div class="card"><h2>Atrasadas</h2>
-      <div class="row"><span class="chk"></span><span class="t">Enviar orçamento do app <small>· Beta Comércio</small></span><span class="pill r">2 dias</span></div>
-    </div>
-    <div class="card"><h2>Próximos prazos (7 dias) <a>Todas as tarefas</a></h2>
-      <div class="row"><span class="chk"></span><span class="t">Entregar layout da home</span><small>hoje</small></div>
-      <div class="row"><span class="chk"></span><span class="t">Revisar contrato</span><small>15/10</small></div>
-      <div class="row"><span class="chk"></span><span class="t">Publicar versão 1.2</span><small>18/10</small></div>
-    </div>
-  </div>
-</main>
-</div>
-</body></html>
+<aside class="rail"><div class="brand"><span class="logo">P</span>ProjectHub</div>
+<div class="sec">Dia a dia</div><div class="nav on"><span class="ic"></span>Início</div><div class="nav"><span class="ic"></span>Meu dia</div><div class="nav"><span class="ic"></span>Agenda</div><div class="nav"><span class="ic"></span>Tarefas</div><div class="nav"><span class="ic"></span>Reuniões</div>
+<div class="sec">Negócio</div><div class="nav"><span class="ic"></span>Projetos</div><div class="nav"><span class="ic"></span>Clientes</div><div class="nav"><span class="ic"></span>Prospecção</div><div class="nav"><span class="ic"></span>Acessos</div>
+<div class="sec">Conta</div><div class="nav"><span class="ic"></span>Configurações</div></aside>
+<main class="main">
+<div class="head"><div><h1>Central do dia</h1><p class="sub">Quarta-feira, 14 de outubro</p></div><div><span class="btn">Novo evento</span><span class="btn p">Planejar o dia</span></div></div>
+<div class="stats">
+<div class="s"><div class="top">Planejado hoje<span class="si" style="background:#efeafe;color:#6b4fd8"><i></i></span></div><b>3 de 5</b><small>2h restantes</small></div>
+<div class="s"><div class="top">Vencidas<span class="si" style="background:#fde8ec;color:#c9353b"><i></i></span></div><b>2</b><small>tarefas com prazo passado</small></div>
+<div class="s"><div class="top">A receber · 7 dias<span class="si" style="background:#e6f6ec;color:#1a7f45"><i></i></span></div><b>R$ 4.500,00</b><small>1 parcela atrasada</small></div>
+<div class="s"><div class="top">Contatos a fazer<span class="si" style="background:#fff4d6;color:#a16207"><i></i></span></div><b>3</b><small>clientes esperando retorno</small></div></div>
+<section class="card"><div class="ch"><b>Planejado hoje</b><div class="tabs"><span class="on">Hoje</span><span>Vencidas</span><span>Próximos 7 dias</span></div></div>
+<table><tr><th><span class="cb"></span></th><th>Tarefa</th><th>Projeto</th><th>Prazo</th><th>Estimativa</th><th>Situação</th></tr>
+<tr><td><span class="cb"></span></td><td><b>Enviar proposta da Acme</b></td><td><span class="proj"><span class="sw" style="background:#9b3894"></span>App de pedidos</span></td><td>Hoje</td><td>1h</td><td><span class="pill" style="background:#e7f0ff;color:#0455a1">Em andamento</span></td></tr>
+<tr><td><span class="cb"></span></td><td><b>Revisar layout da home</b></td><td><span class="proj"><span class="sw" style="background:#007e5e"></span>Site institucional</span></td><td>16/10</td><td>2h</td><td><span class="pill" style="background:#f3f4f6;color:#374151">A fazer</span></td></tr>
+<tr><td><span class="cb"></span></td><td><b>Ligar para o Beta</b></td><td><span class="proj"><span class="sw" style="background:#0455a1"></span>Consultoria Beta</span></td><td>Hoje</td><td>30min</td><td><span class="pill" style="background:#fff4d6;color:#a16207">Aguardando</span></td></tr>
+<tr><td><span class="cb"></span></td><td><b>Responder o contador</b></td><td>Sem projeto</td><td>14/10</td><td>15min</td><td><span class="pill" style="background:#e6f6ec;color:#1a7f45">Concluída</span></td></tr>
+<tr><td><span class="cb"></span></td><td><b>Fechar orçamento da Gama</b></td><td><span class="proj"><span class="sw" style="background:#c9353b"></span>Loja Gama</span></td><td>13/10</td><td>1h</td><td><span class="pill" style="background:#fde8ec;color:#c9353b">Vencida</span></td></tr></table>
+<div class="foot"><span>5 tarefas</span><span>Página 1 de 1</span></div></section>
+</main></body></html>
