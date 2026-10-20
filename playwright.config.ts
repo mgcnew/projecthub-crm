@@ -27,7 +27,7 @@ export default defineConfig({
     {
       name: 'desktop',
       use: { ...devices['Desktop Chrome'] },
-      testIgnore: ['**/mobile.e2e.ts', '**/csp.e2e.ts', '**/panel-mobile.e2e.ts'],
+      testIgnore: ['**/mobile.e2e.ts', '**/csp.e2e.ts', '**/pwa.e2e.ts', '**/panel-mobile.e2e.ts'],
     },
     {
       name: 'mobile',
@@ -37,7 +37,7 @@ export default defineConfig({
     {
       name: 'csp',
       use: { ...devices['Desktop Chrome'], baseURL: previewURL },
-      testMatch: '**/csp.e2e.ts',
+      testMatch: ['**/csp.e2e.ts', '**/pwa.e2e.ts'],
     },
   ],
   webServer: [

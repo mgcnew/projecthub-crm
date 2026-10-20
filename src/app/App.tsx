@@ -1,4 +1,5 @@
 import { RouterProvider, createBrowserRouter } from 'react-router-dom'
+import { UpdatePrompt } from '@/pwa/UpdatePrompt'
 import { Providers } from './providers'
 import { routes } from './routes'
 
@@ -8,6 +9,7 @@ export function App() {
   return (
     <Providers>
       <RouterProvider router={router} />
+      <UpdatePrompt />
     </Providers>
   )
 }

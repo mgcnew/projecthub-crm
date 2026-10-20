@@ -134,6 +134,16 @@ No navegador (com o console aberto, sem erros de CSP):
 - [ ] No celular: navegação inferior, captura rápida e uma tarefa como página inteira.
 - [ ] Sair e tentar abrir `/app` direto: deve voltar ao login.
 
+## 4.1 PWA (instalar como aplicativo)
+
+O app é um PWA (D116). Depois do deploy, no Chrome/Edge (desktop ou Android) aparece "Instalar" na barra de
+endereço; no iPhone/iPad, Safari → Compartilhar → *Adicionar à Tela de Início*. Conferir:
+
+- DevTools → *Application* → *Manifest*: sem erros; *Service Workers*: `sw.js` "activated and is running".
+- Modo avião: o login e as telas já visitadas abrem; os dados só carregam com rede (o service worker não guarda dados).
+- Depois de um novo deploy, quem já usa o app vê o aviso "Há uma versão nova do aplicativo" e atualiza com um clique.
+- O nome e os ícones do aplicativo vêm de `vite.config.ts` (manifesto) e `public/icon-*.png`.
+
 ## 5. Backups e restauração
 
 Siga [RUNBOOK.md](RUNBOOK.md). Os passos do projeto hospedado estão marcados lá como *a validar*: o primeiro
