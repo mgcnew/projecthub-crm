@@ -42,7 +42,7 @@ export function LineStrip({ projectId, className }: { projectId: string | null |
   return (
     <span
       aria-hidden="true"
-      className={cn('w-1.5 shrink-0 self-stretch', line.outline && 'ring-1 ring-foreground ring-inset', className)}
+      className={cn('w-1 shrink-0 self-stretch rounded-full', line.outline && 'ring-1 ring-foreground ring-inset', className)}
       style={{ backgroundColor: line.color }}
     />
   )

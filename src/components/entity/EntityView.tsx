@@ -94,12 +94,12 @@ export function EntityView({
               onClick={() => select(t.id)}
               className={cn(
                 'inline-flex min-h-11 shrink-0 items-center gap-2 border-b-[3px] px-3 text-sm font-semibold whitespace-nowrap',
-                on ? 'border-foreground text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
+                on ? 'border-primary text-foreground' : 'border-transparent text-muted-foreground hover:text-foreground',
               )}
             >
               {t.label}
               {t.badge !== undefined && t.badge !== null && (
-                <span className="rounded-sm border border-current px-1.5 text-xs tabular-nums">{t.badge}</span>
+                <span className="rounded-full bg-muted px-1.5 text-xs text-muted-foreground tabular-nums">{t.badge}</span>
               )}
             </button>
           )
@@ -127,11 +127,13 @@ export function EntityView({
       <>
         <div className="sticky top-0 z-10 -mx-5 space-y-3 border-b border-border bg-card px-5 pt-5">
           <div className="space-y-1 pr-24">
-            <p className="text-xs font-bold tracking-[0.12em] text-muted-foreground uppercase">{kind}</p>
             <h2 id={overlay.titleId} className="text-[1.5rem] leading-tight font-bold tracking-[-0.02em]">
               {title}
             </h2>
-            {description && <div className="text-[0.9375rem] text-muted-foreground">{description}</div>}
+            <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.9375rem] text-muted-foreground">
+              <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-tone-neutral">{kind}</span>
+              {description}
+            </div>
           </div>
           {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
           {tablist}

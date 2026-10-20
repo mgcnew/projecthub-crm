@@ -141,3 +141,47 @@ export function useRecentActivity(enabled: boolean, limit = 8) {
     },
   })
 }
+
+/**
+ * Totais exatos para os cartões da Central do dia (as listas abaixo deles são limitadas). Chaves sob
+ * ['finance'] e ['follow-ups'] para acompanhar as invalidações das telas de origem.
+ */
+export function useReceivablesSummary(today: string, endDate: string, enabled: boolean) {
+  return useQuery({
+    queryKey: ['finance', 'receivables-summary', today, endDate],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('project_payments')
+        .select('amount_cents, due_date, projects(currency)')
+        .eq('status', 'pending')
+        .lte('due_date', endDate)
+      if (error) throw error
+      const rows = (data ?? []) as unknown as { amount_cents: number; due_date: string; projects: { currency: string } | null }[]
+      const totals = new Map<string, number>()
+      for (const r of rows) {
+        const cur = r.projects?.currency ?? 'BRL'
+        totals.set(cur, (totals.get(cur) ?? 0) + r.amount_cents)
+      }
+      return { totals: [...totals], count: rows.length, overdueCount: rows.filter((r) => r.due_date < today).length }
+    },
+  })
+}
+
+export function useFollowUpSummary(today: string, endDate: string, enabled: boolean) {
+  return useQuery({
+    queryKey: ['follow-ups', 'summary', today, endDate],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('clients')
+        .select('next_contact_on')
+        .is('archived_at', null)
+        .not('next_contact_on', 'is', null)
+        .lte('next_contact_on', endDate)
+      if (error) throw error
+      const rows = data ?? []
+      return { count: rows.length, overdueCount: rows.filter((r) => (r.next_contact_on ?? '') < today).length }
+    },
+  })
+}

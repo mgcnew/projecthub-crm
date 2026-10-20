@@ -58,7 +58,7 @@ export function Calendar({
   }
 
   const navBtn =
-    'inline-flex size-10 items-center justify-center rounded-sm border border-input bg-card hover:bg-muted pointer-coarse:size-11'
+    'inline-flex size-10 items-center justify-center rounded-md border border-border-strong bg-card hover:bg-muted pointer-coarse:size-11'
 
   return (
     <div>
@@ -109,7 +109,7 @@ export function Calendar({
                           : inMonth
                             ? 'font-medium hover:bg-muted'
                             : 'text-muted-foreground hover:bg-muted',
-                        isToday && !isSelected && 'border-2 border-primary font-bold text-primary-strong',
+                        isToday && !isSelected && 'bg-tone-info-bg font-bold text-primary-strong ring-1 ring-primary/40 ring-inset',
                       )}
                     >
                       {Number(iso.slice(8))}

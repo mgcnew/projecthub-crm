@@ -2,39 +2,61 @@
 @import '@fontsource-variable/hanken-grotesk';
 
 /*
- * Mundo "Linhas do Metrô" (direção escolhida em 2026-10-13; contrato em .impeccable/surfaces/).
- * Placas esmaltadas da sinalização do Metrô de São Paulo: fundo cinza-claro, placas brancas, tinta
- * quase preta, réguas frias. Azul profundo identifica ações e navegação; cores de linha identificam projetos; vermelho marca "agora" e atraso.
+ * Painel da categoria com acabamento de agência (direção escolhida em 2026-10-19; contrato em
+ * .impeccable/surfaces/). Fundo cinza-gelo, superfícies brancas de cantos suaves, tinta grafite.
+ * Azul profundo identifica ações, marca e navegação (D091); estados usam pares pastel + tinta;
+ * cores de linha continuam identificando projetos e o vermelho marca "agora" e atraso.
  * Tema claro padrão (D005). Contrastes de texto conferidos para AA.
  */
 :root {
-  --background: #f2f4f5;
-  --foreground: #111418;
+  --background: #f7f7f8;
+  --foreground: #111827;
   --card: #ffffff;
-  --card-foreground: #111418;
+  --card-foreground: #111827;
   --popover: #ffffff;
-  --popover-foreground: #111418;
+  --popover-foreground: #111827;
   /* Azul profundo: ações, seleção e marca (D091); branco sobre azul tem contraste AA. */
   --primary: #0455a1;
   --primary-hover: #034580;
   --primary-foreground: #ffffff;
-  /* Azul da Linha 1 para links, foco e informação (7,45:1 sobre branco). */
+  /* Links, foco e informação (7,45:1 sobre branco). */
   --primary-strong: #0455a1;
-  --secondary: #e8ecef;
-  --secondary-foreground: #111418;
-  --muted: #e8ecef;
-  /* 6,59:1 sobre branco, 5,54:1 sobre --muted. */
-  --muted-foreground: #565e66;
-  --accent: #e8ecef;
-  --accent-foreground: #111418;
+  --secondary: #f3f4f6;
+  --secondary-foreground: #111827;
+  --muted: #f3f4f6;
+  /* 5,9:1 sobre branco, 5,4:1 sobre --muted. */
+  --muted-foreground: #5f6672;
+  --accent: #f3f4f6;
+  --accent-foreground: #111827;
   /* Texto de erro/atraso (6,87:1 sobre branco); o vermelho vivo fica para o marcador "agora". */
   --destructive: #b4141b;
-  --border: #d9dee2;
-  --input: #848e96;
+  --border: #e7e8ec;
+  /* Contorno de campo: 3:1 contra o branco (WCAG 1.4.11). */
+  --input: #8b919c;
+  /* Contorno de botão secundário: só reforço, o texto identifica o controle. */
+  --border-strong: #d4d7de;
   --ring: #0455a1;
-  --radius: 0.125rem;
-  --rule-strong: #111418;
+  --radius: 0.5rem;
+  --radius-card: 0.75rem;
+  --rule-strong: #e7e8ec;
   --now: #ee372f;
+  --table-head: #fafafb;
+  --elev-card: 0 1px 2px rgb(17 24 39 / 0.04), 0 1px 3px rgb(17 24 39 / 0.03);
+  --elev-pop: 0 12px 32px -8px rgb(17 24 39 / 0.18), 0 2px 6px rgb(17 24 39 / 0.06);
+
+  /* Estados: fundo pastel + tinta da mesma família (todos ≥ 5:1). */
+  --tone-success-bg: #e6f6ec;
+  --tone-success: #17663a;
+  --tone-danger-bg: #fdebec;
+  --tone-danger: #b4141b;
+  --tone-warning-bg: #fff4d6;
+  --tone-warning: #8a5300;
+  --tone-info-bg: #e7f0ff;
+  --tone-info: #0455a1;
+  --tone-violet-bg: #efeafe;
+  --tone-violet: #5b3fc4;
+  --tone-neutral-bg: #f3f4f6;
+  --tone-neutral: #374151;
 
   /* Cores de linha (projetos). Texto sobre a cor definido em src/lib/lines.ts. */
   --line-azul: #0455a1;
@@ -67,13 +89,30 @@
   --color-accent-foreground: var(--accent-foreground);
   --color-destructive: var(--destructive);
   --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
   --color-input: var(--input);
   --color-ring: var(--ring);
   --color-rule-strong: var(--rule-strong);
   --color-now: var(--now);
-  --radius-md: var(--radius);
+  --color-table-head: var(--table-head);
+  --color-tone-success: var(--tone-success);
+  --color-tone-success-bg: var(--tone-success-bg);
+  --color-tone-danger: var(--tone-danger);
+  --color-tone-danger-bg: var(--tone-danger-bg);
+  --color-tone-warning: var(--tone-warning);
+  --color-tone-warning-bg: var(--tone-warning-bg);
+  --color-tone-info: var(--tone-info);
+  --color-tone-info-bg: var(--tone-info-bg);
+  --color-tone-violet: var(--tone-violet);
+  --color-tone-violet-bg: var(--tone-violet-bg);
+  --color-tone-neutral: var(--tone-neutral);
+  --color-tone-neutral-bg: var(--tone-neutral-bg);
   --radius-sm: var(--radius);
-  --radius-lg: var(--radius);
+  --radius-md: var(--radius);
+  --radius-lg: var(--radius-card);
+  --radius-xl: 1rem;
+  --shadow-card: var(--elev-card);
+  --shadow-pop: var(--elev-pop);
 }
 
 @layer base {
@@ -88,7 +127,12 @@
     font-feature-settings: 'tnum' 1;
   }
   ::selection {
-    background: #0455a133;
+    background: #0455a12e;
+    color: inherit;
+  }
+  html {
+    scrollbar-color: #c9ccd3 transparent;
+    caret-color: var(--primary);
   }
   a {
     text-underline-offset: 3px;
@@ -108,19 +152,20 @@
 }
 
 @layer components {
-  /* Título de seção: caixa alta firme, como o nome de uma estação na placa. */
+  /* Título de seção: caixa normal, peso firme e tamanho de corpo grande. */
   .section-title {
-    font-size: 0.8125rem;
-    line-height: 1.25rem;
+    font-size: 0.9375rem;
+    line-height: 1.375rem;
     font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
+    letter-spacing: -0.005em;
     color: var(--foreground);
   }
-  /* Placa: superfície branca com régua fina. */
+  /* Cartão: superfície branca, borda fria, canto de 12px e sombra de contato quase imperceptível. */
   .plate {
     background: var(--card);
     border: 1px solid var(--border);
+    border-radius: var(--radius-card);
+    box-shadow: var(--elev-card);
   }
 }
 
@@ -171,6 +216,7 @@
     justify-content: space-between;
     gap: 0.5rem;
     cursor: pointer;
+    white-space: nowrap;
   }
 
   select::picker-icon {
@@ -181,17 +227,17 @@
     rotate: 180deg;
   }
 
-  /* A lista: placa branca com régua de tinta, como os menus e diálogos do app. */
+  /* A lista: cartão branco flutuante, como os menus e diálogos do app. */
   select::picker(select) {
     box-sizing: border-box;
-    border: 2px solid var(--primary);
-    border-radius: var(--radius);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-card);
     background: var(--card);
     color: var(--foreground);
     padding: 0.25rem;
     margin-block: 0.25rem;
     max-block-size: min(22rem, 60dvh);
-    box-shadow: 0 18px 40px -12px rgb(17 20 24 / 0.35);
+    box-shadow: var(--elev-pop);
   }
 
   select option {
@@ -200,7 +246,7 @@
     gap: 0.5rem;
     min-block-size: 2.5rem;
     padding: 0.5rem 0.75rem;
-    border-radius: var(--radius);
+    border-radius: 0.375rem;
     font-weight: 500;
     cursor: pointer;
   }

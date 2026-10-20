@@ -32,30 +32,35 @@ import { useIsDesktop } from '@/lib/useMediaQuery'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
 import { usePersistedState } from '@/lib/usePersistedState'
 
-// Pictogramas como na sinalização: o ícone acompanha o nome, nunca o substitui.
-const items: { to: string; label: string; end: boolean; icon: LucideIcon }[] = [
-  { to: '/app', label: 'Início', end: true, icon: House },
-  { to: '/app/meu-dia', label: 'Meu dia', end: false, icon: CalendarCheck2 },
-  { to: '/app/agenda', label: 'Agenda', end: false, icon: CalendarDays },
-  { to: '/app/tarefas', label: 'Tarefas', end: false, icon: ListChecks },
-  { to: '/app/reunioes', label: 'Reuniões', end: false, icon: UsersRound },
-  { to: '/app/projetos', label: 'Projetos', end: false, icon: FolderKanban },
-  { to: '/app/clientes', label: 'Clientes', end: false, icon: Building2 },
-  { to: '/app/prospeccao', label: 'Prospecção', end: false, icon: Megaphone },
-  { to: '/app/acessos', label: 'Acessos', end: false, icon: KeyRound },
-  { to: '/app/notificacoes', label: 'Notificações', end: false, icon: Bell },
-  { to: '/app/configuracoes', label: 'Configurações', end: false, icon: Settings },
+// O ícone acompanha o nome, nunca o substitui. Grupos só organizam o menu lateral do desktop.
+type NavItem = { to: string; label: string; end: boolean; icon: LucideIcon; group: string }
+const items: NavItem[] = [
+  { to: '/app', label: 'Início', end: true, icon: House, group: 'Dia a dia' },
+  { to: '/app/meu-dia', label: 'Meu dia', end: false, icon: CalendarCheck2, group: 'Dia a dia' },
+  { to: '/app/agenda', label: 'Agenda', end: false, icon: CalendarDays, group: 'Dia a dia' },
+  { to: '/app/tarefas', label: 'Tarefas', end: false, icon: ListChecks, group: 'Dia a dia' },
+  { to: '/app/reunioes', label: 'Reuniões', end: false, icon: UsersRound, group: 'Dia a dia' },
+  { to: '/app/projetos', label: 'Projetos', end: false, icon: FolderKanban, group: 'Negócio' },
+  { to: '/app/clientes', label: 'Clientes', end: false, icon: Building2, group: 'Negócio' },
+  { to: '/app/prospeccao', label: 'Prospecção', end: false, icon: Megaphone, group: 'Negócio' },
+  { to: '/app/acessos', label: 'Acessos', end: false, icon: KeyRound, group: 'Negócio' },
+  { to: '/app/notificacoes', label: 'Notificações', end: false, icon: Bell, group: 'Conta' },
+  { to: '/app/configuracoes', label: 'Configurações', end: false, icon: Settings, group: 'Conta' },
 ]
 const primaryMobile = items.slice(0, 4)
 const moreMobile = items.slice(4)
 const desktopItems = items.filter((item) => item.to !== '/app/notificacoes')
+const desktopGroups = [...new Set(desktopItems.map((i) => i.group))].map((g) => ({
+  name: g,
+  items: desktopItems.filter((i) => i.group === g),
+}))
 const APP_NAME = 'ProjectHub CRM'
 const validateSidebarCollapsed = (value: unknown): boolean | null => (typeof value === 'boolean' ? value : null)
 
 function UnreadBadge({ count }: { count: number }) {
   if (count <= 0) return null
   return (
-    <span className="ml-auto rounded-sm border border-current px-1.5 text-xs font-bold tabular-nums">
+    <span className="ml-auto rounded-full bg-tone-info-bg px-1.5 text-xs font-bold text-tone-info tabular-nums">
       {count > 99 ? '99+' : count}
       <span className="sr-only"> não lida{count > 1 ? 's' : ''}</span>
     </span>
@@ -64,8 +69,8 @@ function UnreadBadge({ count }: { count: number }) {
 
 function link({ isActive }: { isActive: boolean }) {
   return cn(
-    'flex min-h-11 items-center gap-3 rounded-sm px-3 text-sm font-semibold',
-    isActive ? 'bg-primary text-primary-foreground' : 'text-[#3b4148] hover:bg-muted',
+    'flex min-h-10 items-center gap-3 rounded-md px-3 text-sm font-semibold transition-colors duration-150 ease-out max-lg:min-h-11',
+    isActive ? 'bg-primary text-primary-foreground shadow-card' : 'text-tone-neutral hover:bg-muted hover:text-foreground',
   )
 }
 
@@ -171,12 +176,12 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
     <div
       className={cn(
         'min-h-dvh lg:grid lg:transition-[grid-template-columns] lg:duration-200 lg:ease-out',
-        sidebarCollapsed ? 'lg:grid-cols-[4rem_minmax(0,1fr)]' : 'lg:grid-cols-[14.75rem_minmax(0,1fr)]',
+        sidebarCollapsed ? 'lg:grid-cols-[4.25rem_minmax(0,1fr)]' : 'lg:grid-cols-[15rem_minmax(0,1fr)]',
       )}
     >
       <a
         href="#conteudo"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:border-2 focus:border-foreground focus:bg-card focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:rounded-md focus:border focus:border-border focus:bg-card focus:shadow-pop focus:px-4 focus:py-2 focus:text-sm focus:font-semibold"
         onClick={(e) => {
           e.preventDefault()
           main.current?.focus()
@@ -194,7 +199,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
         <div className={cn('flex min-h-11 items-center', sidebarCollapsed ? 'flex-col gap-2' : 'gap-2.5 px-3 pb-5')}>
           <span
             aria-hidden="true"
-            className="inline-flex size-[1.375rem] shrink-0 items-center justify-center bg-primary text-[0.8125rem] text-card"
+            className="inline-flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-bold text-card shadow-card"
           >
             P
           </span>
@@ -207,7 +212,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
             title={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
             onClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
             className={cn(
-              'inline-flex size-9 shrink-0 items-center justify-center rounded-sm text-[#3b4148] hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
+              'inline-flex size-9 shrink-0 items-center justify-center rounded-sm text-tone-neutral hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
               sidebarCollapsed && 'size-11',
             )}
           >
@@ -225,26 +230,41 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           title={sidebarCollapsed ? 'Buscar' : undefined}
           onClick={() => setSearchOpen(true)}
           className={cn(
-            'mb-2 flex min-h-11 items-center gap-3 rounded-sm border border-input bg-card text-sm font-semibold text-[#3b4148] hover:bg-muted',
+            'mb-1 flex min-h-10 items-center gap-3 rounded-md border border-border bg-background text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground',
             sidebarCollapsed ? 'justify-center px-0' : 'px-3',
           )}
         >
           <Search aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
           <span className={sidebarCollapsed ? 'sr-only' : ''}>Buscar</span>
-          {!sidebarCollapsed && <kbd className="ml-auto text-xs font-semibold text-muted-foreground">Ctrl K</kbd>}
+          {!sidebarCollapsed && (
+            <kbd className="ml-auto rounded-sm border border-border bg-card px-1.5 font-sans text-[0.6875rem] font-semibold text-muted-foreground">
+              Ctrl K
+            </kbd>
+          )}
         </button>
-        <nav id="navegacao-principal" aria-label="Principal" className="flex flex-col gap-0.5">
-          {desktopItems.map((i) => (
-            <NavLink
-              key={i.to}
-              to={i.to}
-              end={i.end}
-              title={sidebarCollapsed ? i.label : undefined}
-              className={(state) => cn(link(state), sidebarCollapsed && 'justify-center px-0')}
-            >
-              <i.icon aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
-              <span className={sidebarCollapsed ? 'sr-only' : ''}>{i.label}</span>
-            </NavLink>
+        <nav id="navegacao-principal" aria-label="Principal" className="flex flex-col">
+          {desktopGroups.map((g) => (
+            <div key={g.name} className="flex flex-col gap-0.5 pt-3">
+              {sidebarCollapsed ? (
+                <span aria-hidden="true" className="mx-auto mb-1 h-px w-6 bg-border" />
+              ) : (
+                <span aria-hidden="true" className="px-3 pb-1 text-xs font-semibold text-muted-foreground">
+                  {g.name}
+                </span>
+              )}
+              {g.items.map((i) => (
+                <NavLink
+                  key={i.to}
+                  to={i.to}
+                  end={i.end}
+                  title={sidebarCollapsed ? i.label : undefined}
+                  className={(state) => cn(link(state), sidebarCollapsed && 'justify-center px-0')}
+                >
+                  <i.icon aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
+                  <span className={sidebarCollapsed ? 'sr-only' : ''}>{i.label}</span>
+                </NavLink>
+              ))}
+            </div>
           ))}
         </nav>
         <Button
@@ -267,7 +287,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
             title="Notificações"
             className={({ isActive }) =>
               cn(
-                'relative inline-flex size-11 items-center justify-center rounded-sm text-[#3b4148] hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
+                'relative inline-flex size-10 items-center justify-center rounded-md text-tone-neutral hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
                 isActive && 'bg-muted text-foreground',
               )
             }
@@ -276,7 +296,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
             {unread > 0 && (
               <span
                 aria-hidden="true"
-                className="absolute top-0.5 right-0.5 min-w-5 rounded-sm border border-card bg-primary px-1 text-center text-[0.6875rem] leading-4 font-bold tabular-nums text-card"
+                className="absolute -top-0.5 -right-0.5 min-w-5 rounded-full border-2 border-background bg-primary px-1 text-center text-[0.6875rem] leading-4 font-bold tabular-nums text-card"
               >
                 {unread > 99 ? '99+' : unread}
               </span>
@@ -284,7 +304,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           </NavLink>
         </header>
         {!online && (
-          <p role="status" className="border-b-2 border-foreground bg-[#fff3b0] px-4 py-2 text-sm font-medium text-[#5c4700]">
+          <p role="status" className="border-b border-[#f3dfa2] bg-tone-warning-bg px-4 py-2 text-sm font-medium text-tone-warning">
             Sem conexão. Você pode continuar lendo, mas as alterações só serão salvas quando a conexão voltar.
           </p>
         )}
@@ -306,7 +326,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
       {moreOpen && (
         <div
           id="menu-mais"
-          className="fixed inset-x-0 bottom-[4.25rem] z-30 border-t-2 border-foreground bg-card p-2 shadow-[0_-12px_32px_-12px_rgb(17_20_24/0.3)] lg:hidden"
+          className="fixed inset-x-2 bottom-[4.75rem] z-30 rounded-xl border border-border bg-card p-2 shadow-pop lg:hidden"
         >
           <nav aria-label="Mais opções" className="grid gap-1">
             <button
@@ -338,7 +358,7 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
 
       <nav
         aria-label="Principal"
-        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 gap-1 border-t-2 border-foreground bg-card px-1 pt-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden"
+        className="fixed inset-x-0 bottom-0 z-30 grid grid-cols-5 gap-1 border-t border-border bg-card px-1 pt-1 pb-[max(0.25rem,env(safe-area-inset-bottom))] lg:hidden"
       >
         {primaryMobile.map((i) => (
           <NavLink
@@ -357,8 +377,8 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           aria-expanded={moreOpen}
           aria-controls="menu-mais"
           className={cn(
-            'relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-sm px-1 text-xs font-semibold',
-            moreOpen ? 'bg-primary text-primary-foreground' : 'text-[#3b4148]',
+            'relative flex min-h-14 flex-col items-center justify-center gap-1 rounded-md px-1 text-xs font-semibold',
+            moreOpen ? 'bg-primary text-primary-foreground' : 'text-tone-neutral',
           )}
           onClick={() => setMoreOpen((o) => !o)}
         >
