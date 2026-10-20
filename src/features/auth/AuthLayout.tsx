@@ -45,9 +45,9 @@ export function AuthLayout({
         </aside>
 
         <main className="flex min-w-0 flex-col px-6 py-8 sm:px-12 lg:px-12 lg:py-10 xl:px-16">
-          <p className="flex items-center gap-3 text-lg font-bold tracking-[-0.01em]">
-            <span aria-hidden="true" className="inline-flex size-8 items-center justify-center rounded-md bg-primary text-base text-primary-foreground lg:hidden">P</span>
-            <span className="lg:text-sm lg:text-muted-foreground">ProjectHub<span className="font-normal"> CRM</span></span>
+          <p className="flex items-center gap-3 text-lg font-bold tracking-[-0.01em] lg:hidden">
+            <span aria-hidden="true" className="inline-flex size-8 items-center justify-center rounded-md bg-primary text-base text-primary-foreground">P</span>
+            <span>ProjectHub<span className="font-normal"> CRM</span></span>
           </p>
           <div className="flex flex-1 items-center py-12 sm:py-16 lg:py-12">
             <div className="mx-auto w-full max-w-sm space-y-8">

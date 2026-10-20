@@ -45,20 +45,28 @@ export function ErrorState({ message, onRetry }: { message: string; onRetry?: ()
   )
 }
 
-/** Vazio: área tracejada com ícone suave; sempre oferece a próxima ação. */
+/** Vazio: área tracejada (ou sem moldura dentro de um cartão); sempre oferece a próxima ação. */
 export function EmptyState({
   title,
   description,
   action,
   icon,
+  inset = false,
 }: {
   title: string
   description?: string
   action?: ReactNode
   icon?: LucideIcon
+  /** Dentro de um cartão: sem moldura própria (cartão dentro de cartão não). */
+  inset?: boolean
 }) {
   return (
-    <div className="flex flex-col items-center gap-2 rounded-lg border border-dashed border-border-strong bg-card px-6 py-8 text-center">
+    <div
+      className={cn(
+        'flex flex-col items-center gap-2 px-6 text-center',
+        inset ? 'py-10' : 'rounded-lg border border-dashed border-border-strong bg-card py-8',
+      )}
+    >
       {icon && <IconChip icon={icon} tone="neutral" size="lg" className="mb-1" />}
       <p className="font-semibold">{title}</p>
       {description && <p className="max-w-[46ch] text-sm text-muted-foreground">{description}</p>}

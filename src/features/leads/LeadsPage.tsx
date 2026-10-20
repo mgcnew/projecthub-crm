@@ -63,7 +63,7 @@ export function LeadsPage() {
       />
 
       <FilterBar
-        className="md:grid-cols-[minmax(0,1fr)_11rem_11rem_12rem]"
+        className="md:grid-cols-[minmax(0,1fr)_13rem_11rem_12rem]"
         activeCount={(params.temperature ? 1 : 0) + (params.stage ? 1 : 0) + (params.archived !== 'active' ? 1 : 0)}
         search={
           <input

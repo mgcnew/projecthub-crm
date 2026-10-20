@@ -19,7 +19,7 @@ export function Plate({
 }) {
   return (
     <section aria-labelledby={id} className="plate min-w-0">
-      <div className="flex items-start justify-between gap-3 px-4 pt-4 pb-3 sm:items-center sm:px-5">
+      <div className="flex items-start justify-between gap-3 border-b border-border px-4 py-3 sm:items-center sm:px-5">
         <h2 id={id} className="section-title min-w-0 flex-1 pt-2 sm:pt-0">
           {title}
           {meta && (
@@ -30,7 +30,7 @@ export function Plate({
         </h2>
         {action && <div className="flex shrink-0 gap-2">{action}</div>}
       </div>
-      <div className="px-4 pb-5 sm:px-5">{children}</div>
+      <div className="px-4 pt-4 pb-5 sm:px-5">{children}</div>
     </section>
   )
 }

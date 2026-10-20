@@ -145,6 +145,7 @@ export function DashboardPage() {
           {plans.isPending && <LoadingState />}
           {plans.isSuccess && planned.length === 0 && (
             <EmptyState
+              inset
               title="Nada planejado para hoje"
               description="Escolha no Meu dia o que você vai fazer hoje; o prazo de cada tarefa não muda."
               action={

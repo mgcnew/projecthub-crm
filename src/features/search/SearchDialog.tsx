@@ -128,7 +128,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
         {status}
       </p>
 
-      <div id={listId} role="listbox" aria-label="Resultados" className="max-h-[min(26rem,60vh)] overflow-y-auto">
+      <div id={listId} role="listbox" aria-label="Resultados" className="max-h-[min(26rem,60vh)] overflow-y-auto pb-2">
         {!typed && (
           <p className="px-4 py-6 text-sm text-muted-foreground">
             Digite pelo menos {SEARCH_MIN_CHARS} letras. A busca vale para tarefas, projetos, clientes, reuniões e

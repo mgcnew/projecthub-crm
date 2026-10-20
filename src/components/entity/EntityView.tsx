@@ -133,9 +133,9 @@ export function EntityView({
             <div className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[0.9375rem] text-muted-foreground">
               <span className="rounded-full bg-muted px-2 py-0.5 text-xs font-semibold text-tone-neutral">{kind}</span>
               {description}
+              {actions}
             </div>
           </div>
-          {actions && <div className="flex flex-wrap gap-2">{actions}</div>}
           {tablist}
         </div>
         {panels}
