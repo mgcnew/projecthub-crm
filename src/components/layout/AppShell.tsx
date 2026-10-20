@@ -28,6 +28,8 @@ import { SearchDialog } from '@/features/search/SearchDialog'
 import { TimezoneBoundary } from '@/features/settings/TimezoneBoundary'
 import { matchEntityRoute } from '@/lib/entityRoutes'
 import { cn } from '@/lib/utils'
+import voltierIcon from '@/assets/brand/voltier-icon.webp'
+import voltierLogo from '@/assets/brand/voltier-logo.webp'
 import { useIsDesktop } from '@/lib/useMediaQuery'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
 import { usePersistedState } from '@/lib/usePersistedState'
@@ -197,13 +199,13 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
         )}
       >
         <div className={cn('flex min-h-11 items-center', sidebarCollapsed ? 'flex-col gap-2' : 'gap-2.5 px-3 pb-5')}>
-          <span
-            aria-hidden="true"
-            className="inline-flex size-7 shrink-0 items-center justify-center rounded-md bg-primary text-sm font-bold text-card shadow-card"
-          >
-            P
-          </span>
-          {!sidebarCollapsed && <span className="min-w-0 flex-1 text-[1.0625rem] font-bold tracking-[-0.01em]">ProjectHub</span>}
+          {sidebarCollapsed ? (
+            <img src={voltierIcon} alt="Voltier" width={28} height={28} className="size-7 shrink-0 object-contain" />
+          ) : (
+            <span className="flex min-w-0 flex-1 items-center">
+              <img src={voltierLogo} alt="Voltier" width={111} height={32} className="h-8 w-auto max-w-full object-contain object-left" />
+            </span>
+          )}
           <button
             type="button"
             aria-label={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
