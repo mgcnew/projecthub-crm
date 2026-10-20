@@ -31,7 +31,7 @@ export function DayLine({
   if (placed.length === 0) {
     return (
       <div className="relative py-3">
-        <div aria-hidden="true" className="h-2 bg-[#d3d9de]" />
+        <div aria-hidden="true" className="h-2 rounded-full bg-[#e6e8ec]" />
         <p className="mt-3 text-sm text-muted-foreground">{emptyText}</p>
       </div>
     )
@@ -40,7 +40,7 @@ export function DayLine({
   return (
     <div className="relative">
       {/* Trilho horizontal e marcas de hora (só desktop; decorativo, a lista carrega o conteúdo). */}
-      <div aria-hidden="true" className="absolute inset-x-0 top-[3.75rem] hidden h-2 bg-[#d3d9de] md:block" />
+      <div aria-hidden="true" className="absolute inset-x-0 top-[3.75rem] hidden h-2 rounded-full bg-[#e6e8ec] md:block" />
       <div aria-hidden="true" className="hidden md:block">
         {placed.map((p) => {
           const line = lineFor(p.projectId)
@@ -48,7 +48,7 @@ export function DayLine({
             <span
               key={`seg-${p.key}`}
               className={cn(
-                'absolute top-[3.75rem] h-2',
+                'absolute top-[3.75rem] h-2 rounded-full',
                 p.kind === 'work_block' && 'opacity-55',
                 line.outline && 'ring-1 ring-foreground ring-inset',
               )}
@@ -66,7 +66,7 @@ export function DayLine({
           </span>
         ))}
         {now !== null && (
-          <span className="absolute top-[3.1rem] h-[2.2rem] w-0.5 -translate-x-1/2 bg-now" style={{ left: `${now}%` }} />
+          <span className="absolute top-[3.1rem] h-[2.2rem] w-0.5 -translate-x-1/2 rounded-full bg-now" style={{ left: `${now}%` }} />
         )}
       </div>
 
@@ -75,7 +75,7 @@ export function DayLine({
         className={cn(
           'relative grid gap-0',
           // Vertical: trilho à esquerda das estações.
-          'before:absolute before:top-4 before:bottom-4 before:left-[4.69rem] before:w-1.5 before:bg-[#d3d9de] md:before:hidden',
+          'before:absolute before:top-4 before:bottom-4 before:left-[4.69rem] before:w-1.5 before:rounded-full before:bg-[#e6e8ec] md:before:hidden',
           'md:block md:h-[10.25rem]',
         )}
       >
@@ -92,7 +92,7 @@ export function DayLine({
               <span
                 aria-hidden="true"
                 className={cn(
-                  'relative z-10 size-5 rounded-full border-[5px] bg-card md:absolute md:top-[3.3rem] md:left-0 md:size-[1.375rem] md:-translate-x-1/2',
+                  'relative z-10 size-5 rounded-full border-[5px] bg-card shadow-card md:absolute md:top-[3.3rem] md:left-0 md:size-[1.375rem] md:-translate-x-1/2',
                   p.projectId && line.outline && 'shadow-[0_0_0_1.5px_var(--foreground)]',
                 )}
                 style={{ borderColor: p.projectId ? line.color : 'var(--foreground)' }}
@@ -125,7 +125,7 @@ export function DayLine({
               aria-hidden="true"
               className="relative z-10 size-5 rounded-full border-[5px] border-now bg-card md:absolute md:top-[3.3rem] md:left-0 md:size-[1.375rem] md:-translate-x-1/2"
             />
-            <span className="text-sm font-semibold text-destructive md:absolute md:top-[8.55rem] md:left-0 md:w-max md:-translate-x-1/2 md:border-t-2 md:border-now md:bg-card md:px-1.5 md:pt-0.5">
+            <span className="text-sm font-semibold text-destructive md:absolute md:top-[8.55rem] md:left-0 md:w-max md:-translate-x-1/2 md:rounded-full md:bg-tone-danger-bg md:px-2 md:py-0.5 md:text-xs">
               Agora<span className="hidden md:inline"> {nowText}</span>
             </span>
           </li>

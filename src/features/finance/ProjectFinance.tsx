@@ -334,7 +334,7 @@ export function ProjectFinance({ project }: { project: ProjectLite }) {
       <SummaryTiles currency={project.currency} contract={project.contract_value_cents} summary={summary} />
 
       {summary.gap !== null && summary.gap !== 0 && payments.length > 0 && (
-        <p role="status" className="border border-foreground bg-card px-3 py-2 text-sm font-medium">
+        <p role="status" className="rounded-lg bg-tone-info-bg px-3 py-2 text-sm font-medium text-tone-info">
           {summary.gap > 0
             ? `Faltam ${formatMoney(summary.gap, project.currency)} para programar: as parcelas somam menos que o valor do projeto.`
             : `As parcelas passam ${formatMoney(-summary.gap, project.currency)} do valor do projeto.`}

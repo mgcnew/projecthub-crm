@@ -41,7 +41,7 @@ export function SearchDialog({ open, onClose }: { open: boolean; onClose: () => 
       onClick={(e) => {
         if (e.target === ref.current) onClose()
       }}
-      className="mx-auto mt-[10vh] w-[min(38rem,calc(100vw-1.5rem))] rounded-sm border-2 border-foreground bg-card p-0 text-card-foreground shadow-[0_18px_40px_-12px_rgb(17_20_24/0.35)] backdrop:bg-foreground/45"
+      className="mx-auto mt-[10vh] w-[min(38rem,calc(100vw-1.5rem))] rounded-xl border border-border bg-card p-0 text-card-foreground shadow-pop backdrop:bg-foreground/45"
     >
       {open && <SearchPanel onClose={onClose} />}
     </dialog>
@@ -87,7 +87,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
 
   return (
     <>
-      <div className="flex items-center gap-3 border-b-2 border-rule-strong px-4">
+      <div className="flex items-center gap-3 border-b border-border px-4">
         <Search aria-hidden="true" className="size-5 shrink-0" />
         <input
           role="combobox"
@@ -128,7 +128,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
         {status}
       </p>
 
-      <div id={listId} role="listbox" aria-label="Resultados" className="max-h-[min(26rem,60vh)] overflow-y-auto">
+      <div id={listId} role="listbox" aria-label="Resultados" className="max-h-[min(26rem,60vh)] overflow-y-auto pb-2">
         {!typed && (
           <p className="px-4 py-6 text-sm text-muted-foreground">
             Digite pelo menos {SEARCH_MIN_CHARS} letras. A busca vale para tarefas, projetos, clientes, reuniões e
@@ -158,7 +158,7 @@ function SearchPanel({ onClose }: { onClose: () => void }) {
                   onMouseMove={() => setActive(i)}
                   onClick={() => choose(i)}
                   className={
-                    'flex min-h-12 cursor-pointer items-baseline gap-3 px-4 py-2 ' +
+                    'mx-2 flex min-h-12 cursor-pointer items-baseline gap-3 rounded-md px-3 py-2 ' +
                     (isActive ? 'bg-primary text-primary-foreground' : 'hover:bg-muted')
                   }
                 >
