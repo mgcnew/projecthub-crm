@@ -30,6 +30,9 @@ export function buildVercelConfig(supabaseOrigin: string = DEFAULT_SUPABASE_ORIG
       // Assets com hash no nome: cache longo e imutável. O HTML nunca fica em cache (novo deploy vale na hora).
       { source: '/assets/(.*)', headers: [{ key: 'Cache-Control', value: 'public, max-age=31536000, immutable' }] },
       { source: '/index.html', headers: [{ key: 'Cache-Control', value: 'no-cache' }] },
+      // Service worker e manifesto: sempre revalidados, para uma versão nova chegar logo ao navegador.
+      { source: '/sw.js', headers: [{ key: 'Cache-Control', value: 'no-cache' }] },
+      { source: '/manifest.webmanifest', headers: [{ key: 'Cache-Control', value: 'no-cache' }] },
     ],
   }
 }
