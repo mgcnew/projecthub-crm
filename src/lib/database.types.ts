@@ -283,6 +283,26 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"lead_imports": {
+                  Row: {
+                    "created": number,"created_at": string,"errors": NonNullable<Json>,"file_name": string,"id": string,"organization_id": string,"skipped": number,"source": string,"total": number,"updated": number
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created"?: number,"created_at"?: string,"errors"?: NonNullable<Json>,"file_name": string,"id"?: string,"organization_id": string,"skipped"?: number,"source": string,"total": number,"updated"?: number
+                  }
+                  Update: {
+                    "created"?: number,"created_at"?: string,"errors"?: NonNullable<Json>,"file_name"?: string,"id"?: string,"organization_id"?: string,"skipped"?: number,"source"?: string,"total"?: number,"updated"?: number
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "lead_imports_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
                 },"leads": {
                   Row: {
                     "address_line": string | null,"archived_at": string | null,"city": string | null,"company_name": string,"contact_name": string | null,"converted_client_id": string | null,"created_at": string,"email": string | null,"has_whatsapp": boolean | null,"hook": string | null,"id": string,"lost_reason": string | null,"next_contact_on": string | null,"notes": string | null,"opted_out_at": string | null,"organization_id": string,"phone": string | null,"segment": string | null,"source": string,"stage": string,"state": string | null,"temperature": string,"updated_at": string,"website": string | null,"whatsapp_checked_at": string | null

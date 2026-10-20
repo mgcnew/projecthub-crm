@@ -74,7 +74,7 @@
 5. Storage privado e políticas de arquivos (quando arquivos entrarem no MVP).
 
 ## Estado implementado (2026-10-13)
-As 19 tabelas do MVP existem, mais `access_entries` (D086, fora da lista original): 27 no total, todas com RLS, políticas e privilégios por coluna. O esquema vem de **16 migrações**
+As 19 tabelas do MVP existem, mais `access_entries` (D086, fora da lista original): 28 no total, todas com RLS, políticas e privilégios por coluna. O esquema vem de **17 migrações**
 (`supabase/migrations`), agrupadas por fase em vez das 001–010 lógicas acima (D025). O banco hospedado recebeu as
 mesmas 15 (D081; conferidas por hash com `scripts/db-fingerprint.sql`).
 
@@ -93,6 +93,7 @@ mesmas 15 (D081; conferidas por hash com `scripts/db-fingerprint.sql`).
 | `project_payments` | Não prevista (financeiro era "futuro") | Parcelas do projeto (adiantamento, parcelas, saldo) com vencimento e situação; valores em centavos | D093–D095 |
 | `clients.legal_name`, `tax_id`, `billing_email`, `website`, `address_*`, `source` | Não previstos | Cadastro completo (documento fiscal, cobrança, endereço, origem); fora da trilha de atividade | D096, D097 |
 | `client_contacts` | Não prevista | Contatos do cliente (um principal por cliente) | D096 |
+| `lead_imports` | Não prevista (Fase 7) | Histórico das importações de planilha (contagens e motivos de recusa) | D114 |
 | `leads`, `suppression_list`, `outreach_settings` | Não previstas (Fase 7) | Leads da prospecção (temperatura, etapa, gancho, origem), lista de não contatar e configuração de envio | D111 |
 | `client_interactions` | Não prevista | Ligações, e-mails, reuniões e anotações do cliente, com contato do mesmo cliente | D098 |
 | `client_documents` | Não prevista | Links de contrato, proposta e briefing (sem arquivos) | D098 |
