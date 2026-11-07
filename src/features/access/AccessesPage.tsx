@@ -25,8 +25,10 @@ const validateBool = (v: unknown): boolean | null => (typeof v === 'boolean' ? v
 function useUrlFilter(name: string) {
   const [params, setParams] = useSearchParams()
   const value = params.get(name) ?? ''
+  // Lê a URL no momento da troca: duas escolhas seguidas (projeto e categoria) não sobrescrevem uma à outra
+  // mesmo antes de a tela renderizar de novo.
   const set = (next: string) => {
-    const p = new URLSearchParams(params)
+    const p = new URLSearchParams(window.location.search)
     if (next) p.set(name, next)
     else p.delete(name)
     setParams(p, { replace: true })
