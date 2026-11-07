@@ -1,6 +1,7 @@
 import { ExternalLink } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { CopyButton } from '@/components/CopyButton'
+import { LineBadge } from '@/components/LineBadge'
 import { StatusBadge } from '@/components/states'
 import { isHttpUrl } from './schema'
 
@@ -12,12 +13,22 @@ export type AccessRow = {
   username: string | null
   manager_item: string | null
   archived_at: string | null
+  project_id: string | null
   projects: { name: string } | null
   clients: { name: string } | null
 }
 
 /** Lista de acessos: abrir o serviço e copiar usuário (ou o nome do item no gerenciador) em 1 clique. */
-export function AccessList({ rows, showLinks = true }: { rows: AccessRow[]; showLinks?: boolean }) {
+export function AccessList({
+  rows,
+  showLinks = true,
+  hideProject = false,
+}: {
+  rows: AccessRow[]
+  showLinks?: boolean
+  /** Dentro de um grupo por projeto o nome do projeto já está no título. */
+  hideProject?: boolean
+}) {
   return (
     <ul className="plate divide-y divide-border">
       {rows.map((a) => (
@@ -28,9 +39,17 @@ export function AccessList({ rows, showLinks = true }: { rows: AccessRow[]; show
             </Link>
             {a.category && <StatusBadge>{a.category}</StatusBadge>}
             {a.archived_at && <StatusBadge>Arquivado</StatusBadge>}
-            {showLinks && (a.projects || a.clients) && (
-              <span className="text-sm text-muted-foreground">
-                {[a.projects?.name, a.clients?.name].filter(Boolean).join(' · ')}
+            {showLinks && ((!hideProject && a.projects) || a.clients) && (
+              <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">
+                {!hideProject && a.projects && (
+                  <span className="inline-flex items-center gap-1.5 font-medium text-foreground">
+                    <span aria-hidden="true">
+                      <LineBadge projectId={a.project_id} projectName={a.projects.name} size="sm" />
+                    </span>
+                    {a.projects.name}
+                  </span>
+                )}
+                {a.clients && <span>{a.clients.name}</span>}
               </span>
             )}
           </div>

@@ -3,6 +3,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { ConfirmDialog } from '@/components/ConfirmDialog'
+import { Plate } from '@/components/Plate'
 import { controlClass } from '@/components/form-styles'
 import { Button } from '@/components/ui/button'
 import { NewPasswordForm } from '@/features/auth/NewPasswordForm'
@@ -24,8 +25,8 @@ function useFactors() {
   })
 }
 
-/** Senha e verificação em duas etapas (TOTP). A imposição é do banco (D082); aqui só a gestão. */
-export function SecuritySection() {
+/** Verificação em duas etapas (TOTP). A imposição é do banco (D082); aqui só a gestão. */
+export function MfaSection() {
   const factors = useFactors()
   const qc = useQueryClient()
   const [enrollment, setEnrollment] = useState<Enrollment | null>(null)
@@ -33,7 +34,6 @@ export function SecuritySection() {
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [confirmOff, setConfirmOff] = useState(false)
-  const [passwordMessage, setPasswordMessage] = useState<string | null>(null)
   const {
     register,
     handleSubmit,
@@ -104,110 +104,104 @@ export function SecuritySection() {
 
   return (
     <>
-      <section aria-labelledby="mfa-h" className="max-w-xl space-y-3">
-        <h2 id="mfa-h" className="section-title">
-          Verificação em duas etapas
-        </h2>
-        <p className="text-sm text-muted-foreground">
-          Além da senha, o acesso passa a pedir um código de 6 dígitos de um aplicativo autenticador (como
-          Google Authenticator, 1Password ou Authy). A proteção vale também para os dados, não só para a tela.
-        </p>
-
-        {factors.isPending && <p className="text-sm text-muted-foreground">Carregando…</p>}
-        {factors.isError && (
-          <p role="alert" className="text-sm text-destructive">
-            Não foi possível ler o estado da verificação em duas etapas.
+      <Plate id="mfa-h" title="Verificação em duas etapas">
+        <div className="max-w-xl space-y-3">
+          <p className="text-sm text-muted-foreground">
+            Além da senha, o acesso passa a pedir um código de 6 dígitos de um aplicativo autenticador (como Google
+            Authenticator, 1Password ou Authy). A proteção vale também para os dados, não só para a tela.
           </p>
-        )}
 
-        {factors.isSuccess && !enrollment && (
-          <>
-            <p className="text-sm font-semibold">
-              Situação: {active ? 'ativada' : 'desativada'}
+          {factors.isPending && <p className="text-sm text-muted-foreground">Carregando…</p>}
+          {factors.isError && (
+            <p role="alert" className="text-sm text-destructive">
+              Não foi possível ler o estado da verificação em duas etapas.
             </p>
-            {active ? (
-              <Button variant="outline" disabled={busy} onClick={() => setConfirmOff(true)}>
-                Desativar
-              </Button>
-            ) : (
-              <Button disabled={busy} onClick={startEnrollment}>
-                {busy ? 'Preparando…' : 'Ativar verificação em duas etapas'}
-              </Button>
-            )}
-          </>
-        )}
+          )}
 
-        {enrollment && (
-          <div className="plate space-y-4 p-4">
-            <ol className="list-decimal space-y-3 pl-5 text-sm">
-              <li>
-                Abra o aplicativo autenticador e escaneie o código abaixo.
-                <img
-                  src={enrollment.qr}
-                  alt="QR code para o aplicativo autenticador"
-                  width={176}
-                  height={176}
-                  className="mt-2 border border-border bg-white p-2"
-                />
-              </li>
-              <li>
-                Sem câmera? Digite este segredo no aplicativo:{' '}
-                <code className="font-mono break-all select-all" data-testid="mfa-secret">
-                  {enrollment.secret}
-                </code>
-              </li>
-              <li>Digite o código de 6 dígitos que o aplicativo mostrar.</li>
-            </ol>
-            <form onSubmit={confirmEnrollment} noValidate className="space-y-3">
-              <div className="space-y-1.5">
-                <label htmlFor="enroll-code" className="text-sm font-semibold">
-                  Código de verificação
-                </label>
-                <input
-                  id="enroll-code"
-                  inputMode="numeric"
-                  autoComplete="one-time-code"
-                  maxLength={6}
-                  className={controlClass}
-                  aria-invalid={errors.code ? true : undefined}
-                  aria-describedby={errors.code ? 'enroll-code-error' : undefined}
-                  {...register('code')}
-                />
-                {errors.code && (
-                  <p id="enroll-code-error" className="text-sm text-destructive">
-                    {errors.code.message}
-                  </p>
-                )}
-              </div>
-              <p className="text-sm text-muted-foreground">
-                Guarde o segredo em um gerenciador de senhas: sem o aplicativo você não consegue entrar.
-              </p>
-              <div className="flex flex-wrap gap-2">
-                <Button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? 'Verificando…' : 'Confirmar e ativar'}
+          {factors.isSuccess && !enrollment && (
+            <>
+              <p className="text-sm font-semibold">Situação: {active ? 'ativada' : 'desativada'}</p>
+              {active ? (
+                <Button variant="outline" disabled={busy} onClick={() => setConfirmOff(true)}>
+                  Desativar
                 </Button>
-                <Button type="button" variant="outline" onClick={cancelEnrollment}>
-                  Cancelar
+              ) : (
+                <Button disabled={busy} onClick={startEnrollment}>
+                  {busy ? 'Preparando…' : 'Ativar verificação em duas etapas'}
                 </Button>
-              </div>
-            </form>
-          </div>
-        )}
+              )}
+            </>
+          )}
 
-        {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
-        {error && <p role="alert" className="text-sm text-destructive">{error}</p>}
-      </section>
+          {enrollment && (
+            <div className="plate space-y-4 p-4">
+              <ol className="list-decimal space-y-3 pl-5 text-sm">
+                <li>
+                  Abra o aplicativo autenticador e escaneie o código abaixo.
+                  <img
+                    src={enrollment.qr}
+                    alt="QR code para o aplicativo autenticador"
+                    width={176}
+                    height={176}
+                    className="mt-2 border border-border bg-white p-2"
+                  />
+                </li>
+                <li>
+                  Sem câmera? Digite este segredo no aplicativo:{' '}
+                  <code className="font-mono break-all select-all" data-testid="mfa-secret">
+                    {enrollment.secret}
+                  </code>
+                </li>
+                <li>Digite o código de 6 dígitos que o aplicativo mostrar.</li>
+              </ol>
+              <form onSubmit={confirmEnrollment} noValidate className="space-y-3">
+                <div className="space-y-1.5">
+                  <label htmlFor="enroll-code" className="text-sm font-semibold">
+                    Código de verificação
+                  </label>
+                  <input
+                    id="enroll-code"
+                    inputMode="numeric"
+                    autoComplete="one-time-code"
+                    maxLength={6}
+                    className={controlClass}
+                    aria-invalid={errors.code ? true : undefined}
+                    aria-describedby={errors.code ? 'enroll-code-error' : undefined}
+                    {...register('code')}
+                  />
+                  {errors.code && (
+                    <p id="enroll-code-error" className="text-sm text-destructive">
+                      {errors.code.message}
+                    </p>
+                  )}
+                </div>
+                <p className="text-sm text-muted-foreground">
+                  Guarde o segredo em um gerenciador de senhas: sem o aplicativo você não consegue entrar.
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  <Button type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? 'Verificando…' : 'Confirmar e ativar'}
+                  </Button>
+                  <Button type="button" variant="outline" onClick={cancelEnrollment}>
+                    Cancelar
+                  </Button>
+                </div>
+              </form>
+            </div>
+          )}
 
-      <section aria-labelledby="pwd-h" className="max-w-xl space-y-3">
-        <h2 id="pwd-h" className="section-title">
-          Alterar senha
-        </h2>
-        <NewPasswordForm
-          submitLabel="Salvar nova senha"
-          onDone={() => setPasswordMessage('Senha alterada.')}
-        />
-        {passwordMessage && <p role="status" className="text-sm text-emerald-700">{passwordMessage}</p>}
-      </section>
+          {message && (
+            <p role="status" className="text-sm text-tone-success">
+              {message}
+            </p>
+          )}
+          {error && (
+            <p role="alert" className="text-sm text-destructive">
+              {error}
+            </p>
+          )}
+        </div>
+      </Plate>
 
       <ConfirmDialog
         open={confirmOff}
@@ -219,5 +213,22 @@ export function SecuritySection() {
         onCancel={() => setConfirmOff(false)}
       />
     </>
+  )
+}
+
+/** Troca de senha da sessão atual (com MFA ativo o Auth pede a sessão confirmada: D082). */
+export function PasswordSection() {
+  const [message, setMessage] = useState<string | null>(null)
+  return (
+    <Plate id="pwd-h" title="Senha">
+      <div className="max-w-xl space-y-3">
+        <NewPasswordForm submitLabel="Salvar nova senha" onDone={() => setMessage('Senha alterada.')} />
+        {message && (
+          <p role="status" className="text-sm text-tone-success">
+            {message}
+          </p>
+        )}
+      </div>
+    </Plate>
   )
 }

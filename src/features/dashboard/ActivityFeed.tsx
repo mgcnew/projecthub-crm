@@ -2,10 +2,12 @@ import { Building2 } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { LineBadge } from '@/components/LineBadge'
 import { LoadingState } from '@/components/states'
+import { tooltipHost, TooltipBubble } from '@/components/Tooltip'
 import { useAuth } from '@/features/auth/auth-context'
 import { describeActivity } from '@/features/activity/describe'
 import { entityHref, entityLabel, relativeTime } from '@/features/activity/feed'
 import { formatDateTime } from '@/lib/format'
+import { cn } from '@/lib/utils'
 import { useRecentActivity } from './api'
 
 /** "Atividade recente": o que mudou na organização, com o título atual e a linha do projeto. */
@@ -50,8 +52,9 @@ export function ActivityFeed({ enabled }: { enabled: boolean }) {
                 <span className="font-semibold">{label}</span> · {who} {what}
               </p>
             </div>
-            <time dateTime={a.created_at} title={formatDateTime(a.created_at)} className="shrink-0 pt-0.5 text-sm text-muted-foreground tabular-nums">
+            <time dateTime={a.created_at} className={cn(tooltipHost, 'shrink-0 pt-0.5 text-sm text-muted-foreground tabular-nums')}>
               {relativeTime(a.created_at)}
+              <TooltipBubble label={formatDateTime(a.created_at)} side="top-end" />
             </time>
           </li>
         )

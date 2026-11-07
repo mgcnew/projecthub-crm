@@ -43,6 +43,39 @@ export function ClientDetailPage() {
       content: (
         <>
           {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+          <ClientForm
+            key={c.updated_at}
+            initial={{
+              name: c.name,
+              company_name: c.company_name ?? '',
+              email: c.email ?? '',
+              phone: c.phone ?? '',
+              status: c.status as 'active' | 'inactive',
+              notes: c.notes ?? '',
+              legal_name: c.legal_name ?? '',
+              tax_id: c.tax_id ?? '',
+              billing_email: c.billing_email ?? '',
+              website: c.website ?? '',
+              address_line: c.address_line ?? '',
+              address_city: c.address_city ?? '',
+              address_state: c.address_state ?? '',
+              address_postal_code: c.address_postal_code ?? '',
+              source: c.source ?? '',
+            }}
+            readOnly={!canWrite}
+            submitLabel="Salvar alterações"
+            serverError={error}
+            onSubmit={async (values) => {
+              setError(null)
+              setMessage(null)
+              try {
+                await update.mutateAsync(values)
+                setMessage('Alterações salvas.')
+              } catch {
+                setError('Não foi possível salvar as alterações.')
+              }
+            }}
+          />
         </>
       ),
     },
@@ -56,6 +89,28 @@ export function ClientDetailPage() {
       label: 'Projetos',
       content: (
         <>
+          <section aria-labelledby="client-projects" className="space-y-3">
+            <h2 id="client-projects" className="section-title">
+              Projetos
+            </h2>
+            {projects.isPending && <LoadingState />}
+            {projects.isError && <ErrorState message="Não foi possível carregar os projetos." onRetry={() => projects.refetch()} />}
+            {projects.isSuccess && projects.data.length === 0 && (
+              <p className="text-sm text-muted-foreground">Nenhum projeto vinculado.</p>
+            )}
+            {projects.isSuccess && projects.data.length > 0 && (
+              <ul className="plate divide-y divide-border">
+                {projects.data.map((p) => (
+                  <li key={p.id}>
+                    <Link to={`/app/projetos/${p.id}`} className="flex min-h-12 items-center justify-between gap-2 px-4 py-3 hover:bg-muted">
+                      <span className="font-medium">{p.name}</span>
+                      <StatusBadge>{projectStatuses[p.status as keyof typeof projectStatuses] ?? p.status}</StatusBadge>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
 
         </>
       ),
@@ -160,63 +215,6 @@ export function ClientDetailPage() {
           }
         }}
       />
-
-      <ClientForm
-        key={c.updated_at}
-        initial={{
-          name: c.name,
-          company_name: c.company_name ?? '',
-          email: c.email ?? '',
-          phone: c.phone ?? '',
-          status: c.status as 'active' | 'inactive',
-          notes: c.notes ?? '',
-          legal_name: c.legal_name ?? '',
-          tax_id: c.tax_id ?? '',
-          billing_email: c.billing_email ?? '',
-          website: c.website ?? '',
-          address_line: c.address_line ?? '',
-          address_city: c.address_city ?? '',
-          address_state: c.address_state ?? '',
-          address_postal_code: c.address_postal_code ?? '',
-          source: c.source ?? '',
-        }}
-        readOnly={!canWrite}
-        submitLabel="Salvar alterações"
-        serverError={error}
-        onSubmit={async (values) => {
-          setError(null)
-          setMessage(null)
-          try {
-            await update.mutateAsync(values)
-            setMessage('Alterações salvas.')
-          } catch {
-            setError('Não foi possível salvar as alterações.')
-          }
-        }}
-      />
-
-      <section aria-labelledby="client-projects" className="space-y-3">
-        <h2 id="client-projects" className="section-title">
-          Projetos
-        </h2>
-        {projects.isPending && <LoadingState />}
-        {projects.isError && <ErrorState message="Não foi possível carregar os projetos." onRetry={() => projects.refetch()} />}
-        {projects.isSuccess && projects.data.length === 0 && (
-          <p className="text-sm text-muted-foreground">Nenhum projeto vinculado.</p>
-        )}
-        {projects.isSuccess && projects.data.length > 0 && (
-          <ul className="plate divide-y divide-border">
-            {projects.data.map((p) => (
-              <li key={p.id}>
-                <Link to={`/app/projetos/${p.id}`} className="flex min-h-12 items-center justify-between gap-2 px-4 py-3 hover:bg-muted">
-                  <span className="font-medium">{p.name}</span>
-                  <StatusBadge>{projectStatuses[p.status as keyof typeof projectStatuses] ?? p.status}</StatusBadge>
-                </Link>
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-      </EntityView>
+    </EntityView>
   )
 }

@@ -1,3 +1,4 @@
+import { tooltipHost, TooltipBubble } from '@/components/Tooltip'
 import { lineFor, lineInitial } from '@/lib/lines'
 import { cn } from '@/lib/utils'
 
@@ -22,8 +23,8 @@ export function LineBadge({
     <span
       role="img"
       aria-label={label}
-      title={label}
       className={cn(
+        tooltipHost,
         'inline-flex shrink-0 items-center justify-center rounded-full font-bold leading-none select-none',
         size === 'md' ? 'size-6 text-xs' : 'size-5 text-[11px]',
         line.outline && 'ring-1 ring-foreground ring-inset',
@@ -32,6 +33,7 @@ export function LineBadge({
       style={{ backgroundColor: line.color, color: line.ink }}
     >
       {projectId ? lineInitial(projectName) : '—'}
+      <TooltipBubble label={label} side="top" />
     </span>
   )
 }

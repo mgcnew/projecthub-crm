@@ -5,11 +5,15 @@ import { accessPayload, type AccessFormValues } from './schema'
 
 export type ArchivedFilter = 'active' | 'archived' | 'all'
 export const ACCESS_LIMIT = 200
+/** Valor do filtro de projeto para "acessos sem projeto" (`?projeto=sem`). */
+export const NO_PROJECT = 'sem'
 
 export type AccessListParams = {
   search: string
   archived: ArchivedFilter
+  /** Id do projeto, ou `NO_PROJECT` para os acessos que não têm projeto. */
   projectId?: string
+  category?: string
   /** Cliente: acessos ligados a ele ou a qualquer projeto dele (`projectIds`). */
   clientId?: string
   projectIds?: string[]
@@ -26,7 +30,9 @@ export function useAccessEntries(params: AccessListParams, enabled: boolean) {
       let q = supabase.from('access_entries').select(columns, { count: 'exact' }).order('name').limit(ACCESS_LIMIT)
       const term = sanitizeSearch(params.search)
       if (term) q = q.or(`name.ilike.%${term}%,username.ilike.%${term}%,category.ilike.%${term}%`)
-      if (params.projectId) q = q.eq('project_id', params.projectId)
+      if (params.projectId === NO_PROJECT) q = q.is('project_id', null)
+      else if (params.projectId) q = q.eq('project_id', params.projectId)
+      if (params.category) q = q.eq('category', params.category)
       if (params.clientId) {
         const ids = (params.projectIds ?? []).filter((v) => /^[0-9a-f-]{36}$/i.test(v))
         q = ids.length
@@ -104,5 +110,36 @@ export function useDeleteAccess(id: string) {
       if (error) throw error
     },
     onSuccess: () => qc.invalidateQueries({ queryKey: ['access'] }),
+  })
+}
+
+/** Projetos para o filtro: inclui os arquivados, porque um acesso pode continuar ligado a um deles. */
+export function useAccessProjectOptions(enabled: boolean) {
+  return useQuery({
+    queryKey: ['access', 'project-options'],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('projects')
+        .select('id, name, archived_at')
+        .order('name')
+        .limit(500)
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}
+
+/** Categorias que já existem nos acessos (texto livre), sem repetição e em ordem alfabética. */
+export function useAccessCategories(enabled: boolean) {
+  return useQuery({
+    queryKey: ['access', 'categories'],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase.from('access_entries').select('category').not('category', 'is', null).limit(1000)
+      if (error) throw error
+      const names = (data ?? []).map((r) => r.category as string).filter(Boolean)
+      return [...new Set(names)].sort((a, b) => a.localeCompare(b, 'pt-BR'))
+    },
   })
 }

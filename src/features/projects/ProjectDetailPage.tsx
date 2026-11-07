@@ -42,6 +42,35 @@ export function ProjectDetailPage() {
       content: (
         <>
           {message && <p role="status" className="text-sm text-emerald-700">{message}</p>}
+          <ProjectForm
+            key={p.updated_at}
+            initial={{
+              name: p.name,
+              description: p.description ?? '',
+              client_id: p.client_id ?? '',
+              status: p.status as 'planning',
+              priority: p.priority as 'medium',
+              started_on: p.started_on ?? '',
+              target_date: p.target_date ?? '',
+              contract_value: formatMoneyInput(p.contract_value_cents),
+              currency: p.currency as 'BRL',
+              billing_model: p.billing_model as 'fixed',
+            }}
+            lockCurrency={(payments.data?.length ?? 0) > 0}
+            readOnly={!canWrite}
+            submitLabel="Salvar alterações"
+            serverError={error}
+            onSubmit={async (values) => {
+              setError(null)
+              setMessage(null)
+              try {
+                await update.mutateAsync(values)
+                setMessage('Alterações salvas.')
+              } catch {
+                setError('Não foi possível salvar as alterações.')
+              }
+            }}
+          />
         </>
       ),
     },
@@ -50,6 +79,7 @@ export function ProjectDetailPage() {
       label: 'Tarefas',
       content: (
         <>
+          <LinkedTasks scope={{ projectId: p.id }} />
 
         </>
       ),
@@ -155,38 +185,6 @@ export function ProjectDetailPage() {
           }
         }}
       />
-
-      <ProjectForm
-        key={p.updated_at}
-        initial={{
-          name: p.name,
-          description: p.description ?? '',
-          client_id: p.client_id ?? '',
-          status: p.status as 'planning',
-          priority: p.priority as 'medium',
-          started_on: p.started_on ?? '',
-          target_date: p.target_date ?? '',
-          contract_value: formatMoneyInput(p.contract_value_cents),
-          currency: p.currency as 'BRL',
-          billing_model: p.billing_model as 'fixed',
-        }}
-        lockCurrency={(payments.data?.length ?? 0) > 0}
-        readOnly={!canWrite}
-        submitLabel="Salvar alterações"
-        serverError={error}
-        onSubmit={async (values) => {
-          setError(null)
-          setMessage(null)
-          try {
-            await update.mutateAsync(values)
-            setMessage('Alterações salvas.')
-          } catch {
-            setError('Não foi possível salvar as alterações.')
-          }
-        }}
-      />
-
-      <LinkedTasks scope={{ projectId: p.id }} />
-      </EntityView>
+    </EntityView>
   )
 }
