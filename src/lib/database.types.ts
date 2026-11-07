@@ -739,6 +739,52 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"vault_items": {
+                  Row: {
+                    "access_id": string,"ciphertext": string,"created_at": string,"id": string,"iv": string,"organization_id": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "access_id": string,"ciphertext": string,"created_at"?: string,"id"?: string,"iv": string,"organization_id": string,"updated_at"?: string
+                  }
+                  Update: {
+                    "access_id"?: string,"ciphertext"?: string,"created_at"?: string,"id"?: string,"iv"?: string,"organization_id"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "vault_items_organization_id_access_id_fkey"
+      columns: ["organization_id","access_id"]
+isOneToOne: true
+      referencedRelation: "access_entries"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "vault_items_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "vault_meta"
+      referencedColumns: ["organization_id"]
+    }
+                  ]
+                },"vault_meta": {
+                  Row: {
+                    "created_at": string,"dek_iv": string,"failed_attempts": number,"kdf_iterations": number,"locked_until": string | null,"max_attempts": number,"organization_id": string,"salt": string,"secret_id": string,"updated_at": string,"verifier": string,"wrapped_dek": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "created_at"?: string,"dek_iv": string,"failed_attempts"?: number,"kdf_iterations": number,"locked_until"?: string | null,"max_attempts"?: number,"organization_id": string,"salt": string,"secret_id": string,"updated_at"?: string,"verifier": string,"wrapped_dek": string
+                  }
+                  Update: {
+                    "created_at"?: string,"dek_iv"?: string,"failed_attempts"?: number,"kdf_iterations"?: number,"locked_until"?: string | null,"max_attempts"?: number,"organization_id"?: string,"salt"?: string,"secret_id"?: string,"updated_at"?: string,"verifier"?: string,"wrapped_dek"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "vault_meta_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: true
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
                 }
           }
           Views: {
@@ -748,6 +794,22 @@ isOneToOne: false
             "list_calendar_occurrences":
 { Args: { "p_from": string,"p_to": string }; Returns: {
               "client_id": string,"event_id": string,"event_type": string,"is_recurring": boolean,"occurrence_date": string,"occurrence_end": string,"occurrence_start": string,"project_id": string,"status": string,"task_id": string,"timezone": string,"title": string
+            }[]
+                           },
+"vault_destroy":
+{ Args: { "p_organization": string }; Returns: undefined
+                           },
+"vault_rekey":
+{ Args: { "p_dek_iv": string,"p_iterations": number,"p_new_proof": string,"p_old_proof": string,"p_organization": string,"p_salt": string,"p_wrapped_dek": string }; Returns: {
+              "attempts_left": number,"retry_at": string,"status": string
+            }[]
+                           },
+"vault_setup":
+{ Args: { "p_dek_iv": string,"p_iterations": number,"p_max_attempts"?: number,"p_organization": string,"p_proof": string,"p_salt": string,"p_share": string,"p_wrapped_dek": string }; Returns: undefined
+                           },
+"vault_unlock":
+{ Args: { "p_organization": string,"p_proof": string }; Returns: {
+              "attempts_left": number,"retry_at": string,"share": string,"status": string
             }[]
                            }
           }
