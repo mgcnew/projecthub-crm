@@ -88,6 +88,10 @@ delete from auth.mfa_factors
 Depois, entre só com a senha e reative a verificação em duas etapas, guardando o segredo no gerenciador de senhas.
 Esta operação é a única forma de "desligar" o MFA sem o código; registre quando for feita.
 
+## Cofre de senhas (D120–D125)
+
+O backup do banco **não leva o cofre inteiro**: a parte da chave guardada no servidor fica no schema `vault` e não entra no dump de `public`. Depois de restaurar o banco, o cofre não abre mais. Procedimento: Configurações → Cofre → **Destruir o cofre** → **Restaurar de um backup** (arquivo `cofre-voltier-AAAA-MM-DD.json` exportado antes, com a senha mestra daquela exportação). Exporte um backup depois de guardar senhas novas e guarde o arquivo fora do app.
+
 ## Falhas conhecidas / pontos de atenção
 
 - O dump emite avisos de FKs circulares (`tasks`, `meetings`, `calendar_events`): esperado; o `--disable-triggers`
