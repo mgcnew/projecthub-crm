@@ -57,7 +57,7 @@ test('o build de produção funciona sob CSP estrita, sem violações', async ({
   await expect(picker).toBeHidden()
 
   // QR code do autenticador: imagem data: SVG vinda do Auth precisa carregar sob `img-src 'self' data:`.
-  await page.goto('/app/configuracoes')
+  await page.goto('/app/configuracoes?aba=seguranca')
   await page.getByRole('button', { name: 'Ativar verificação em duas etapas' }).click()
   const qr = page.getByAltText('QR code para o aplicativo autenticador')
   await expect(qr).toBeVisible()

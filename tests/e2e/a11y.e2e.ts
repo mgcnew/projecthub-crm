@@ -77,6 +77,9 @@ test.describe('acessibilidade (axe)', () => {
       `/app/clientes/${ids.client}`,
       '/app/notificacoes',
       '/app/configuracoes',
+      '/app/configuracoes?aba=seguranca',
+      '/app/configuracoes?aba=preferencias',
+      '/app/configuracoes?aba=espaco',
     ]
     for (const path of routes) {
       await page.goto(path)

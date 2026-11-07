@@ -3,7 +3,10 @@ import userEvent from '@testing-library/user-event'
 import { RouterProvider, createMemoryRouter, Link } from 'react-router-dom'
 import { AppShell } from './AppShell'
 
-vi.mock('@/features/auth/auth-context', () => ({ useAuth: () => ({ signOut: vi.fn() }) }))
+vi.mock('@/features/auth/auth-context', () => ({
+  useAuth: () => ({ signOut: vi.fn(), session: { user: { id: 'u1', email: 'maria@example.com' } } }),
+}))
+vi.mock('@/features/settings/api', () => ({ useProfile: () => ({ data: { display_name: 'Maria Souza' } }) }))
 vi.mock('@/features/notifications/api', () => ({ useUnreadCount: () => ({ data: 3 }) }))
 vi.mock('@/features/search/SearchDialog', () => ({
   SearchDialog: ({ open }: { open: boolean }) => (open ? <div role="dialog" aria-label="Buscar">busca aberta</div> : null),

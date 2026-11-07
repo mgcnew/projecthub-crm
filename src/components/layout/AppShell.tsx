@@ -18,18 +18,20 @@ import {
   UsersRound,
   type LucideIcon,
 } from 'lucide-react'
-import { NavLink, useLocation, useNavigate, useRoutes, type RouteObject } from 'react-router-dom'
+import { Link, NavLink, useLocation, useNavigate, useRoutes, type RouteObject } from 'react-router-dom'
+import { Avatar } from '@/components/Avatar'
+import { BrandLogo, BrandMark } from '@/components/Brand'
 import { EntityOverlay } from '@/components/entity/EntityOverlay'
 import { LineRegistry } from '@/components/LineRegistry'
 import { Button } from '@/components/ui/button'
 import { useAuth } from '@/features/auth/auth-context'
 import { useUnreadCount } from '@/features/notifications/api'
 import { SearchDialog } from '@/features/search/SearchDialog'
+import { useProfile } from '@/features/settings/api'
 import { TimezoneBoundary } from '@/features/settings/TimezoneBoundary'
 import { matchEntityRoute } from '@/lib/entityRoutes'
+import { tooltipHost, TooltipBubble } from '@/components/Tooltip'
 import { cn } from '@/lib/utils'
-import voltierIcon from '@/assets/brand/voltier-icon.webp'
-import voltierLogo from '@/assets/brand/voltier-logo.webp'
 import { useIsDesktop } from '@/lib/useMediaQuery'
 import { useOnlineStatus } from '@/lib/useOnlineStatus'
 import { usePersistedState } from '@/lib/usePersistedState'
@@ -71,6 +73,7 @@ function UnreadBadge({ count }: { count: number }) {
 
 function link({ isActive }: { isActive: boolean }) {
   return cn(
+    tooltipHost,
     'flex min-h-10 items-center gap-3 rounded-md px-3 text-sm font-semibold transition-colors duration-150 ease-out max-lg:min-h-11',
     isActive ? 'bg-primary text-primary-foreground shadow-card' : 'text-tone-neutral hover:bg-muted hover:text-foreground',
   )
@@ -115,7 +118,10 @@ function useRouteAccessibility(main: React.RefObject<HTMLElement | null>, overla
 type Origin = { pathname: string; search: string; idx: number | null }
 
 export function AppShell({ pages }: { pages: RouteObject[] }) {
-  const { signOut } = useAuth()
+  const { signOut, session } = useAuth()
+  const profile = useProfile(session?.user.id)
+  const email = session?.user.email ?? ''
+  const displayName = profile.data?.display_name || email.split('@')[0] || 'Meu perfil'
   const [moreOpen, setMoreOpen] = useState(false)
   const [searchOpen, setSearchOpen] = useState(false)
   const [sidebarCollapsed, setSidebarCollapsed] = usePersistedState(
@@ -194,16 +200,17 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
 
       <aside
         className={cn(
-          'sticky top-0 hidden h-dvh border-r border-border bg-card py-5 lg:flex lg:flex-col lg:gap-1',
+          // z-30: as dicas que saem da barra passam por cima do cabeçalho fixo (z-20).
+          'sticky top-0 z-30 hidden h-dvh border-r border-border bg-card py-5 lg:flex lg:flex-col lg:gap-1',
           sidebarCollapsed ? 'px-2' : 'px-3',
         )}
       >
         <div className={cn('flex min-h-11 items-center', sidebarCollapsed ? 'flex-col gap-2' : 'gap-2.5 px-3 pb-5')}>
           {sidebarCollapsed ? (
-            <img src={voltierIcon} alt="Voltier" width={28} height={28} className="size-7 shrink-0 object-contain" />
+            <BrandMark />
           ) : (
             <span className="flex min-w-0 flex-1 items-center">
-              <img src={voltierLogo} alt="Voltier" width={111} height={32} className="h-8 w-auto max-w-full object-contain object-left" />
+              <BrandLogo />
             </span>
           )}
           <button
@@ -211,9 +218,9 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
             aria-label={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
             aria-expanded={!sidebarCollapsed}
             aria-controls="navegacao-principal"
-            title={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
             onClick={() => setSidebarCollapsed((collapsed) => !collapsed)}
             className={cn(
+              tooltipHost,
               'inline-flex size-9 shrink-0 items-center justify-center rounded-sm text-tone-neutral hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
               sidebarCollapsed && 'size-11',
             )}
@@ -223,21 +230,23 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
             ) : (
               <PanelLeftClose aria-hidden="true" className="size-[1.125rem]" strokeWidth={2} />
             )}
+            <TooltipBubble label={sidebarCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'} />
           </button>
         </div>
         <button
           type="button"
           aria-keyshortcuts="Control+K Meta+K"
           aria-label="Buscar"
-          title={sidebarCollapsed ? 'Buscar' : undefined}
           onClick={() => setSearchOpen(true)}
           className={cn(
+            tooltipHost,
             'mb-1 flex min-h-10 items-center gap-3 rounded-md border border-border bg-background text-sm font-medium text-muted-foreground hover:bg-muted hover:text-foreground',
             sidebarCollapsed ? 'justify-center px-0' : 'px-3',
           )}
         >
           <Search aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
           <span className={sidebarCollapsed ? 'sr-only' : ''}>Buscar</span>
+          {sidebarCollapsed && <TooltipBubble label="Buscar" />}
           {!sidebarCollapsed && (
             <kbd className="ml-auto rounded-sm border border-border bg-card px-1.5 font-sans text-[0.6875rem] font-semibold text-muted-foreground">
               Ctrl K
@@ -259,25 +268,44 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
                   key={i.to}
                   to={i.to}
                   end={i.end}
-                  title={sidebarCollapsed ? i.label : undefined}
                   className={(state) => cn(link(state), sidebarCollapsed && 'justify-center px-0')}
                 >
                   <i.icon aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
                   <span className={sidebarCollapsed ? 'sr-only' : ''}>{i.label}</span>
+                  {sidebarCollapsed && <TooltipBubble label={i.label} />}
                 </NavLink>
               ))}
             </div>
           ))}
         </nav>
+        <Link
+          to="/app/configuracoes"
+          aria-label={`Seu perfil: ${displayName}`}
+          className={cn(
+            tooltipHost,
+            'mt-auto flex items-center gap-3 rounded-md p-2 transition-colors duration-150 ease-out hover:bg-muted',
+            sidebarCollapsed && 'justify-center',
+          )}
+        >
+          <Avatar name={profile.data?.display_name} email={email} size="sm" />
+          {sidebarCollapsed ? (
+            <TooltipBubble label={displayName} />
+          ) : (
+            <span className="min-w-0 flex-1">
+              <span className="block truncate text-sm font-semibold">{displayName}</span>
+              <span className="block truncate text-xs text-muted-foreground">{email}</span>
+            </span>
+          )}
+        </Link>
         <Button
           variant="ghost"
           aria-label="Sair"
-          title={sidebarCollapsed ? 'Sair' : undefined}
-          className={cn('mt-auto', sidebarCollapsed ? 'justify-center px-0' : 'justify-start px-3')}
+          className={cn(tooltipHost, sidebarCollapsed ? 'justify-center px-0' : 'justify-start px-3')}
           onClick={() => void signOut()}
         >
           <LogOut aria-hidden="true" className="size-[1.125rem] shrink-0" strokeWidth={2} />
           <span className={sidebarCollapsed ? 'sr-only' : ''}>Sair</span>
+          {sidebarCollapsed && <TooltipBubble label="Sair" />}
         </Button>
       </aside>
 
@@ -286,15 +314,16 @@ export function AppShell({ pages }: { pages: RouteObject[] }) {
           <NavLink
             to="/app/notificacoes"
             aria-label={`Notificações${unread > 0 ? `, ${unread} não lida${unread > 1 ? 's' : ''}` : ''}`}
-            title="Notificações"
             className={({ isActive }) =>
               cn(
-                'relative inline-flex size-10 items-center justify-center rounded-md text-tone-neutral hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
+                tooltipHost,
+                'inline-flex size-10 items-center justify-center rounded-md text-tone-neutral hover:bg-muted focus-visible:outline-2 focus-visible:outline-ring',
                 isActive && 'bg-muted text-foreground',
               )
             }
           >
             <Bell aria-hidden="true" className="size-5" strokeWidth={2} />
+            <TooltipBubble label="Notificações" side="bottom-end" />
             {unread > 0 && (
               <span
                 aria-hidden="true"

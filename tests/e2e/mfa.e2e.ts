@@ -21,8 +21,8 @@ test('verificação em duas etapas: ativar, exigir o código no login e desativa
   const user = await createUser('mfa')
   await login(page, user)
 
-  // Ativar pela tela de Configurações.
-  await page.goto('/app/configuracoes')
+  // Ativar pela tela de Configurações (aba Conta e segurança).
+  await page.goto('/app/configuracoes?aba=seguranca')
   await expect(page.getByText('Situação: desativada')).toBeVisible()
   await page.getByRole('button', { name: 'Ativar verificação em duas etapas' }).click()
   await expect(page.getByAltText('QR code para o aplicativo autenticador')).toBeVisible()
@@ -67,7 +67,7 @@ test('verificação em duas etapas: ativar, exigir o código no login e desativa
   await expect(page.getByRole('heading', { level: 1, name: 'Tarefas' })).toBeVisible()
 
   // Desativar (pede confirmação).
-  await page.goto('/app/configuracoes')
+  await page.goto('/app/configuracoes?aba=seguranca')
   await page.getByRole('button', { name: 'Desativar', exact: true }).click()
   await page.getByRole('alertdialog').getByRole('button', { name: 'Desativar' }).click()
   await expect(page.getByText('Situação: desativada')).toBeVisible()
