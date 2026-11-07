@@ -6,6 +6,7 @@ import { LoginPage } from '@/features/auth/LoginPage'
 import { RecoverPasswordPage } from '@/features/auth/RecoverPasswordPage'
 import { ResetPasswordPage } from '@/features/auth/ResetPasswordPage'
 import { RequireAuth } from '@/features/auth/RequireAuth'
+import { VaultProvider } from '@/features/vault/VaultProvider'
 import { NotFoundPage } from '@/pages/NotFoundPage'
 import { appRoutes } from './appRoutes'
 
@@ -27,7 +28,11 @@ export const routes: RouteObject[] = [
         element: <RequireAuth />,
         children: [
           {
-            element: <AppShell pages={appRoutes} />,
+            element: (
+              <VaultProvider>
+                <AppShell pages={appRoutes} />
+              </VaultProvider>
+            ),
             children: appRoutes,
           },
         ],

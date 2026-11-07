@@ -6,9 +6,9 @@ test('configurações em abas: perfil, e-mail, espaço de trabalho e preferênci
   await login(page, user)
   await page.goto('/app/configuracoes')
 
-  // Quatro abas; a primeira (Perfil) abre por padrão e o menu lateral leva até ela.
+  // Cinco abas; a primeira (Perfil) abre por padrão e o menu lateral leva até ela.
   const tabs = page.getByRole('tablist', { name: 'Seções de configurações' })
-  await expect(tabs.getByRole('tab')).toHaveText(['Perfil', 'Conta e segurança', 'Preferências', 'Espaço de trabalho'])
+  await expect(tabs.getByRole('tab')).toHaveText(['Perfil', 'Conta e segurança', 'Cofre', 'Preferências', 'Espaço de trabalho'])
   await expect(tabs.getByRole('tab', { name: 'Perfil' })).toHaveAttribute('aria-selected', 'true')
 
   // Perfil: editar o nome aparece no menu lateral e sobrevive ao recarregar.

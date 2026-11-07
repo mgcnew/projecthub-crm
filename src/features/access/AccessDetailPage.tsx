@@ -4,6 +4,7 @@ import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { EntityView } from '@/components/entity/EntityView'
 import { ErrorState, LoadingState, StatusBadge } from '@/components/states'
 import { Button } from '@/components/ui/button'
+import { AccessSecret } from '@/features/vault/AccessSecret'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
 import { useAccessEntry, useArchiveAccess, useDeleteAccess, useUpdateAccess } from './api'
@@ -99,6 +100,7 @@ export function AccessDetailPage() {
             </>
           ),
         },
+        { id: 'senha', label: 'Senha', content: <AccessSecret accessId={a.id} accessName={a.name} /> },
       ]}
     >
       <ConfirmDialog
