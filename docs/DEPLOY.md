@@ -165,3 +165,39 @@ primeiro deploy e registrado na tabela de ensaios.
   param e voltam sozinhos (janela de recuperação de 24 h, D049).
 - Usuário único: a atribuição entre membros e a visibilidade de perfis (D023) não foram desenhadas.
 - Integrações externas, push e WhatsApp seguem fora do escopo (D011).
+
+## 8. Envio de e-mail e WhatsApp (Fases 7.5 e 7.6) — passo a passo do usuário
+
+Tudo abaixo é **seu** (contas, DNS, chaves). Eu não uso nem peço chaves. Enquanto isso não estiver feito, os provedores ficam `fake`
+e nada sai de verdade.
+
+1. **Resend** (e-mail): confira a política de uso aceitável (e-mail frio costuma ser restrito); em resend.com → *Domains* adicione seu
+   domínio e crie no DNS os registros que ele mostrar (SPF e DKIM; DMARC recomendado). Quando o domínio estiver "Verified", crie uma
+   *API key* (só envio) e, em *Webhooks*, um webhook para `https://SEU_PROJETO.supabase.co/functions/v1/resend-webhook` com os eventos
+   `email.bounced` e `email.complained`; copie o *Signing secret* (`whsec_…`).
+2. **Evolution** (WhatsApp): deixe a API da VPS acessível por **HTTPS** (domínio ou subdomínio com certificado; Caddy ou Nginx);
+   anote a URL, o nome da instância e a chave de API. No Evolution, aponte o webhook da instância para
+   `https://SEU_PROJETO.supabase.co/functions/v1/evolution-webhook?secret=SEGREDO_QUE_VOCE_ESCOLHER` com os eventos
+   `MESSAGES_UPSERT` e `CONNECTION_UPDATE`.
+3. **Segredos das funções** (rode você, com a CLI logada na conta do CRM; `gere` = valor aleatório longo, ex. `openssl rand -hex 32`):
+   ```bash
+   npx supabase secrets set --project-ref gnissqsrpzadthapdpue \
+     CRON_SECRET=<gere> UNSUBSCRIBE_SECRET=<gere> \
+     EMAIL_PROVIDER=resend RESEND_API_KEY=<sua chave> RESEND_WEBHOOK_SECRET=<whsec_…> \
+     WHATSAPP_PROVIDER=evolution EVOLUTION_URL=https://evolution.seudominio.com EVOLUTION_INSTANCE=<instância> \
+     EVOLUTION_API_KEY=<sua chave> EVOLUTION_WEBHOOK_SECRET=<o mesmo SEGREDO do passo 2>
+   ```
+4. **Publicar as funções:** `npx supabase functions deploy send-outbox unsubscribe resend-webhook evolution-webhook --project-ref gnissqsrpzadthapdpue`
+   (o `config.toml` já marca `verify_jwt = false`: elas se autenticam pelos próprios segredos).
+5. **Agendador** (SQL Editor do Supabase, uma vez; usa o **mesmo** `CRON_SECRET` do passo 3):
+   ```sql
+   select vault.create_secret('https://gnissqsrpzadthapdpue.supabase.co/functions/v1/send-outbox', 'send_outbox_url');
+   select vault.create_secret('<o mesmo CRON_SECRET>', 'cron_secret');
+   ```
+   O job `send-outbox` (a cada minuto) já existe na migração e só passa a chamar a função depois disso.
+6. **Prospecção → Configurações:** preencha o *E-mail de envio* (do domínio verificado), os limites (comece com poucos), a janela e o fuso.
+7. **Primeiro teste real (só para você):** crie um lead com o **seu** e-mail, gere um rascunho, aprove e espere até 1 minuto; confira a
+   mensagem, o rodapé e o link de descadastro. Repita para o seu WhatsApp (lead morno com o seu número, com a conexão aberta).
+8. **Teste local das funções (sem chaves):** `npx supabase functions serve --env-file <arquivo com CRON_SECRET, UNSUBSCRIBE_SECRET e
+   EVOLUTION_WEBHOOK_SECRET>` e, em outro terminal, `node --experimental-strip-types scripts/smoke-functions.mts`.
+
