@@ -5,6 +5,7 @@ const tabs = [
   { to: '/app/prospeccao', label: 'Leads', end: true },
   { to: '/app/prospeccao/importar', label: 'Importar', end: false },
   { to: '/app/prospeccao/modelos', label: 'Modelos', end: false },
+  { to: '/app/prospeccao/fila', label: 'Fila', end: false },
   { to: '/app/prospeccao/sistemas', label: 'Sistemas', end: false },
 ] as const
 

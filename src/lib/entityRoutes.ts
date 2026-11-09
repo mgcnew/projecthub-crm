@@ -3,7 +3,7 @@
  * `fallback` é a página usada como fundo quando a URL é aberta direto (F5, link colado).
  */
 export type EntityRoute = {
-  kind: 'task' | 'project' | 'client' | 'event' | 'meeting' | 'access' | 'lead' | 'product' | 'template' | 'new-product' | 'new-template' | 'new-project' | 'new-client' | 'new-event' | 'new-access' | 'new-lead'
+  kind: 'task' | 'project' | 'client' | 'event' | 'meeting' | 'access' | 'lead' | 'product' | 'template' | 'message' | 'new-product' | 'new-template' | 'new-project' | 'new-client' | 'new-event' | 'new-access' | 'new-lead'
   fallback: string
 }
 
@@ -24,6 +24,7 @@ const rules: { re: RegExp; route: EntityRoute }[] = [
   { re: /^\/app\/prospeccao\/leads\/[^/]+\/?$/, route: { kind: 'lead', fallback: '/app/prospeccao' } },
   { re: /^\/app\/prospeccao\/sistemas\/[^/]+\/?$/, route: { kind: 'product', fallback: '/app/prospeccao/sistemas' } },
   { re: /^\/app\/prospeccao\/modelos\/[^/]+\/?$/, route: { kind: 'template', fallback: '/app/prospeccao/modelos' } },
+  { re: /^\/app\/prospeccao\/fila\/[^/]+\/?$/, route: { kind: 'message', fallback: '/app/prospeccao/fila' } },
 ]
 
 export function matchEntityRoute(pathname: string): EntityRoute | null {

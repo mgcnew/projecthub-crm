@@ -15,10 +15,11 @@ describe('matchEntityRoute', () => {
     expect(matchEntityRoute('/app/prospeccao/sistemas/abc')).toEqual({ kind: 'product', fallback: '/app/prospeccao/sistemas' })
     expect(matchEntityRoute('/app/prospeccao/modelos/novo')?.kind).toBe('new-template')
     expect(matchEntityRoute('/app/prospeccao/modelos/abc')).toEqual({ kind: 'template', fallback: '/app/prospeccao/modelos' })
+    expect(matchEntityRoute('/app/prospeccao/fila/abc')).toEqual({ kind: 'message', fallback: '/app/prospeccao/fila' })
   })
 
   it('páginas e listas não são registros', () => {
-    for (const p of ['/app', '/app/meu-dia', '/app/tarefas', '/app/tarefas/modelos', '/app/clientes', '/app/projetos', '/app/agenda', '/app/reunioes', '/app/notificacoes', '/app/configuracoes', '/app/prospeccao', '/app/prospeccao/importar', '/app/prospeccao/sistemas', '/app/prospeccao/modelos', '/login'])
+    for (const p of ['/app', '/app/meu-dia', '/app/tarefas', '/app/tarefas/modelos', '/app/clientes', '/app/projetos', '/app/agenda', '/app/reunioes', '/app/notificacoes', '/app/configuracoes', '/app/prospeccao', '/app/prospeccao/importar', '/app/prospeccao/sistemas', '/app/prospeccao/modelos', '/app/prospeccao/fila', '/login'])
       expect(matchEntityRoute(p)).toBeNull()
   })
 
