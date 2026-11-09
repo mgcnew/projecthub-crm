@@ -177,7 +177,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
   variações; avisos aparecem para link no passo 1 e para clichês.
 - **Testes:** unitários do render e do lint (tabela de casos), pgTAP, E2E.
 
-### 7.4 Fila e aprovação, sem envio real (Codex, regras do banco revisadas aqui)
+### 7.4 Fila e aprovação, sem envio real (Codex, regras do banco revisadas aqui) — **feita aqui** (D129–D132)
 - **Escopo:** `outbound_messages`; gerar rascunhos para leads selecionados (lead × modelo); revisar, editar,
   aprovar em lote, cancelar; regras no banco (D105, supressão, transições de status); placa "Aguardando
   aprovação".
