@@ -182,3 +182,46 @@ export function campaignPayload(v: CampaignFormValues) {
 
 export const campaignStatusLabels = { draft: 'Rascunho', active: 'Ativa', paused: 'Pausada', finished: 'Encerrada' } as const
 export const campaignLeadStatusLabels = { active: 'Na sequência', replied: 'Respondeu', finished: 'Encerrado', opted_out: 'Saiu', failed: 'Falhou' } as const
+
+// ------------------------------------------------------- configurações de envio
+const hhmm = z.string().regex(/^([01]\d|2[0-3]):[0-5]\d$/, 'Use o formato HH:MM')
+const limit = (max: number) =>
+  z.string().regex(/^\d{1,3}$/, `Informe um número de 1 a ${max}`).refine((v) => Number(v) >= 1 && Number(v) <= max, `Informe um número de 1 a ${max}`)
+
+export const outreachSettingsSchema = z
+  .object({
+    email_from: z.string().trim().max(254, 'Máximo de 254 caracteres').refine((v) => v === '' || /@/.test(v), 'Informe um e-mail (ex.: Seu Nome <contato@seudominio.com.br>)'),
+    email_reply_to: z.string().trim().max(254, 'Máximo de 254 caracteres').refine((v) => v === '' || /@/.test(v), 'Informe um e-mail'),
+    email_daily_limit: limit(100),
+    whatsapp_daily_limit: limit(100),
+    window_start: hhmm,
+    window_end: hhmm,
+    weekdays_only: z.boolean(),
+    timezone: z.string().trim().min(1, 'Informe o fuso').max(64),
+  })
+  .refine((v) => v.window_end > v.window_start, { path: ['window_end'], message: 'O fim da janela vem depois do início' })
+export type OutreachSettingsValues = z.infer<typeof outreachSettingsSchema>
+
+export const outreachSettingsDefaults: OutreachSettingsValues = {
+  email_from: '',
+  email_reply_to: '',
+  email_daily_limit: '50',
+  whatsapp_daily_limit: '20',
+  window_start: '09:00',
+  window_end: '18:00',
+  weekdays_only: true,
+  timezone: 'America/Sao_Paulo',
+}
+
+export function outreachSettingsPayload(v: OutreachSettingsValues) {
+  return {
+    email_from: emptyToNull(v.email_from),
+    email_reply_to: emptyToNull(v.email_reply_to),
+    email_daily_limit: Number(v.email_daily_limit),
+    whatsapp_daily_limit: Number(v.whatsapp_daily_limit),
+    window_start: v.window_start,
+    window_end: v.window_end,
+    weekdays_only: v.weekdays_only,
+    timezone: v.timezone.trim(),
+  }
+}

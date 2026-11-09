@@ -1,5 +1,6 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { sanitizeSearch } from '@/lib/format'
+import type { Database } from '@/lib/database.types'
 import { supabase } from '@/lib/supabase'
 import { campaignPayload, productPayload, templatePayload, type CampaignFormValues, type Channel, type ProductFormValues, type TemplateFormValues } from './schema'
 
@@ -155,7 +156,7 @@ export function useLeadSamples(enabled: boolean) {
 }
 
 // ---------------------------------------------------------------------- fila
-export type OutboxStatus = 'draft' | 'approved' | 'cancelled' | 'all'
+export type OutboxStatus = 'draft' | 'approved' | 'sent' | 'failed' | 'cancelled' | 'all'
 
 export function useOutbox(status: OutboxStatus, enabled: boolean) {
   return useQuery({
@@ -165,7 +166,7 @@ export function useOutbox(status: OutboxStatus, enabled: boolean) {
     queryFn: async () => {
       let q = supabase
         .from('outbound_messages')
-        .select('id, lead_id, channel, to_address, subject, body, status, approved_at, template_id, created_at, leads(company_name), message_templates(name, step)')
+        .select('id, lead_id, channel, to_address, subject, body, status, approved_at, sent_at, last_error, template_id, created_at, leads(company_name), message_templates(name, step)')
         .order('created_at', { ascending: false })
         .limit(300)
       if (status !== 'all') q = q.eq('status', status)
@@ -186,8 +187,8 @@ export function useOutboxCounts(enabled: boolean) {
         if (error) throw error
         return n ?? 0
       }
-      const [draft, approved] = await Promise.all([count('draft'), count('approved')])
-      return { draft, approved }
+      const [draft, approved, failed] = await Promise.all([count('draft'), count('approved'), count('failed')])
+      return { draft, approved, failed }
     },
   })
 }
@@ -672,5 +673,37 @@ export function useMetricsData(enabled: boolean) {
         queued: queue.count ?? 0,
       }
     },
+  })
+}
+
+// ---------------------------------------------------- configurações de envio
+export function useOutreachSettings(enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'settings'],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase.from('outreach_settings').select('*').maybeSingle()
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+type SettingsPatch = Omit<Database['public']['Tables']['outreach_settings']['Update'], 'organization_id'>
+
+/** Salva a configuração (cria a linha da organização na primeira vez). */
+export function useSaveOutreachSettings(orgId: string | undefined) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (patch: SettingsPatch) => {
+      if (!orgId) throw new Error('Organização não carregada')
+      const upd = await supabase.from('outreach_settings').update(patch).eq('organization_id', orgId).select('organization_id')
+      if (upd.error) throw upd.error
+      if (upd.data.length === 0) {
+        const ins = await supabase.from('outreach_settings').insert({ organization_id: orgId, ...patch })
+        if (ins.error) throw ins.error
+      }
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
   })
 }

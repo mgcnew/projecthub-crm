@@ -21,7 +21,7 @@ describe('matchEntityRoute', () => {
   })
 
   it('páginas e listas não são registros', () => {
-    for (const p of ['/app', '/app/meu-dia', '/app/tarefas', '/app/tarefas/modelos', '/app/clientes', '/app/projetos', '/app/agenda', '/app/reunioes', '/app/notificacoes', '/app/configuracoes', '/app/prospeccao', '/app/prospeccao/importar', '/app/prospeccao/sistemas', '/app/prospeccao/modelos', '/app/prospeccao/fila', '/app/prospeccao/campanhas', '/app/prospeccao/respostas', '/app/prospeccao/metricas', '/login'])
+    for (const p of ['/app', '/app/meu-dia', '/app/tarefas', '/app/tarefas/modelos', '/app/clientes', '/app/projetos', '/app/agenda', '/app/reunioes', '/app/notificacoes', '/app/configuracoes', '/app/prospeccao', '/app/prospeccao/importar', '/app/prospeccao/sistemas', '/app/prospeccao/modelos', '/app/prospeccao/fila', '/app/prospeccao/campanhas', '/app/prospeccao/respostas', '/app/prospeccao/metricas', '/app/prospeccao/configuracoes', '/login'])
       expect(matchEntityRoute(p)).toBeNull()
   })
 

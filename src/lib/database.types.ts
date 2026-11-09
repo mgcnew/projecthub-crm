@@ -595,14 +595,14 @@ isOneToOne: false
                   ]
                 },"outbound_messages": {
                   Row: {
-                    "approved_at": string | null,"attempts": number,"body": string,"campaign_id": string | null,"channel": string,"created_at": string,"generated_by": string,"id": string,"last_error": string | null,"lead_id": string,"organization_id": string,"provider": string | null,"provider_message_id": string | null,"scheduled_for": string | null,"sent_at": string | null,"status": string,"subject": string | null,"template_id": string | null,"to_address": string,"updated_at": string
+                    "approved_at": string | null,"attempts": number,"body": string,"campaign_id": string | null,"channel": string,"claimed_at": string | null,"created_at": string,"generated_by": string,"id": string,"last_error": string | null,"lead_id": string,"organization_id": string,"provider": string | null,"provider_message_id": string | null,"scheduled_for": string | null,"sent_at": string | null,"status": string,"subject": string | null,"template_id": string | null,"to_address": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "approved_at"?: string | null,"attempts"?: number,"body": string,"campaign_id"?: string | null,"channel": string,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id": string,"organization_id": string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
+                    "approved_at"?: string | null,"attempts"?: number,"body": string,"campaign_id"?: string | null,"channel": string,"claimed_at"?: string | null,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id": string,"organization_id": string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "approved_at"?: string | null,"attempts"?: number,"body"?: string,"campaign_id"?: string | null,"channel"?: string,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id"?: string,"organization_id"?: string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
+                    "approved_at"?: string | null,"attempts"?: number,"body"?: string,"campaign_id"?: string | null,"channel"?: string,"claimed_at"?: string | null,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id"?: string,"organization_id"?: string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
@@ -633,14 +633,14 @@ isOneToOne: false
                   ]
                 },"outreach_settings": {
                   Row: {
-                    "draft_provider": string,"email_daily_limit": number,"email_from": string | null,"email_reply_to": string | null,"organization_id": string,"paused": boolean,"updated_at": string,"weekdays_only": boolean,"whatsapp_daily_limit": number,"window_end": string,"window_start": string
+                    "ai_daily_limit": number,"draft_provider": string,"email_daily_limit": number,"email_from": string | null,"email_reply_to": string | null,"organization_id": string,"paused": boolean,"timezone": string,"updated_at": string,"weekdays_only": boolean,"whatsapp_daily_limit": number,"whatsapp_next_at": string | null,"whatsapp_state": string | null,"whatsapp_state_at": string | null,"window_end": string,"window_start": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "draft_provider"?: string,"email_daily_limit"?: number,"email_from"?: string | null,"email_reply_to"?: string | null,"organization_id": string,"paused"?: boolean,"updated_at"?: string,"weekdays_only"?: boolean,"whatsapp_daily_limit"?: number,"window_end"?: string,"window_start"?: string
+                    "ai_daily_limit"?: number,"draft_provider"?: string,"email_daily_limit"?: number,"email_from"?: string | null,"email_reply_to"?: string | null,"organization_id": string,"paused"?: boolean,"timezone"?: string,"updated_at"?: string,"weekdays_only"?: boolean,"whatsapp_daily_limit"?: number,"whatsapp_next_at"?: string | null,"whatsapp_state"?: string | null,"whatsapp_state_at"?: string | null,"window_end"?: string,"window_start"?: string
                   }
                   Update: {
-                    "draft_provider"?: string,"email_daily_limit"?: number,"email_from"?: string | null,"email_reply_to"?: string | null,"organization_id"?: string,"paused"?: boolean,"updated_at"?: string,"weekdays_only"?: boolean,"whatsapp_daily_limit"?: number,"window_end"?: string,"window_start"?: string
+                    "ai_daily_limit"?: number,"draft_provider"?: string,"email_daily_limit"?: number,"email_from"?: string | null,"email_reply_to"?: string | null,"organization_id"?: string,"paused"?: boolean,"timezone"?: string,"updated_at"?: string,"weekdays_only"?: boolean,"whatsapp_daily_limit"?: number,"whatsapp_next_at"?: string | null,"whatsapp_state"?: string | null,"whatsapp_state_at"?: string | null,"window_end"?: string,"window_start"?: string
                   }
                   Relationships: [
                     {
@@ -990,6 +990,23 @@ isOneToOne: true
 { Args: { "p_from": string,"p_to": string }; Returns: {
               "client_id": string,"event_id": string,"event_type": string,"is_recurring": boolean,"occurrence_date": string,"occurrence_end": string,"occurrence_start": string,"project_id": string,"status": string,"task_id": string,"timezone": string,"title": string
             }[]
+                           },
+"outbox_claim":
+{ Args: { "p_channel": string,"p_max"?: number }; Returns: {
+              "attempts": number,"body": string,"channel": string,"id": string,"lead_id": string,"organization_id": string,"subject": string,"to_address": string
+            }[]
+                           },
+"outbox_finish":
+{ Args: { "p_error": string,"p_id": string,"p_message_id": string,"p_ok": boolean,"p_provider": string,"p_retry"?: boolean }; Returns: undefined
+                           },
+"outbox_suppress":
+{ Args: { "p_channel": string,"p_org": string,"p_reason": string,"p_value": string }; Returns: undefined
+                           },
+"outbox_unsubscribe":
+{ Args: { "p_lead": string,"p_org": string }; Returns: undefined
+                           },
+"outbox_whatsapp_state":
+{ Args: { "p_org": string,"p_state": string }; Returns: undefined
                            },
 "vault_destroy":
 { Args: { "p_organization": string }; Returns: undefined

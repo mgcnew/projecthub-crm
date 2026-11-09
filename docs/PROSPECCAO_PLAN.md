@@ -185,7 +185,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
   aprovado fica "aprovado" e nada é enviado.
 - **Testes:** pgTAP das regras, integração, E2E.
 
-### 7.5 E-mail via Resend (Aqui)
+### 7.5 E-mail via Resend (Aqui) — **código feito** (D143–D148); falta o usuário configurar domínio, chaves e segredos (docs/DEPLOY.md, seção 8)
 - **Escopo:** `supabase/functions/send-outbox` (lote por minuto, limites diários, janela, `paused`), adapter
   Resend e `fake`; `pg_cron` + `pg_net` chamando a função com segredo; `unsubscribe` (token HMAC por lead) com
   cabeçalhos `List-Unsubscribe`; `resend-webhook` com verificação de assinatura (bounce e reclamação → supressão);
@@ -195,7 +195,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
 - **Testes:** testes Deno das funções (fetch simulado), pgTAP, E2E com `fake`. Teste real com o Resend só manual,
   pelo usuário, para o próprio e-mail.
 
-### 7.6 WhatsApp via Evolution (Aqui)
+### 7.6 WhatsApp via Evolution (Aqui) — **código feito** (D143–D148); falta o usuário expor o Evolution em HTTPS e gravar os segredos (docs/DEPLOY.md, seção 8)
 - **Escopo:** adapter Evolution em `send-outbox` (intervalo aleatório de 60 a 240 s, limite diário, janela);
   checagem de número (endpoint do Evolution) em lote antes do envio; `evolution-webhook` com segredo (respostas →
   `inbound_messages`, lead "respondeu", sequência interrompida, notificação; estado da conexão); "SAIR" → supressão;
