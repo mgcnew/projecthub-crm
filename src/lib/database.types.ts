@@ -305,14 +305,14 @@ isOneToOne: false
                   ]
                 },"leads": {
                   Row: {
-                    "address_line": string | null,"archived_at": string | null,"city": string | null,"company_name": string,"contact_name": string | null,"converted_client_id": string | null,"created_at": string,"email": string | null,"has_whatsapp": boolean | null,"hook": string | null,"id": string,"lost_reason": string | null,"next_contact_on": string | null,"notes": string | null,"opted_out_at": string | null,"organization_id": string,"phone": string | null,"segment": string | null,"source": string,"stage": string,"state": string | null,"temperature": string,"updated_at": string,"website": string | null,"whatsapp_checked_at": string | null
+                    "address_line": string | null,"archived_at": string | null,"city": string | null,"company_name": string,"contact_name": string | null,"converted_client_id": string | null,"created_at": string,"email": string | null,"has_whatsapp": boolean | null,"hook": string | null,"id": string,"lost_reason": string | null,"next_contact_on": string | null,"notes": string | null,"opted_out_at": string | null,"organization_id": string,"phone": string | null,"product_id": string | null,"segment": string | null,"source": string,"stage": string,"state": string | null,"temperature": string,"updated_at": string,"website": string | null,"whatsapp_checked_at": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name": string,"contact_name"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id": string,"phone"?: string | null,"segment"?: string | null,"source": string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
+                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name": string,"contact_name"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id": string,"phone"?: string | null,"product_id"?: string | null,"segment"?: string | null,"source": string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
                   }
                   Update: {
-                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name"?: string,"contact_name"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id"?: string,"phone"?: string | null,"segment"?: string | null,"source"?: string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
+                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name"?: string,"contact_name"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id"?: string,"phone"?: string | null,"product_id"?: string | null,"segment"?: string | null,"source"?: string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
                   }
                   Relationships: [
                     {
@@ -327,6 +327,12 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "organizations"
       referencedColumns: ["id"]
+    },{
+      foreignKeyName: "leads_organization_id_product_id_fkey"
+      columns: ["organization_id","product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["organization_id","id"]
     }
                   ]
                 },"meetings": {
@@ -353,6 +359,32 @@ isOneToOne: false
 isOneToOne: false
       referencedRelation: "organizations"
       referencedColumns: ["id"]
+    }
+                  ]
+                },"message_templates": {
+                  Row: {
+                    "active": boolean,"body": string,"channel": string,"closings": (string)[],"created_at": string,"id": string,"name": string,"openings": (string)[],"organization_id": string,"product_id": string | null,"step": number,"subject": string | null,"temperature": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "active"?: boolean,"body": string,"channel": string,"closings"?: (string)[],"created_at"?: string,"id"?: string,"name": string,"openings"?: (string)[],"organization_id": string,"product_id"?: string | null,"step"?: number,"subject"?: string | null,"temperature"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "active"?: boolean,"body"?: string,"channel"?: string,"closings"?: (string)[],"created_at"?: string,"id"?: string,"name"?: string,"openings"?: (string)[],"organization_id"?: string,"product_id"?: string | null,"step"?: number,"subject"?: string | null,"temperature"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "message_templates_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "message_templates_organization_id_product_id_fkey"
+      columns: ["organization_id","product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["organization_id","id"]
     }
                   ]
                 },"notification_deliveries": {
@@ -475,6 +507,26 @@ isOneToOne: false
       foreignKeyName: "outreach_settings_organization_id_fkey"
       columns: ["organization_id"]
 isOneToOne: true
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    }
+                  ]
+                },"products": {
+                  Row: {
+                    "active": boolean,"audience": string | null,"created_at": string,"demo_url": string | null,"description": string | null,"id": string,"name": string,"organization_id": string,"price_note": string | null,"updated_at": string,"value_proposition": string | null
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "active"?: boolean,"audience"?: string | null,"created_at"?: string,"demo_url"?: string | null,"description"?: string | null,"id"?: string,"name": string,"organization_id": string,"price_note"?: string | null,"updated_at"?: string,"value_proposition"?: string | null
+                  }
+                  Update: {
+                    "active"?: boolean,"audience"?: string | null,"created_at"?: string,"demo_url"?: string | null,"description"?: string | null,"id"?: string,"name"?: string,"organization_id"?: string,"price_note"?: string | null,"updated_at"?: string,"value_proposition"?: string | null
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "products_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
       referencedRelation: "organizations"
       referencedColumns: ["id"]
     }
