@@ -210,7 +210,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
   **rascunhos** (pg_cron), não envios; pausar e encerrar.
 - **Aceite:** lead que respondeu não recebe lembrete; campanha pausada não gera rascunhos.
 
-### 7.8 Respostas e conversão (Codex)
+### 7.8 Respostas e conversão (Codex) — **feita aqui** (D138–D141)
 - **Escopo:** aba Respostas, linha do tempo do lead, temperatura automática (respondeu → morno; reunião ou proposta →
   quente), "Converter em cliente" (cria cliente, contato e projeto opcional; guarda `converted_client_id`), placa
   "Respostas novas", leads na busca global.

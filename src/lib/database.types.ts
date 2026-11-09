@@ -359,6 +359,32 @@ isOneToOne: false
       referencedColumns: ["id"]
     }
                   ]
+                },"inbound_messages": {
+                  Row: {
+                    "body": string,"channel": string,"created_at": string,"from_address": string,"id": string,"lead_id": string | null,"organization_id": string,"provider_message_id": string | null,"read_at": string | null,"received_at": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "body": string,"channel": string,"created_at"?: string,"from_address"?: string,"id"?: string,"lead_id"?: string | null,"organization_id": string,"provider_message_id"?: string | null,"read_at"?: string | null,"received_at"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "body"?: string,"channel"?: string,"created_at"?: string,"from_address"?: string,"id"?: string,"lead_id"?: string | null,"organization_id"?: string,"provider_message_id"?: string | null,"read_at"?: string | null,"received_at"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "inbound_messages_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "inbound_messages_organization_id_lead_id_fkey"
+      columns: ["organization_id","lead_id"]
+isOneToOne: false
+      referencedRelation: "leads"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
                 },"lead_imports": {
                   Row: {
                     "created": number,"created_at": string,"errors": NonNullable<Json>,"file_name": string,"id": string,"organization_id": string,"skipped": number,"source": string,"total": number,"updated": number
@@ -381,14 +407,14 @@ isOneToOne: false
                   ]
                 },"leads": {
                   Row: {
-                    "address_line": string | null,"archived_at": string | null,"city": string | null,"company_name": string,"contact_name": string | null,"converted_client_id": string | null,"created_at": string,"email": string | null,"has_whatsapp": boolean | null,"hook": string | null,"id": string,"lost_reason": string | null,"next_contact_on": string | null,"notes": string | null,"opted_out_at": string | null,"organization_id": string,"phone": string | null,"product_id": string | null,"segment": string | null,"source": string,"stage": string,"state": string | null,"temperature": string,"updated_at": string,"website": string | null,"whatsapp_checked_at": string | null
+                    "address_line": string | null,"archived_at": string | null,"city": string | null,"company_name": string,"contact_name": string | null,"converted_at": string | null,"converted_client_id": string | null,"created_at": string,"email": string | null,"has_whatsapp": boolean | null,"hook": string | null,"id": string,"lost_reason": string | null,"next_contact_on": string | null,"notes": string | null,"opted_out_at": string | null,"organization_id": string,"phone": string | null,"product_id": string | null,"segment": string | null,"source": string,"stage": string,"state": string | null,"temperature": string,"updated_at": string,"website": string | null,"whatsapp_checked_at": string | null
                   }
                   ComputedFields: never
                   Insert: {
-                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name": string,"contact_name"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id": string,"phone"?: string | null,"product_id"?: string | null,"segment"?: string | null,"source": string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
+                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name": string,"contact_name"?: string | null,"converted_at"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id": string,"phone"?: string | null,"product_id"?: string | null,"segment"?: string | null,"source": string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
                   }
                   Update: {
-                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name"?: string,"contact_name"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id"?: string,"phone"?: string | null,"product_id"?: string | null,"segment"?: string | null,"source"?: string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
+                    "address_line"?: string | null,"archived_at"?: string | null,"city"?: string | null,"company_name"?: string,"contact_name"?: string | null,"converted_at"?: string | null,"converted_client_id"?: string | null,"created_at"?: string,"email"?: string | null,"has_whatsapp"?: boolean | null,"hook"?: string | null,"id"?: string,"lost_reason"?: string | null,"next_contact_on"?: string | null,"notes"?: string | null,"opted_out_at"?: string | null,"organization_id"?: string,"phone"?: string | null,"product_id"?: string | null,"segment"?: string | null,"source"?: string,"stage"?: string,"state"?: string | null,"temperature"?: string,"updated_at"?: string,"website"?: string | null,"whatsapp_checked_at"?: string | null
                   }
                   Relationships: [
                     {
@@ -957,7 +983,10 @@ isOneToOne: true
             [_ in never]: never
           }
           Functions: {
-            "list_calendar_occurrences":
+            "convert_lead":
+{ Args: { "p_existing_client"?: string,"p_lead": string,"p_project_name"?: string }; Returns: string
+                           },
+"list_calendar_occurrences":
 { Args: { "p_from": string,"p_to": string }; Returns: {
               "client_id": string,"event_id": string,"event_type": string,"is_recurring": boolean,"occurrence_date": string,"occurrence_end": string,"occurrence_start": string,"project_id": string,"status": string,"task_id": string,"timezone": string,"title": string
             }[]

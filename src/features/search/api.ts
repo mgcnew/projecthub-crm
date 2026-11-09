@@ -18,7 +18,7 @@ export function useGlobalSearch(term: string) {
     staleTime: 15_000,
     queryFn: async () => {
       const like = `%${q}%`
-      const [tasks, projects, clients, events] = await Promise.all([
+      const [tasks, projects, clients, leads, events] = await Promise.all([
         supabase
           .from('tasks')
           .select('id, title, status')
@@ -34,6 +34,13 @@ export function useGlobalSearch(term: string) {
           .order('name')
           .limit(LIMIT),
         supabase
+          .from('leads')
+          .select('id, company_name, contact_name, stage')
+          .is('archived_at', null)
+          .or(`company_name.ilike.${like},contact_name.ilike.${like},email.ilike.${like}`)
+          .order('company_name')
+          .limit(LIMIT),
+        supabase
           .from('calendar_events')
           .select('id, title, event_type, starts_at')
           .neq('status', 'cancelled')
@@ -42,11 +49,12 @@ export function useGlobalSearch(term: string) {
           .order('starts_at', { ascending: false })
           .limit(LIMIT),
       ])
-      for (const r of [tasks, projects, clients, events]) if (r.error) throw r.error
+      for (const r of [tasks, projects, clients, leads, events]) if (r.error) throw r.error
       return buildGroups({
         tasks: tasks.data ?? [],
         projects: projects.data ?? [],
         clients: clients.data ?? [],
+        leads: leads.data ?? [],
         events: events.data ?? [],
       })
     },
