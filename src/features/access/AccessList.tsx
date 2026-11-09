@@ -1,8 +1,10 @@
-import { ExternalLink } from 'lucide-react'
+import { ExternalLink, KeyRound } from 'lucide-react'
 import { Link } from 'react-router-dom'
 import { CopyButton } from '@/components/CopyButton'
 import { LineBadge } from '@/components/LineBadge'
 import { StatusBadge } from '@/components/states'
+import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
+import { useVaultItemIds } from '@/features/vault/api'
 import { isHttpUrl } from './schema'
 
 export type AccessRow = {
@@ -29,6 +31,8 @@ export function AccessList({
   /** Dentro de um grupo por projeto o nome do projeto já está no título. */
   hideProject?: boolean
 }) {
+  const { orgId } = useCurrentWorkspace()
+  const stored = useVaultItemIds(orgId, true).data
   return (
     <ul className="plate divide-y divide-border">
       {rows.map((a) => (
@@ -38,6 +42,12 @@ export function AccessList({
               {a.name}
             </Link>
             {a.category && <StatusBadge>{a.category}</StatusBadge>}
+            {stored?.has(a.id) && (
+              <StatusBadge tone="success" dot={false}>
+                <KeyRound aria-hidden="true" className="size-3.5" />
+                Senha no cofre
+              </StatusBadge>
+            )}
             {a.archived_at && <StatusBadge>Arquivado</StatusBadge>}
             {showLinks && ((!hideProject && a.projects) || a.clients) && (
               <span className="flex flex-wrap items-center gap-x-3 gap-y-1 text-sm text-muted-foreground">

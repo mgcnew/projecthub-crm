@@ -41,7 +41,7 @@ select is(
   (select coalesce(string_agg(table_name, ', ' order by table_name), '')
      from information_schema.role_table_grants
     where table_schema = 'public' and grantee = 'authenticated' and privilege_type = 'DELETE'),
-  'access_entries, checklist_items, checklist_template_items, checklist_templates, client_contacts, client_documents, client_interactions, project_payments, reminders, suppression_list, task_plans',
+  'access_entries, checklist_items, checklist_template_items, checklist_templates, client_contacts, client_documents, client_interactions, project_payments, reminders, suppression_list, task_plans, vault_items',
   'DELETE concedido apenas às tabelas sem histórico de negócio');
 
 -- 6) Colunas de identidade/tenancy nunca são atualizáveis pelo cliente
@@ -79,8 +79,8 @@ select is(
   (select coalesce(string_agg(n.nspname || '.' || p.proname, ', ' order by n.nspname, p.proname), '')
      from pg_proc p join pg_namespace n on n.oid = p.pronamespace
     where n.nspname in ('public', 'private') and has_function_privilege('authenticated', p.oid, 'EXECUTE')),
-  'private.is_active_member, private.is_active_owner, private.mfa_satisfied, public.list_calendar_occurrences',
-  'authenticated executa só os helpers de RLS e a expansão da agenda');
+  'private.is_active_member, private.is_active_owner, private.mfa_satisfied, private.vault_destroy, private.vault_rekey, private.vault_setup, private.vault_unlock, public.list_calendar_occurrences, public.vault_destroy, public.vault_rekey, public.vault_setup, public.vault_unlock',
+  'authenticated executa só os helpers de RLS, a expansão da agenda e as operações do cofre (D121)');
 
 -- 10) Multitenancy: FKs entre tabelas de tenant incluem organization_id (FK composta)
 select is(
