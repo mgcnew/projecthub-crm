@@ -324,6 +324,38 @@ export function useCreateDrafts(orgId: string | undefined) {
   })
 }
 
+/**
+ * Rascunhos escritos pela IA (Edge Function `draft-message`, desligada por padrão). Um lead por chamada, em sequência:
+ * o servidor confere a configuração, o limite diário e a elegibilidade; o resultado é um rascunho comum da fila.
+ */
+export function useCreateAiDrafts() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ templateId, leadIds }: { templateId: string; leadIds: string[] }) => {
+      let created = 0
+      let failed = 0
+      let stopped: string | null = null
+      for (const leadId of leadIds) {
+        const { error, response } = await supabase.functions.invoke('draft-message', { body: { leadId, templateId } })
+        if (!error) {
+          created++
+          continue
+        }
+        // 409 (IA desligada) e 429 (limite do dia) valem para todos os próximos: para aqui.
+        const status = (response as Response | undefined)?.status
+        if (status === 409 || status === 429) {
+          const body = (await (response as Response).json().catch(() => null)) as { error?: string } | null
+          stopped = body?.error ?? 'A IA não está disponível agora.'
+          break
+        }
+        failed++
+      }
+      return { created, failed, stopped }
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
 // ------------------------------------------------------------------ campanhas
 
 export function useCampaigns(enabled: boolean) {

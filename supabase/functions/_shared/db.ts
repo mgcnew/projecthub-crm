@@ -83,3 +83,75 @@ export function webhookDb(c: ServiceClient): WebhookDb {
     },
   }
 }
+
+// ---------------------------------------------------------------- rascunho com IA
+import type { DraftDb, DraftRequestContext } from './draft.ts'
+
+type UserQuery = PromiseLike<{ data: unknown; error: { message: string } | null; count?: number | null }> & {
+  select(cols: string, opts?: { count: 'exact'; head: boolean }): UserQuery
+  eq(col: string, v: unknown): UserQuery
+  gte(col: string, v: string): UserQuery
+  maybeSingle(): UserQuery
+}
+export interface UserClient {
+  from(table: string): { select(cols: string, opts?: { count: 'exact'; head: boolean }): UserQuery }
+}
+
+/** `user` = cliente com o JWT do usuário (RLS + MFA); `service` = service_role, só para gravar o rascunho. */
+export function draftDb(user: UserClient, service: ServiceClient): DraftDb {
+  return {
+    async settings() {
+      const r = await user.from('outreach_settings').select('organization_id, draft_provider, ai_daily_limit').maybeSingle()
+      return (r.data as { organization_id: string; draft_provider: string; ai_daily_limit: number } | null) ?? null
+    },
+    async aiCount(orgId, sinceISO) {
+      const r = await user.from('outbound_messages').select('id', { count: 'exact', head: true }).eq('organization_id', orgId).eq('generated_by', 'ai').gte('created_at', sinceISO)
+      if (r.error) throw new Error(`outbound_messages: ${r.error.message}`)
+      return r.count ?? 0
+    },
+    async context(leadId, templateId) {
+      const l = await user.from('leads').select('organization_id, company_name, contact_name, hook, segment, city, product_id').eq('id', leadId).maybeSingle()
+      const t = await user.from('message_templates').select('channel, step, subject, body, product_id').eq('id', templateId).maybeSingle()
+      const lead = l.data as { organization_id: string; company_name: string; contact_name: string | null; hook: string | null; segment: string | null; city: string | null; product_id: string | null } | null
+      const tpl = t.data as { channel: 'email' | 'whatsapp'; step: number; subject: string | null; body: string; product_id: string | null } | null
+      if (!lead || !tpl) return null
+      const productId = tpl.product_id ?? lead.product_id
+      let product: DraftRequestContext['product'] = null
+      if (productId) {
+        const p = await user.from('products').select('name, value_proposition').eq('id', productId).maybeSingle()
+        product = (p.data as DraftRequestContext['product']) ?? null
+      }
+      return {
+        organization_id: lead.organization_id,
+        channel: tpl.channel,
+        step: tpl.step,
+        template_id: templateId,
+        lead: {
+          company_name: lead.company_name,
+          contact_first_name: lead.contact_name?.trim().split(/\s+/)[0] ?? null,
+          hook: lead.hook,
+          segment: lead.segment,
+          city: lead.city,
+        },
+        product,
+        reference: { subject: tpl.subject, body: tpl.body },
+      }
+    },
+    async insertDraft(i) {
+      const r = await service.from('outbound_messages').insert({
+        organization_id: i.orgId,
+        lead_id: i.leadId,
+        template_id: i.templateId,
+        channel: i.channel,
+        subject: i.subject,
+        body: i.body,
+        generated_by: 'ai',
+      })
+      if (r.error) return { error: r.error.message }
+      // O id volta por consulta (o insert do PostgREST sem `select` não devolve a linha).
+      const q = await service.from('outbound_messages').select('id').eq('lead_id', i.leadId).eq('template_id', i.templateId).eq('generated_by', 'ai').limit(1).maybeSingle()
+      const row = (await q).data as { id: string } | null
+      return row ? { id: row.id } : { error: 'rascunho criado, mas o id não voltou' }
+    },
+  }
+}

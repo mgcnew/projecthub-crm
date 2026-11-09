@@ -94,6 +94,17 @@ export function OutreachSettingsPage() {
             }
           }} />
 
+          <AiPlate key={`ai-${s?.updated_at ?? 'novo'}`} enabled={s?.draft_provider === 'deepseek'} limit={s?.ai_daily_limit ?? 20} readOnly={!canWrite} onSave={async (patch) => {
+            setError(null)
+            setMessage(null)
+            try {
+              await save.mutateAsync(patch)
+              setMessage('Configuração da IA salva.')
+            } catch {
+              setError('Não foi possível salvar a configuração da IA.')
+            }
+          }} />
+
           <Plate id="wa-h" title="WhatsApp" action={s?.whatsapp_state ? <StatusBadge tone={s.whatsapp_state === 'open' ? 'success' : 'warning'}>{stateLabel[s.whatsapp_state as keyof typeof stateLabel]}</StatusBadge> : undefined}>
             <p className="text-sm text-muted-foreground">
               {s?.whatsapp_state
@@ -153,6 +164,36 @@ function SettingsForm({ initial, readOnly, onSave }: { initial: OutreachSettings
           </Button>
         )}
       </form>
+    </Plate>
+  )
+}
+
+/** Rascunho com IA: desligado por padrão. A chave do provedor fica só no servidor; aqui só se liga e se limita o uso. */
+function AiPlate({ enabled, limit, readOnly, onSave }: { enabled: boolean; limit: number; readOnly: boolean; onSave: (patch: { draft_provider: 'none' | 'deepseek'; ai_daily_limit: number }) => Promise<void> }) {
+  const [on, setOn] = useState(enabled)
+  const [value, setValue] = useState(String(limit))
+  const valid = /^\d{1,3}$/.test(value) && Number(value) >= 1 && Number(value) <= 200
+  return (
+    <Plate id="ai-h" title="Rascunho com IA" action={<StatusBadge tone={enabled ? 'success' : 'neutral'}>{enabled ? 'Ligada' : 'Desligada'}</StatusBadge>}>
+      <div className="max-w-xl space-y-4">
+        <p className="text-sm text-muted-foreground">
+          A IA só escreve <strong className="text-foreground">rascunhos</strong>: eles passam pelo mesmo verificador de estilo e pela sua aprovação, como qualquer outro. Ao provedor vão só o nome da empresa, o primeiro nome do contato, o gancho, o segmento e a cidade; nunca e-mail nem telefone. Precisa da chave configurada no servidor (veja o passo a passo em DEPLOY).
+        </p>
+        <fieldset disabled={readOnly} className="space-y-4">
+          <label className="flex items-center gap-2 text-sm">
+            <input type="checkbox" className="size-4" checked={on} onChange={(e) => setOn(e.target.checked)} />
+            Ligar o rascunho com IA
+          </label>
+          <Field id="ai_daily_limit" label="Rascunhos de IA por dia" error={valid ? undefined : 'Informe um número de 1 a 200'} hint="Limita o gasto com o provedor.">
+            <input id="ai_daily_limit" inputMode="numeric" className={controlClass} value={value} onChange={(e) => setValue(e.target.value)} />
+          </Field>
+        </fieldset>
+        {!readOnly && (
+          <Button className="h-11" disabled={!valid} onClick={() => void onSave({ draft_provider: on ? 'deepseek' : 'none', ai_daily_limit: Number(value) })}>
+            Salvar IA
+          </Button>
+        )}
+      </div>
     </Plate>
   )
 }

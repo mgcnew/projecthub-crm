@@ -51,4 +51,13 @@ check((await fetch(`${FN}/unsubscribe?t=${token}x`)).status === 400, 'descadastr
 check((await fetch(`${FN}/unsubscribe?t=${token}`)).status === 200, 'descadastro aceita o token')
 check((await c.from('leads').select('opted_out_at').eq('id', lead).single()).data!.opted_out_at !== null, 'lead virou "não contatar"')
 check(((await c.from('suppression_list').select('value').eq('value', 'smoke@ex.com')).data ?? []).length === 1, 'e-mail entrou na lista de supressão')
+// rascunho com IA: sem DEEPSEEK_API_KEY no servidor nada é gerado, com ou sem a opção ligada
+const draft = (headers: Record<string, string>) => fetch(`${FN}/draft-message`, { method: 'POST', headers: { 'Content-Type': 'application/json', ...headers }, body: JSON.stringify({ leadId: lead, templateId: lead }) })
+check((await draft({})).status === 401, 'draft-message recusa sem login')
+const session = (await c.auth.getSession()).data.session!
+const authed = { Authorization: `Bearer ${session.access_token}`, apikey: key }
+check((await draft(authed)).status === 409, 'draft-message com a IA desligada nas configurações: 409')
+await c.from('outreach_settings').update({ draft_provider: 'deepseek' }).eq('organization_id', org)
+check((await draft(authed)).status === 404 || (await draft(authed)).status === 409, 'draft-message ligada mas sem modelo válido/chave: nada é gerado')
+check(((await c.from('outbound_messages').select('id').eq('generated_by', 'ai')).data ?? []).length === 0, 'nenhum rascunho de IA foi criado')
 console.log('TUDO OK')
