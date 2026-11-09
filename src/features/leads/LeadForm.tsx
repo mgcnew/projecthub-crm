@@ -4,6 +4,7 @@ import { Field } from '@/components/form'
 import { FormDateField } from '@/components/form-fields'
 import { controlClass, textareaClass } from '@/components/form-styles'
 import { Button } from '@/components/ui/button'
+import { useProductOptions } from '@/features/outreach/api'
 import { useUnsavedChangesGuard } from '@/lib/unsaved'
 import { leadDefaults, leadFormSchema, stages, temperatures, type LeadFormValues } from './schema'
 
@@ -28,6 +29,7 @@ export function LeadForm({
     formState: { errors, isDirty, isSubmitting },
   } = useForm<LeadFormValues>({ resolver: zodResolver(leadFormSchema), defaultValues: initial })
   const stage = useWatch({ control, name: 'stage' })
+  const products = useProductOptions(true)
 
   useUnsavedChangesGuard(isDirty && !isSubmitting)
 
@@ -59,6 +61,17 @@ export function LeadForm({
           </Field>
           <Field id="segment" label="Segmento" error={err('segment')} hint="Ex.: restaurante, clínica, escritório">
             <input id="segment" autoComplete="off" className={controlClass} {...register('segment')} />
+          </Field>
+          <Field id="product_id" label="Sistema de interesse" error={err('product_id')} hint="Qual dos seus sistemas combina com este lead.">
+            <select id="product_id" className={controlClass} {...register('product_id')}>
+              <option value="">Nenhum</option>
+              {(products.data ?? []).map((p) => (
+                <option key={p.id} value={p.id}>
+                  {p.name}
+                  {p.active ? '' : ' (inativo)'}
+                </option>
+              ))}
+            </select>
           </Field>
         </div>
 

@@ -3,6 +3,12 @@ import { ImportPage } from '@/features/leads/import/ImportPage'
 import { LeadDetailPage } from '@/features/leads/LeadDetailPage'
 import { LeadNewPage } from '@/features/leads/LeadNewPage'
 import { LeadsPage } from '@/features/leads/LeadsPage'
+import { ProductDetailPage, ProductNewPage, ProductsPage } from '@/features/outreach/ProductPages'
+import {
+  TemplateDetailPage as MessageTemplateDetailPage,
+  TemplateNewPage as MessageTemplateNewPage,
+  TemplatesPage as MessageTemplatesPage,
+} from '@/features/outreach/TemplatePages'
 import { AccessDetailPage } from '@/features/access/AccessDetailPage'
 import { AccessesPage } from '@/features/access/AccessesPage'
 import { AccessNewPage } from '@/features/access/AccessNewPage'
@@ -45,6 +51,12 @@ export const appRoutes: RouteObject[] = [
   { path: '/app/clientes/:id', element: <ClientDetailPage /> },
   { path: '/app/prospeccao', element: <LeadsPage /> },
   { path: '/app/prospeccao/importar', element: <ImportPage /> },
+  { path: '/app/prospeccao/sistemas', element: <ProductsPage /> },
+  { path: '/app/prospeccao/sistemas/novo', element: <ProductNewPage /> },
+  { path: '/app/prospeccao/sistemas/:id', element: <ProductDetailPage /> },
+  { path: '/app/prospeccao/modelos', element: <MessageTemplatesPage /> },
+  { path: '/app/prospeccao/modelos/novo', element: <MessageTemplateNewPage /> },
+  { path: '/app/prospeccao/modelos/:id', element: <MessageTemplateDetailPage /> },
   { path: '/app/prospeccao/leads/novo', element: <LeadNewPage /> },
   { path: '/app/prospeccao/leads/:id', element: <LeadDetailPage /> },
   { path: '/app/acessos', element: <AccessesPage /> },

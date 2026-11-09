@@ -79,6 +79,8 @@ test.describe('acessibilidade (axe)', () => {
       '/app/configuracoes',
       '/app/configuracoes?aba=seguranca',
       '/app/configuracoes?aba=cofre',
+      '/app/prospeccao/sistemas',
+      '/app/prospeccao/modelos',
       '/app/configuracoes?aba=preferencias',
       '/app/configuracoes?aba=espaco',
     ]

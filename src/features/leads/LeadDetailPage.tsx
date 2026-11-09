@@ -108,6 +108,7 @@ export function LeadDetailPage() {
                   city: lead.city ?? '',
                   state: lead.state ?? '',
                   segment: lead.segment ?? '',
+                  product_id: lead.product_id ?? '',
                   source: lead.source,
                   temperature: lead.temperature as LeadFormValues['temperature'],
                   stage: lead.stage as LeadFormValues['stage'],
