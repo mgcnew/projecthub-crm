@@ -143,3 +143,20 @@ export function useAccessCategories(enabled: boolean) {
     },
   })
 }
+
+/** Serviços já cadastrados (nome, categoria e endereço), do mais recente para o mais antigo, para reaproveitar em novos acessos. */
+export function useAccessServices(enabled: boolean) {
+  return useQuery({
+    queryKey: ['access', 'services'],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('access_entries')
+        .select('name, category, url')
+        .order('created_at', { ascending: false })
+        .limit(1000)
+      if (error) throw error
+      return (data ?? []).map((r) => ({ name: r.name as string, category: (r.category as string | null) ?? '', url: (r.url as string | null) ?? '' }))
+    },
+  })
+}

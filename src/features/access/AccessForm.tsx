@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod'
+import { useMemo } from 'react'
 import { useForm, useWatch } from 'react-hook-form'
 import { Field } from '@/components/form'
 import { controlClass, textareaClass } from '@/components/form-styles'
@@ -7,7 +8,8 @@ import { Button } from '@/components/ui/button'
 import { useClientOptions } from '@/features/clients/api'
 import { useProjectOptions } from '@/features/projects/api'
 import { useUnsavedChangesGuard } from '@/lib/unsaved'
-import { accessCategories, accessDefaults, accessFormSchema, type AccessFormValues } from './schema'
+import { useAccessServices } from './api'
+import { accessCategories, accessDefaults, accessFormSchema, mergeServiceSuggestions, type AccessFormValues } from './schema'
 
 export function AccessForm({
   initial = accessDefaults,
@@ -27,6 +29,7 @@ export function AccessForm({
     handleSubmit,
     reset,
     setValue,
+    getValues,
     control,
     formState: { errors, isDirty, isSubmitting },
   } = useForm<AccessFormValues>({ resolver: zodResolver(accessFormSchema), defaultValues: initial })
@@ -36,6 +39,16 @@ export function AccessForm({
   const clientOptions = withCurrentOption(clients.data, initial.client_id, clients.isPending, 'Cliente atual (arquivado)')
 
   const category = useWatch({ control, name: 'category' })
+  const name = useWatch({ control, name: 'name' })
+  const used = useAccessServices(!readOnly)
+  const services = useMemo(() => mergeServiceSuggestions(used.data ?? []), [used.data])
+  // Escolher um serviço preenche o nome e, se ainda estiverem vazios, a categoria e o endereço.
+  const pickService = (s: { name: string; category: string; url: string }) => {
+    const opts = { shouldDirty: true, shouldValidate: true }
+    setValue('name', s.name, opts)
+    if (!getValues('category') && s.category) setValue('category', s.category, opts)
+    if (!getValues('url') && s.url) setValue('url', s.url, opts)
+  }
 
   useUnsavedChangesGuard(isDirty && !isSubmitting)
 
@@ -54,8 +67,28 @@ export function AccessForm({
       </p>
 
       <fieldset disabled={readOnly || isSubmitting} className="space-y-4">
-        <Field id="name" label="Serviço *" error={err('name')} hint="Ex.: Supabase — painel, GitHub, Gmail">
-          <input id="name" className={controlClass} aria-invalid={inv('name')} {...register('name')} />
+        <Field id="name" label="Serviço *" error={err('name')} hint="Escolha um serviço abaixo ou digite. Os que você cadastra ficam disponíveis para os outros projetos.">
+          <input id="name" autoComplete="off" className={controlClass} aria-invalid={inv('name')} {...register('name')} />
+          {!readOnly && (
+            <div role="group" aria-label="Escolher entre os mais usados" className="flex flex-wrap gap-1.5 pt-1">
+              {services.slice(0, 30).map((s) => (
+                <button
+                  key={s.name}
+                  type="button"
+                  aria-pressed={name.trim().toLocaleLowerCase('pt-BR') === s.name.toLocaleLowerCase('pt-BR')}
+                  onClick={() => pickService(s)}
+                  className={
+                    'min-h-9 rounded-sm border px-2.5 text-sm font-semibold pointer-coarse:min-h-11 ' +
+                    (name.trim().toLocaleLowerCase('pt-BR') === s.name.toLocaleLowerCase('pt-BR')
+                      ? 'border-primary bg-primary text-primary-foreground'
+                      : 'border-border-strong bg-card hover:bg-muted')
+                  }
+                >
+                  {s.name}
+                </button>
+              ))}
+            </div>
+          )}
         </Field>
         <div className="grid gap-4 sm:grid-cols-2">
           <Field id="category" label="Categoria" error={err('category')}>

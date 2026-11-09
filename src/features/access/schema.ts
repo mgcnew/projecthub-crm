@@ -13,6 +13,41 @@ export const accessCategories = [
   'Outro',
 ] as const
 
+export type ServiceSuggestion = { name: string; category: string; url: string }
+
+/** Serviços comuns para escolher com um clique (nome, categoria e endereço do painel); o usuário ainda pode digitar outro. */
+export const builtinServices: readonly ServiceSuggestion[] = [
+  { name: 'Supabase', category: 'Banco de dados', url: 'https://supabase.com/dashboard' },
+  { name: 'GitHub', category: 'Repositório', url: 'https://github.com' },
+  { name: 'Vercel', category: 'Hospedagem', url: 'https://vercel.com/dashboard' },
+  { name: 'Cloudflare', category: 'Domínio', url: 'https://dash.cloudflare.com' },
+  { name: 'Registro.br', category: 'Domínio', url: 'https://registro.br' },
+  { name: 'Hostinger', category: 'Hospedagem', url: 'https://hpanel.hostinger.com' },
+  { name: 'AWS', category: 'Hospedagem', url: 'https://console.aws.amazon.com' },
+  { name: 'Google (Gmail)', category: 'E-mail', url: 'https://mail.google.com' },
+  { name: 'Resend', category: 'E-mail', url: 'https://resend.com' },
+  { name: 'Stripe', category: 'Pagamentos', url: 'https://dashboard.stripe.com' },
+  { name: 'Mercado Pago', category: 'Pagamentos', url: 'https://www.mercadopago.com.br' },
+  { name: 'Figma', category: 'Ferramenta', url: 'https://www.figma.com' },
+]
+
+/**
+ * Sugestões do formulário: primeiro os serviços que o usuário já cadastrou (com a categoria e o endereço do registro mais
+ * recente, sem repetir o nome), depois os comuns que ainda não foram usados. Assim cada serviço novo vira atalho para os outros projetos.
+ */
+export function mergeServiceSuggestions(used: readonly ServiceSuggestion[]): ServiceSuggestion[] {
+  const seen = new Set<string>()
+  const out: ServiceSuggestion[] = []
+  for (const s of [...used, ...builtinServices]) {
+    const name = s.name.trim()
+    const key = name.toLocaleLowerCase('pt-BR')
+    if (!name || seen.has(key)) continue
+    seen.add(key)
+    out.push({ name, category: s.category?.trim() ?? '', url: s.url?.trim() ?? '' })
+  }
+  return out
+}
+
 /** Só http(s): a URL vira link; `javascript:` e afins nunca são aceitos (o banco também confere). */
 export const isHttpUrl = (v: string) => /^https?:\/\/[^\s]+$/i.test(v)
 
