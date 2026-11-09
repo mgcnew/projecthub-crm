@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { FilterBar } from '@/components/FilterBar'
 import { controlClass } from '@/components/form-styles'
+import { ProspectingNav } from '@/features/outreach/ProspectingNav'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge, type Tone } from '@/components/states'
 import { Button } from '@/components/ui/button'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
@@ -66,6 +67,7 @@ export function LeadsPage() {
           )
         }
       />
+      <ProspectingNav />
 
       <FilterBar
         className="md:grid-cols-[minmax(0,1fr)_13rem_11rem_12rem]"

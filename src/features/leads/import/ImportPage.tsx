@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Field } from '@/components/form'
 import { controlClass } from '@/components/form-styles'
 import { EmptyState, PageHeader, StatusBadge } from '@/components/states'
+import { ProspectingNav } from '@/features/outreach/ProspectingNav'
 import { Button } from '@/components/ui/button'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { decodeCsv, parseCsv } from '@/lib/csv'
@@ -139,6 +140,7 @@ export function ImportPage() {
           </Button>
         }
       />
+      <ProspectingNav />
 
       {result ? (
         <section aria-labelledby="result-h" className="space-y-3">
