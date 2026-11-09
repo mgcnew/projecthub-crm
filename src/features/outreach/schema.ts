@@ -115,3 +115,70 @@ export function outreachErrorMessage(e: unknown): string {
   if (code === '42501') return 'Você não tem permissão para esta ação.'
   return 'Não foi possível salvar. Tente de novo.'
 }
+
+// ----------------------------------------------------------------- campanhas
+const dayField = z
+  .string()
+  .trim()
+  .refine((v) => v === '' || (/^\d{1,2}$/.test(v) && Number(v) >= 1 && Number(v) <= 60), 'Use um número de dias de 1 a 60')
+
+export const campaignFormSchema = z
+  .object({
+    name: z.string().trim().min(1, 'Informe o nome da campanha').max(120, 'Máximo de 120 caracteres'),
+    product_id: z.string(),
+    channel: z.enum(['email', 'whatsapp']),
+    temperature: z.enum(['', 'cold', 'warm', 'hot']),
+    daily_limit: z.string().regex(/^\d{1,3}$/, 'Informe um número de 1 a 100').refine((v) => Number(v) >= 1 && Number(v) <= 100, 'Informe um número de 1 a 100'),
+    followup_1: dayField,
+    followup_2: dayField,
+    step1_template_id: z.string(),
+    step2_template_id: z.string(),
+    step3_template_id: z.string(),
+  })
+  .superRefine((v, ctx) => {
+    if (v.channel === 'whatsapp' && v.temperature !== 'warm' && v.temperature !== 'hot') {
+      ctx.addIssue({ code: 'custom', path: ['temperature'], message: 'WhatsApp é só para lead morno ou quente' })
+    }
+    if (v.followup_1 === '' && v.followup_2 !== '') {
+      ctx.addIssue({ code: 'custom', path: ['followup_1'], message: 'Preencha o 1º lembrete antes do 2º' })
+    }
+    if (v.followup_1 !== '' && v.followup_2 !== '' && Number(v.followup_2) <= Number(v.followup_1)) {
+      ctx.addIssue({ code: 'custom', path: ['followup_2'], message: 'O 2º lembrete vem depois do 1º' })
+    }
+    if (v.followup_1 === '' && v.step2_template_id !== '') {
+      ctx.addIssue({ code: 'custom', path: ['step2_template_id'], message: 'Sem 1º lembrete não há modelo do passo 2' })
+    }
+    if (v.followup_2 === '' && v.step3_template_id !== '') {
+      ctx.addIssue({ code: 'custom', path: ['step3_template_id'], message: 'Sem 2º lembrete não há modelo do passo 3' })
+    }
+  })
+export type CampaignFormValues = z.infer<typeof campaignFormSchema>
+
+export const campaignDefaults: CampaignFormValues = {
+  name: '',
+  product_id: '',
+  channel: 'email',
+  temperature: '',
+  daily_limit: '20',
+  followup_1: '3',
+  followup_2: '7',
+  step1_template_id: '',
+  step2_template_id: '',
+  step3_template_id: '',
+}
+
+export function campaignPayload(v: CampaignFormValues) {
+  const days = [v.followup_1, v.followup_2].filter((d) => d !== '').map(Number)
+  return {
+    name: v.name.trim(),
+    product_id: emptyToNull(v.product_id),
+    daily_limit: Number(v.daily_limit),
+    followup_days: days,
+    step1_template_id: emptyToNull(v.step1_template_id),
+    step2_template_id: days.length >= 1 ? emptyToNull(v.step2_template_id) : null,
+    step3_template_id: days.length >= 2 ? emptyToNull(v.step3_template_id) : null,
+  }
+}
+
+export const campaignStatusLabels = { draft: 'Rascunho', active: 'Ativa', paused: 'Pausada', finished: 'Encerrada' } as const
+export const campaignLeadStatusLabels = { active: 'Na sequência', replied: 'Respondeu', finished: 'Encerrado', opted_out: 'Saiu', failed: 'Falhou' } as const

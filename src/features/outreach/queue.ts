@@ -72,3 +72,11 @@ export function splitEligible(input: {
   }
   return { eligible, skipped }
 }
+
+/**
+ * Leads de uma campanha que esperam um rascunho: o passo 1 ainda não gerado ou um lembrete cuja data já chegou.
+ * `maxStep` = 1 + número de lembretes. Só quem segue na sequência (`active`) entra.
+ */
+export function pendingCampaignRows<T extends { status: string; step: number; next_step_on: string | null }>(rows: T[], maxStep: number, today: string): T[] {
+  return rows.filter((r) => r.status === 'active' && (r.step === 0 || (r.step < maxStep && r.next_step_on !== null && r.next_step_on <= today)))
+}

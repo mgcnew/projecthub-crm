@@ -1,4 +1,4 @@
-import { eligibility, leadAddress, splitEligible, type QueueLead } from './queue'
+import { eligibility, leadAddress, pendingCampaignRows, splitEligible, type QueueLead } from './queue'
 
 const lead = (id: string, extra: Partial<QueueLead> = {}): QueueLead => ({
   id,
@@ -63,5 +63,26 @@ describe('splitEligible / leadAddress', () => {
     expect(leadAddress('email', { email: ' Ana@Ex.COM ', phone: null })).toBe('ana@ex.com')
     expect(leadAddress('whatsapp', { email: null, phone: '+5511999999999' })).toBe('+5511999999999')
     expect(leadAddress('whatsapp', { email: 'x@y.com', phone: null })).toBeNull()
+  })
+})
+
+describe('pendingCampaignRows', () => {
+  const row = (status: string, step: number, next: string | null) => ({ status, step, next_step_on: next })
+  it('passo 1 pendente e lembretes vencidos entram; futuros, respondidos e terminados não', () => {
+    const rows = [
+      row('active', 0, null), // passo 1 ainda não gerado
+      row('active', 1, '2026-11-09'), // lembrete vence hoje
+      row('active', 1, '2026-11-08'), // venceu ontem
+      row('active', 1, '2026-11-10'), // amanhã: ainda não
+      row('active', 2, '2026-11-09'), // 2º lembrete vencido
+      row('active', 3, null), // última etapa já gerada
+      row('replied', 1, '2026-11-01'),
+      row('opted_out', 0, null),
+      row('finished', 3, null),
+    ]
+    expect(pendingCampaignRows(rows, 3, '2026-11-09')).toEqual([rows[0], rows[1], rows[2], rows[4]])
+  })
+  it('com um só lembrete o passo 2 é o último', () => {
+    expect(pendingCampaignRows([row('active', 2, '2026-11-01')], 2, '2026-11-09')).toEqual([])
   })
 })

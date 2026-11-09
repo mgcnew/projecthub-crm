@@ -16,10 +16,12 @@ describe('matchEntityRoute', () => {
     expect(matchEntityRoute('/app/prospeccao/modelos/novo')?.kind).toBe('new-template')
     expect(matchEntityRoute('/app/prospeccao/modelos/abc')).toEqual({ kind: 'template', fallback: '/app/prospeccao/modelos' })
     expect(matchEntityRoute('/app/prospeccao/fila/abc')).toEqual({ kind: 'message', fallback: '/app/prospeccao/fila' })
+    expect(matchEntityRoute('/app/prospeccao/campanhas/novo')?.kind).toBe('new-campaign')
+    expect(matchEntityRoute('/app/prospeccao/campanhas/abc')).toEqual({ kind: 'campaign', fallback: '/app/prospeccao/campanhas' })
   })
 
   it('páginas e listas não são registros', () => {
-    for (const p of ['/app', '/app/meu-dia', '/app/tarefas', '/app/tarefas/modelos', '/app/clientes', '/app/projetos', '/app/agenda', '/app/reunioes', '/app/notificacoes', '/app/configuracoes', '/app/prospeccao', '/app/prospeccao/importar', '/app/prospeccao/sistemas', '/app/prospeccao/modelos', '/app/prospeccao/fila', '/login'])
+    for (const p of ['/app', '/app/meu-dia', '/app/tarefas', '/app/tarefas/modelos', '/app/clientes', '/app/projetos', '/app/agenda', '/app/reunioes', '/app/notificacoes', '/app/configuracoes', '/app/prospeccao', '/app/prospeccao/importar', '/app/prospeccao/sistemas', '/app/prospeccao/modelos', '/app/prospeccao/fila', '/app/prospeccao/campanhas', '/login'])
       expect(matchEntityRoute(p)).toBeNull()
   })
 
