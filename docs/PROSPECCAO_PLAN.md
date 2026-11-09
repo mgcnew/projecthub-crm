@@ -170,7 +170,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
   reporta 2 com o motivo.
 - **Testes:** unitários do parser e do mapeamento (casos ruins), E2E com upload de fixture.
 
-### 7.3 Sistemas e modelos (Codex)
+### 7.3 Sistemas e modelos (Codex) — **feita aqui** (D126–D128)
 - **Escopo:** `products`, `message_templates`; renderizador puro (`src/features/outreach/render.ts`) com placeholders e
   variação determinística; verificador de estilo (`lint.ts`); pré-visualização com lead real.
 - **Aceite:** o mesmo lead sempre recebe o mesmo texto; dois leads recebem variações diferentes quando há
