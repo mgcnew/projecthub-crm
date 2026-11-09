@@ -491,6 +491,38 @@ isOneToOne: false
                   Relationships: [
                     
                   ]
+                },"outbound_messages": {
+                  Row: {
+                    "approved_at": string | null,"attempts": number,"body": string,"channel": string,"created_at": string,"generated_by": string,"id": string,"last_error": string | null,"lead_id": string,"organization_id": string,"provider": string | null,"provider_message_id": string | null,"scheduled_for": string | null,"sent_at": string | null,"status": string,"subject": string | null,"template_id": string | null,"to_address": string,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "approved_at"?: string | null,"attempts"?: number,"body": string,"channel": string,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id": string,"organization_id": string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
+                  }
+                  Update: {
+                    "approved_at"?: string | null,"attempts"?: number,"body"?: string,"channel"?: string,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id"?: string,"organization_id"?: string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "outbound_messages_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "outbound_messages_organization_id_lead_id_fkey"
+      columns: ["organization_id","lead_id"]
+isOneToOne: false
+      referencedRelation: "leads"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "outbound_messages_organization_id_template_id_fkey"
+      columns: ["organization_id","template_id"]
+isOneToOne: false
+      referencedRelation: "message_templates"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
                 },"outreach_settings": {
                   Row: {
                     "draft_provider": string,"email_daily_limit": number,"email_from": string | null,"email_reply_to": string | null,"organization_id": string,"paused": boolean,"updated_at": string,"weekdays_only": boolean,"whatsapp_daily_limit": number,"window_end": string,"window_start": string

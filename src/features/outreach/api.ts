@@ -153,3 +153,172 @@ export function useLeadSamples(enabled: boolean) {
     },
   })
 }
+
+// ---------------------------------------------------------------------- fila
+export type OutboxStatus = 'draft' | 'approved' | 'cancelled' | 'all'
+
+export function useOutbox(status: OutboxStatus, enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'outbox', status],
+    enabled,
+    placeholderData: (prev) => prev,
+    queryFn: async () => {
+      let q = supabase
+        .from('outbound_messages')
+        .select('id, lead_id, channel, to_address, subject, body, status, approved_at, template_id, created_at, leads(company_name), message_templates(name, step)')
+        .order('created_at', { ascending: false })
+        .limit(300)
+      if (status !== 'all') q = q.eq('status', status)
+      const { data, error } = await q
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}
+
+export function useOutboxCounts(enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'outbox-counts'],
+    enabled,
+    queryFn: async () => {
+      const count = async (status: string) => {
+        const { count: n, error } = await supabase.from('outbound_messages').select('id', { count: 'exact', head: true }).eq('status', status)
+        if (error) throw error
+        return n ?? 0
+      }
+      const [draft, approved] = await Promise.all([count('draft'), count('approved')])
+      return { draft, approved }
+    },
+  })
+}
+
+export function useOutboxMessage(id: string | undefined) {
+  return useQuery({
+    queryKey: ['outreach', 'outbox-message', id],
+    enabled: Boolean(id),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('outbound_messages')
+        .select('*, leads(id, company_name, contact_name), message_templates(name, step)')
+        .eq('id', id!)
+        .maybeSingle()
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+export type OutboxPatch = { subject?: string | null; body?: string; status?: 'draft' | 'approved' | 'cancelled' }
+
+export function useUpdateOutbox(id: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (patch: OutboxPatch) => {
+      const { error } = await supabase.from('outbound_messages').update(patch).eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+/** Muda o status de várias mensagens, uma a uma: o banco confere cada uma (supressão, "não contatar"). */
+export function useSetStatusMany() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ ids, status }: { ids: string[]; status: 'approved' | 'cancelled' | 'draft' }) => {
+      const results = await Promise.allSettled(
+        ids.map(async (id) => {
+          const { error } = await supabase.from('outbound_messages').update({ status }).eq('id', id)
+          if (error) throw error
+        }),
+      )
+      const failed = results.filter((r) => r.status === 'rejected').length
+      return { done: ids.length - failed, failed }
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+/** Leads candidatos a rascunho (não arquivados), com o necessário para checar a elegibilidade. */
+export function useQueueLeads(enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'queue-leads'],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('leads')
+        .select('id, company_name, contact_name, email, phone, hook, temperature, product_id, opted_out_at, archived_at')
+        .is('archived_at', null)
+        .order('company_name')
+        .limit(1000)
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}
+
+export function useSuppressedValues(enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'suppressed'],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase.from('suppression_list').select('value').limit(5000)
+      if (error) throw error
+      return new Set((data ?? []).map((r) => r.value))
+    },
+  })
+}
+
+/** Leads que já têm o modelo em rascunho, aprovada ou enviando (o banco não aceita duplicar). */
+export function useQueuedLeadIds(templateId: string, enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'queued', templateId],
+    enabled: enabled && Boolean(templateId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('outbound_messages')
+        .select('lead_id')
+        .eq('template_id', templateId)
+        .in('status', ['draft', 'approved', 'sending'])
+        .limit(2000)
+      if (error) throw error
+      return new Set((data ?? []).map((r) => r.lead_id))
+    },
+  })
+}
+
+export type DraftInput = { leadId: string; channel: Channel; subject: string | null; body: string }
+
+/** Cria os rascunhos um a um (o banco recusa o que não pode); devolve quantos entraram e quantos foram barrados. */
+export function useCreateDrafts(orgId: string | undefined) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ templateId, drafts }: { templateId: string; drafts: DraftInput[] }) => {
+      if (!orgId) throw new Error('Organização não carregada')
+      let created = 0
+      let blocked = 0
+      for (let i = 0; i < drafts.length; i += 8) {
+        const chunk = drafts.slice(i, i + 8)
+        const results = await Promise.allSettled(
+          chunk.map(async (d) => {
+            const { error } = await supabase.from('outbound_messages').insert({
+              organization_id: orgId,
+              lead_id: d.leadId,
+              template_id: templateId,
+              channel: d.channel,
+              subject: d.subject,
+              body: d.body,
+            })
+            if (error) throw error
+          }),
+        )
+        for (const r of results) {
+          if (r.status === 'fulfilled') created++
+          else blocked++
+        }
+      }
+      return { created, blocked }
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
