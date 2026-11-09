@@ -201,3 +201,22 @@ e nada sai de verdade.
 8. **Teste local das funções (sem chaves):** `npx supabase functions serve --env-file <arquivo com CRON_SECRET, UNSUBSCRIBE_SECRET e
    EVOLUTION_WEBHOOK_SECRET>` e, em outro terminal, `node --experimental-strip-types scripts/smoke-functions.mts`.
 
+
+## 9. Rascunho com IA (Fase 7.10) — opcional e desligado
+
+A IA só escreve **rascunhos** (que passam pelo mesmo verificador de estilo e pela sua aprovação). Nada é enviado por ela e nada muda se você não ligar.
+
+1. **Conta no DeepSeek** (platform.deepseek.com): crie uma chave de API e coloque um pouco de crédito. Defina um limite de gasto no painel deles.
+2. **Segredo no Supabase** (a chave nunca vai para o repositório, o front nem os logs):
+   ```bash
+   npx supabase secrets set DEEPSEEK_API_KEY=<sua chave>
+   ```
+3. **Publique a função** (ela exige o login do usuário, ao contrário das de envio):
+   ```bash
+   npx supabase functions deploy draft-message
+   ```
+4. **Prospecção → Configurações → Rascunho com IA:** marque *Ligar o rascunho com IA* e ajuste o limite por dia (padrão 20). Em *Gerar rascunhos* aparece o botão *Escrever N com IA*.
+5. **Primeiro teste:** gere 1 ou 2 rascunhos para leads de teste, leia com calma (a IA pode errar fato, tom ou nome) e só então aprove. Rascunhos de IA têm o selo *Escrito pela IA*.
+
+Privacidade: ao DeepSeek vão só empresa, primeiro nome do contato, gancho, segmento, cidade, nome do sistema e o texto do modelo de referência. Nunca e-mail, telefone ou respostas do lead.
+Para desligar: desmarque a opção (ou apague o segredo).

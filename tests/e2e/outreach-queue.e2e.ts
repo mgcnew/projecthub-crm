@@ -45,6 +45,7 @@ test('fila: gerar rascunhos por modelo, revisar, editar, aprovar em lote e regra
   const gen = page.getByRole('region', { name: 'Gerar rascunhos' })
   await gen.getByLabel('Modelo', { exact: true }).selectOption({ label: 'Primeiro contato · E-mail · passo 1' })
   await expect(gen.getByText(/2 leads podem receber este modelo/)).toBeVisible()
+  await expect(gen.getByRole('button', { name: /com IA/ })).toHaveCount(0) // a IA vem desligada
   await expect(gen.getByText(/1 sem e-mail\/telefone para o canal/)).toBeVisible()
   await expect(gen.getByText(/1 marcado como "não contatar"/)).toBeVisible()
   await expect(gen.getByText(/1 na lista de supressão/)).toBeVisible()

@@ -36,7 +36,12 @@ export function OutboxMessagePage() {
       kind="Mensagem"
       title={m.leads?.company_name ?? 'Mensagem'}
       description={`${channels[m.channel as Channel]} · ${m.to_address}`}
-      actions={<StatusBadge tone={m.status === 'approved' ? 'success' : m.status === 'draft' ? 'warning' : 'neutral'}>{statusLabel[m.status as keyof typeof statusLabel] ?? m.status}</StatusBadge>}
+      actions={
+        <>
+          {m.generated_by === 'ai' && <StatusBadge tone="violet">Escrito pela IA</StatusBadge>}
+          <StatusBadge tone={m.status === 'approved' ? 'success' : m.status === 'draft' ? 'warning' : 'neutral'}>{statusLabel[m.status as keyof typeof statusLabel] ?? m.status}</StatusBadge>
+        </>
+      }
       tabs={[
         {
           id: 'mensagem',

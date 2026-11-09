@@ -428,3 +428,7 @@ verify_jwt = false
 
 [functions.evolution-webhook]
 verify_jwt = false
+
+# Rascunho com IA: exige o JWT do usuário (padrão do Supabase).
+[functions.draft-message]
+verify_jwt = true

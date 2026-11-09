@@ -38,4 +38,18 @@ test('configurações de envio: validar, salvar, pausar tudo e retomar', async (
   await page.getByRole('button', { name: 'Retomar envios' }).click()
   await expect(page.getByText('Envios retomados.')).toBeVisible()
   expect((await client.from('outreach_settings').select('paused').single()).data!.paused).toBe(false)
+
+  // Rascunho com IA: desligada por padrão; ligar e limitar o uso.
+  const ai = page.getByRole('region', { name: 'Rascunho com IA' })
+  await expect(ai.getByText('Desligada', { exact: true })).toBeVisible()
+  expect((await client.from('outreach_settings').select('draft_provider, ai_daily_limit').single()).data).toMatchObject({ draft_provider: 'none', ai_daily_limit: 20 })
+  await ai.getByLabel('Rascunhos de IA por dia').fill('500')
+  await expect(ai.getByText('Informe um número de 1 a 200')).toBeVisible()
+  await expect(ai.getByRole('button', { name: 'Salvar IA' })).toBeDisabled()
+  await ai.getByLabel('Rascunhos de IA por dia').fill('15')
+  await ai.getByLabel('Ligar o rascunho com IA').check()
+  await ai.getByRole('button', { name: 'Salvar IA' }).click()
+  await expect(page.getByText('Configuração da IA salva.')).toBeVisible()
+  await expect(ai.getByText('Ligada', { exact: true })).toBeVisible()
+  expect((await client.from('outreach_settings').select('draft_provider, ai_daily_limit').single()).data).toMatchObject({ draft_provider: 'deepseek', ai_daily_limit: 15 })
 })

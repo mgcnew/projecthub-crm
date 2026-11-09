@@ -5,7 +5,7 @@ import { Plate } from '@/components/Plate'
 import { RowCheckbox } from '@/components/RowCheckbox'
 import { Button } from '@/components/ui/button'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
-import { useCreateDrafts, useProductOptions, useQueueLeads, useQueuedLeadIds, useSuppressedValues, useTemplate, useTemplates } from './api'
+import { useCreateAiDrafts, useCreateDrafts, useOutreachSettings, useProductOptions, useQueueLeads, useQueuedLeadIds, useSuppressedValues, useTemplate, useTemplates } from './api'
 import { placeholdersIn, renderMessage } from './render'
 import { skipLabels, splitEligible, type QueueLead, type SkipReason } from './queue'
 import type { Channel } from './schema'
@@ -24,6 +24,9 @@ export function GenerateDrafts({ onClose }: { onClose: () => void }) {
   const queued = useQueuedLeadIds(templateId, true)
   const products = useProductOptions(true)
   const create = useCreateDrafts(orgId)
+  const createAi = useCreateAiDrafts()
+  const settings = useOutreachSettings(true)
+  const aiOn = settings.data?.draft_provider === 'deepseek'
   const [excluded, setExcluded] = useState<Set<string>>(new Set())
   const [result, setResult] = useState<string | null>(null)
   const [error, setError] = useState<string | null>(null)
@@ -64,6 +67,22 @@ export function GenerateDrafts({ onClose }: { onClose: () => void }) {
       )
     } catch {
       setError('Não foi possível gerar os rascunhos. Tente de novo.')
+    }
+  }
+
+  const generateAi = async () => {
+    if (!t || chosen.length === 0) return
+    setError(null)
+    setResult(null)
+    try {
+      const res = await createAi.mutateAsync({ templateId: t.id, leadIds: chosen.map((l) => l.id) })
+      setExcluded(new Set())
+      const parts = [`${res.created} rascunho${res.created === 1 ? '' : 's'} escrito${res.created === 1 ? '' : 's'} pela IA`]
+      if (res.failed) parts.push(`${res.failed} não saíram (a IA falhou ou o banco barrou)`)
+      if (res.stopped) parts.push(res.stopped)
+      setResult(`${parts.join('; ')}. Revise com atenção e aprove na fila.`)
+    } catch {
+      setError('Não foi possível gerar os rascunhos com a IA. Tente de novo.')
     }
   }
 
@@ -137,9 +156,14 @@ export function GenerateDrafts({ onClose }: { onClose: () => void }) {
               </ul>
             )}
             <div className="flex flex-wrap items-center gap-3">
-              <Button onClick={generate} disabled={create.isPending || chosen.length === 0}>
+              <Button onClick={generate} disabled={create.isPending || createAi.isPending || chosen.length === 0}>
                 {create.isPending ? 'Gerando…' : `Gerar ${chosen.length} rascunho${chosen.length === 1 ? '' : 's'}`}
               </Button>
+              {aiOn && (
+                <Button variant="outline" onClick={generateAi} disabled={create.isPending || createAi.isPending || chosen.length === 0}>
+                  {createAi.isPending ? 'Escrevendo com a IA…' : `Escrever ${chosen.length} com IA`}
+                </Button>
+              )}
               {usesHook && <span className="text-sm text-muted-foreground">O modelo usa {'{{gancho}}'}: leads sem gancho saem com o trecho vazio (a revisão avisa).</span>}
             </div>
           </>
