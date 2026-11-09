@@ -50,6 +50,8 @@ export function OutboxMessagePage() {
               initialSubject={m.subject ?? ''}
               initialBody={m.body}
               approvedAt={m.approved_at}
+              sentAt={m.sent_at}
+              lastError={m.last_error}
               leadId={m.leads?.id ?? m.lead_id}
               canWrite={canWrite}
               pending={update.isPending}
@@ -80,6 +82,8 @@ function MessageEditor({
   initialSubject,
   initialBody,
   approvedAt,
+  sentAt,
+  lastError,
   leadId,
   canWrite,
   pending,
@@ -93,6 +97,8 @@ function MessageEditor({
   initialSubject: string
   initialBody: string
   approvedAt: string | null
+  sentAt: string | null
+  lastError: string | null
   leadId: string
   canWrite: boolean
   pending: boolean
@@ -135,7 +141,13 @@ function MessageEditor({
         </p>
       )}
 
-      {approvedAt && <p className="text-sm text-muted-foreground">Aprovada em {formatDateTime(approvedAt)}. Para editar, volte para rascunho.</p>}
+      {sentAt && <p className="text-sm text-tone-success">Enviada em {formatDateTime(sentAt)}.</p>}
+      {status === 'failed' && lastError && (
+        <p role="alert" className="rounded-md bg-tone-danger-bg px-3 py-1.5 text-sm text-tone-danger">
+          Não foi possível enviar: {lastError}
+        </p>
+      )}
+      {approvedAt && status === 'approved' && <p className="text-sm text-muted-foreground">Aprovada em {formatDateTime(approvedAt)}. Para editar, volte para rascunho.</p>}
       <p className="text-sm">
         <Link to={`/app/prospeccao/leads/${leadId}`} className="font-semibold text-primary-strong underline">
           Abrir o lead
@@ -156,6 +168,11 @@ function MessageEditor({
                 Cancelar mensagem
               </Button>
             </>
+          )}
+          {status === 'failed' && (
+            <Button variant="outline" disabled={pending} onClick={() => onAct({ status: 'draft' }, 'Voltou para rascunho. Corrija e aprove de novo.')}>
+              Voltar para rascunho
+            </Button>
           )}
           {status === 'approved' && (
             <>

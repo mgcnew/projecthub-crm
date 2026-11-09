@@ -6,6 +6,7 @@ import { RowCheckbox } from '@/components/RowCheckbox'
 import { EmptyState, ErrorState, LoadingState, PageHeader, StatusBadge } from '@/components/states'
 import { Button } from '@/components/ui/button'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
+import { formatDateTime } from '@/lib/format'
 import { useOutbox, useOutboxCounts, useSetStatusMany, type OutboxStatus } from './api'
 import { GenerateDrafts } from './GenerateDrafts'
 import { ProspectingNav } from './ProspectingNav'
@@ -64,6 +65,8 @@ export function OutboxPage() {
         >
           <option value="draft">Rascunhos{counts ? ` (${counts.draft})` : ''}</option>
           <option value="approved">Aprovadas{counts ? ` (${counts.approved})` : ''}</option>
+          <option value="sent">Enviadas</option>
+          <option value="failed">Falhas{counts && counts.failed > 0 ? ` (${counts.failed})` : ''}</option>
           <option value="cancelled">Canceladas</option>
           <option value="all">Todas</option>
         </select>
@@ -77,7 +80,7 @@ export function OutboxPage() {
               Aprovar selecionadas
             </Button>
           )}
-          {status === 'approved' && (
+          {(status === 'approved' || status === 'failed') && (
             <Button size="sm" variant="outline" disabled={bulk.isPending} onClick={() => run('draft', 'devolvida(s) para rascunho')}>
               Voltar para rascunho
             </Button>
@@ -110,7 +113,7 @@ export function OutboxPage() {
       )}
       {q.isSuccess && rows.length > 0 && (
         <>
-          {canWrite && (status === 'draft' || status === 'approved') && (
+          {canWrite && (status === 'draft' || status === 'approved' || status === 'failed') && (
             <label className="flex min-h-11 items-center gap-2 text-sm font-medium">
               <input
                 type="checkbox"
@@ -124,7 +127,7 @@ export function OutboxPage() {
           <ul className="plate divide-y divide-border">
             {rows.map((r) => (
               <li key={r.id} className="flex items-stretch">
-                {canWrite && (status === 'draft' || status === 'approved') && (
+                {canWrite && (status === 'draft' || status === 'approved' || status === 'failed') && (
                   <div className="flex items-center pl-2">
                     <RowCheckbox
                       label={`Selecionar mensagem para ${r.leads?.company_name ?? 'lead'}`}
@@ -147,7 +150,8 @@ export function OutboxPage() {
                   <span className="min-w-0">
                     <span className="block font-semibold">{r.leads?.company_name ?? 'Lead'}</span>
                     <span className="block truncate text-sm text-muted-foreground">{r.subject ? `${r.subject} — ` : ''}{r.body}</span>
-                    <span className="block truncate text-xs text-muted-foreground">{r.to_address}</span>
+                    <span className="block truncate text-xs text-muted-foreground">{r.to_address}{r.sent_at ? ` · enviada em ${formatDateTime(r.sent_at)}` : ''}</span>
+                    {r.status === 'failed' && r.last_error && <span className="block truncate text-xs text-destructive">{r.last_error}</span>}
                   </span>
                   <span className="flex flex-wrap items-center gap-2">
                     <StatusBadge tone="info">{channels[r.channel as Channel]}</StatusBadge>

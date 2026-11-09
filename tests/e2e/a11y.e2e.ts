@@ -85,6 +85,7 @@ test.describe('acessibilidade (axe)', () => {
       '/app/prospeccao/campanhas',
       '/app/prospeccao/respostas',
       '/app/prospeccao/metricas',
+      '/app/prospeccao/configuracoes',
       '/app/configuracoes?aba=preferencias',
       '/app/configuracoes?aba=espaco',
     ]
