@@ -3,6 +3,7 @@ import { ImportPage } from '@/features/leads/import/ImportPage'
 import { LeadDetailPage } from '@/features/leads/LeadDetailPage'
 import { LeadNewPage } from '@/features/leads/LeadNewPage'
 import { LeadsPage } from '@/features/leads/LeadsPage'
+import { CampaignDetailPage, CampaignNewPage, CampaignsPage } from '@/features/outreach/CampaignPages'
 import { OutboxMessagePage } from '@/features/outreach/OutboxMessagePage'
 import { OutboxPage } from '@/features/outreach/OutboxPage'
 import { ProductDetailPage, ProductNewPage, ProductsPage } from '@/features/outreach/ProductPages'
@@ -59,6 +60,9 @@ export const appRoutes: RouteObject[] = [
   { path: '/app/prospeccao/modelos', element: <MessageTemplatesPage /> },
   { path: '/app/prospeccao/modelos/novo', element: <MessageTemplateNewPage /> },
   { path: '/app/prospeccao/modelos/:id', element: <MessageTemplateDetailPage /> },
+  { path: '/app/prospeccao/campanhas', element: <CampaignsPage /> },
+  { path: '/app/prospeccao/campanhas/novo', element: <CampaignNewPage /> },
+  { path: '/app/prospeccao/campanhas/:id', element: <CampaignDetailPage /> },
   { path: '/app/prospeccao/fila', element: <OutboxPage /> },
   { path: '/app/prospeccao/fila/:id', element: <OutboxMessagePage /> },
   { path: '/app/prospeccao/leads/novo', element: <LeadNewPage /> },

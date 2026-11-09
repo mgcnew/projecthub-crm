@@ -1,7 +1,7 @@
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query'
 import { sanitizeSearch } from '@/lib/format'
 import { supabase } from '@/lib/supabase'
-import { productPayload, templatePayload, type Channel, type ProductFormValues, type TemplateFormValues } from './schema'
+import { campaignPayload, productPayload, templatePayload, type CampaignFormValues, type Channel, type ProductFormValues, type TemplateFormValues } from './schema'
 
 export type StatusFilter = 'active' | 'inactive' | 'all'
 
@@ -320,5 +320,200 @@ export function useCreateDrafts(orgId: string | undefined) {
       return { created, blocked }
     },
     onSettled: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+// ------------------------------------------------------------------ campanhas
+
+export function useCampaigns(enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'campaigns'],
+    enabled,
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('campaigns')
+        .select('id, name, channel, temperature, status, followup_days, daily_limit, products(name), campaign_leads(status)')
+        .order('created_at', { ascending: false })
+        .limit(200)
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}
+
+export function useCampaign(id: string | undefined) {
+  return useQuery({
+    queryKey: ['outreach', 'campaign', id],
+    enabled: Boolean(id),
+    queryFn: async () => {
+      const { data, error } = await supabase.from('campaigns').select('*').eq('id', id!).maybeSingle()
+      if (error) throw error
+      return data
+    },
+  })
+}
+
+export function useCreateCampaign(orgId: string | undefined) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (values: CampaignFormValues) => {
+      if (!orgId) throw new Error('Organização não carregada')
+      const { data, error } = await supabase
+        .from('campaigns')
+        .insert({
+          organization_id: orgId,
+          channel: values.channel,
+          temperature: values.temperature === '' ? null : values.temperature,
+          ...campaignPayload(values),
+        })
+        .select('id')
+        .single()
+      if (error) throw error
+      return data
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+export function useUpdateCampaign(id: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (patch: ReturnType<typeof campaignPayload> | { status: 'active' | 'paused' | 'finished' }) => {
+      const { error } = await supabase.from('campaigns').update(patch).eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+export function useCampaignLeads(campaignId: string | undefined) {
+  return useQuery({
+    queryKey: ['outreach', 'campaign-leads', campaignId],
+    enabled: Boolean(campaignId),
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from('campaign_leads')
+        .select('id, lead_id, step, status, started_on, next_step_on, leads(company_name, contact_name, email, phone, hook, temperature, product_id)')
+        .eq('campaign_id', campaignId!)
+        .order('created_at')
+        .limit(1000)
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}
+
+/** Inclui leads na campanha, um a um (o banco confere cada um). */
+export function useIncludeLeads(orgId: string | undefined, campaignId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (leadIds: string[]) => {
+      if (!orgId) throw new Error('Organização não carregada')
+      const results = await Promise.allSettled(
+        leadIds.map(async (leadId) => {
+          const { error } = await supabase.from('campaign_leads').insert({ organization_id: orgId, campaign_id: campaignId, lead_id: leadId })
+          if (error) throw error
+        }),
+      )
+      const failed = results.filter((r) => r.status === 'rejected').length
+      return { added: leadIds.length - failed, failed }
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+export function useSetCampaignLeadStatus() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async ({ id, status }: { id: string; status: 'active' | 'replied' | 'finished' }) => {
+      const { error } = await supabase.from('campaign_leads').update({ status }).eq('id', id)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+/** Modelos dos passos da campanha (texto completo, para renderizar os rascunhos). */
+export function useCampaignTemplates(ids: string[]) {
+  const key = ids.filter(Boolean).sort().join(',')
+  return useQuery({
+    queryKey: ['outreach', 'campaign-templates', key],
+    enabled: key !== '',
+    queryFn: async () => {
+      const { data, error } = await supabase.from('message_templates').select('*').in('id', ids.filter(Boolean))
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}
+
+/** Quantos rascunhos a campanha já gerou hoje (para respeitar o limite diário). */
+export function useGeneratedToday(campaignId: string | undefined, sinceISO: string) {
+  return useQuery({
+    queryKey: ['outreach', 'campaign-today', campaignId, sinceISO],
+    enabled: Boolean(campaignId),
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('outbound_messages')
+        .select('id', { count: 'exact', head: true })
+        .eq('campaign_id', campaignId!)
+        .gte('created_at', sinceISO)
+      if (error) throw error
+      return count ?? 0
+    },
+  })
+}
+
+export type CampaignDraftInput = { leadId: string; templateId: string; channel: Channel; subject: string | null; body: string }
+
+export function useCreateCampaignDrafts(orgId: string | undefined, campaignId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (drafts: CampaignDraftInput[]) => {
+      if (!orgId) throw new Error('Organização não carregada')
+      let created = 0
+      let blocked = 0
+      for (let i = 0; i < drafts.length; i += 8) {
+        const results = await Promise.allSettled(
+          drafts.slice(i, i + 8).map(async (d) => {
+            const { error } = await supabase.from('outbound_messages').insert({
+              organization_id: orgId,
+              campaign_id: campaignId,
+              lead_id: d.leadId,
+              template_id: d.templateId,
+              channel: d.channel,
+              subject: d.subject,
+              body: d.body,
+            })
+            if (error) throw error
+          }),
+        )
+        for (const r of results) {
+          if (r.status === 'fulfilled') created++
+          else blocked++
+        }
+      }
+      return { created, blocked }
+    },
+    onSettled: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+/** Lembretes de campanha vencidos (para a Central do dia). */
+export function useDueReminders(today: string, enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'due-reminders', today],
+    enabled,
+    queryFn: async () => {
+      const { count, error } = await supabase
+        .from('campaign_leads')
+        .select('id, campaigns!inner(status)', { count: 'exact', head: true })
+        .eq('status', 'active')
+        .gte('step', 1)
+        .lte('next_step_on', today)
+        .eq('campaigns.status', 'active')
+      if (error) throw error
+      return count ?? 0
+    },
   })
 }

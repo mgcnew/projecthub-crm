@@ -205,7 +205,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
 - **Testes:** Deno com payloads reais do Evolution (fixtures), pgTAP, E2E com `fake`. Teste real só manual, para
   um número do próprio usuário.
 
-### 7.7 Campanhas e sequências (Codex, revisão aqui)
+### 7.7 Campanhas e sequências (Codex, revisão aqui) — **feita aqui** (D133–D137; lembretes por botão, não por `pg_cron`)
 - **Escopo:** `campaigns`, `campaign_leads`; incluir leads (filtro ou seleção); lembretes D+3 e D+7 geram
   **rascunhos** (pg_cron), não envios; pausar e encerrar.
 - **Aceite:** lead que respondeu não recebe lembrete; campanha pausada não gera rascunhos.

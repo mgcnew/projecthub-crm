@@ -101,6 +101,82 @@ isOneToOne: false
       referencedColumns: ["organization_id","id"]
     }
                   ]
+                },"campaign_leads": {
+                  Row: {
+                    "campaign_id": string,"created_at": string,"id": string,"lead_id": string,"next_step_on": string | null,"organization_id": string,"started_on": string | null,"status": string,"step": number,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "campaign_id": string,"created_at"?: string,"id"?: string,"lead_id": string,"next_step_on"?: string | null,"organization_id": string,"started_on"?: string | null,"status"?: string,"step"?: number,"updated_at"?: string
+                  }
+                  Update: {
+                    "campaign_id"?: string,"created_at"?: string,"id"?: string,"lead_id"?: string,"next_step_on"?: string | null,"organization_id"?: string,"started_on"?: string | null,"status"?: string,"step"?: number,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "campaign_leads_organization_id_campaign_id_fkey"
+      columns: ["organization_id","campaign_id"]
+isOneToOne: false
+      referencedRelation: "campaigns"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "campaign_leads_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "campaign_leads_organization_id_lead_id_fkey"
+      columns: ["organization_id","lead_id"]
+isOneToOne: false
+      referencedRelation: "leads"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
+                },"campaigns": {
+                  Row: {
+                    "channel": string,"created_at": string,"daily_limit": number,"followup_days": (number)[],"id": string,"name": string,"organization_id": string,"product_id": string | null,"status": string,"step1_template_id": string | null,"step2_template_id": string | null,"step3_template_id": string | null,"temperature": string | null,"updated_at": string
+                  }
+                  ComputedFields: never
+                  Insert: {
+                    "channel": string,"created_at"?: string,"daily_limit"?: number,"followup_days"?: (number)[],"id"?: string,"name": string,"organization_id": string,"product_id"?: string | null,"status"?: string,"step1_template_id"?: string | null,"step2_template_id"?: string | null,"step3_template_id"?: string | null,"temperature"?: string | null,"updated_at"?: string
+                  }
+                  Update: {
+                    "channel"?: string,"created_at"?: string,"daily_limit"?: number,"followup_days"?: (number)[],"id"?: string,"name"?: string,"organization_id"?: string,"product_id"?: string | null,"status"?: string,"step1_template_id"?: string | null,"step2_template_id"?: string | null,"step3_template_id"?: string | null,"temperature"?: string | null,"updated_at"?: string
+                  }
+                  Relationships: [
+                    {
+      foreignKeyName: "campaigns_organization_id_fkey"
+      columns: ["organization_id"]
+isOneToOne: false
+      referencedRelation: "organizations"
+      referencedColumns: ["id"]
+    },{
+      foreignKeyName: "campaigns_organization_id_product_id_fkey"
+      columns: ["organization_id","product_id"]
+isOneToOne: false
+      referencedRelation: "products"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "campaigns_organization_id_step1_template_id_fkey"
+      columns: ["organization_id","step1_template_id"]
+isOneToOne: false
+      referencedRelation: "message_templates"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "campaigns_organization_id_step2_template_id_fkey"
+      columns: ["organization_id","step2_template_id"]
+isOneToOne: false
+      referencedRelation: "message_templates"
+      referencedColumns: ["organization_id","id"]
+    },{
+      foreignKeyName: "campaigns_organization_id_step3_template_id_fkey"
+      columns: ["organization_id","step3_template_id"]
+isOneToOne: false
+      referencedRelation: "message_templates"
+      referencedColumns: ["organization_id","id"]
+    }
+                  ]
                 },"checklist_items": {
                   Row: {
                     "completed_at": string | null,"id": string,"is_completed": boolean,"organization_id": string,"sort_order": number,"task_id": string,"title": string
@@ -493,17 +569,23 @@ isOneToOne: false
                   ]
                 },"outbound_messages": {
                   Row: {
-                    "approved_at": string | null,"attempts": number,"body": string,"channel": string,"created_at": string,"generated_by": string,"id": string,"last_error": string | null,"lead_id": string,"organization_id": string,"provider": string | null,"provider_message_id": string | null,"scheduled_for": string | null,"sent_at": string | null,"status": string,"subject": string | null,"template_id": string | null,"to_address": string,"updated_at": string
+                    "approved_at": string | null,"attempts": number,"body": string,"campaign_id": string | null,"channel": string,"created_at": string,"generated_by": string,"id": string,"last_error": string | null,"lead_id": string,"organization_id": string,"provider": string | null,"provider_message_id": string | null,"scheduled_for": string | null,"sent_at": string | null,"status": string,"subject": string | null,"template_id": string | null,"to_address": string,"updated_at": string
                   }
                   ComputedFields: never
                   Insert: {
-                    "approved_at"?: string | null,"attempts"?: number,"body": string,"channel": string,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id": string,"organization_id": string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
+                    "approved_at"?: string | null,"attempts"?: number,"body": string,"campaign_id"?: string | null,"channel": string,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id": string,"organization_id": string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
                   }
                   Update: {
-                    "approved_at"?: string | null,"attempts"?: number,"body"?: string,"channel"?: string,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id"?: string,"organization_id"?: string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
+                    "approved_at"?: string | null,"attempts"?: number,"body"?: string,"campaign_id"?: string | null,"channel"?: string,"created_at"?: string,"generated_by"?: string,"id"?: string,"last_error"?: string | null,"lead_id"?: string,"organization_id"?: string,"provider"?: string | null,"provider_message_id"?: string | null,"scheduled_for"?: string | null,"sent_at"?: string | null,"status"?: string,"subject"?: string | null,"template_id"?: string | null,"to_address"?: string,"updated_at"?: string
                   }
                   Relationships: [
                     {
+      foreignKeyName: "outbound_messages_organization_id_campaign_id_fkey"
+      columns: ["organization_id","campaign_id"]
+isOneToOne: false
+      referencedRelation: "campaigns"
+      referencedColumns: ["organization_id","id"]
+    },{
       foreignKeyName: "outbound_messages_organization_id_fkey"
       columns: ["organization_id"]
 isOneToOne: false
