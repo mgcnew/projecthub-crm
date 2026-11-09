@@ -9,6 +9,7 @@ describe('buildGroups', () => {
       { id: 'c1', name: 'Acme', company_name: 'Acme Ltda' },
       { id: 'c2', name: 'Beta', company_name: null },
     ],
+    leads: [{ id: 'l1', company_name: 'Padaria Sol', contact_name: 'Maria', stage: 'replied' }],
     events: [
       { id: 'e1', title: 'Alinhamento', event_type: 'meeting', starts_at: '2030-05-06T13:00:00Z' },
       { id: 'e2', title: 'Pagamento', event_type: 'event', starts_at: '2030-05-07T13:00:00Z' },
@@ -17,13 +18,14 @@ describe('buildGroups', () => {
 
   it('agrupa na ordem tarefas, projetos, clientes, eventos e monta o destino de cada tipo', () => {
     const groups = buildGroups(raw)
-    expect(groups.map((g) => g.id)).toEqual(['tasks', 'projects', 'clients', 'events'])
+    expect(groups.map((g) => g.id)).toEqual(['tasks', 'projects', 'clients', 'leads', 'events'])
     const hrefs = flattenHits(groups).map((h) => h.href)
     expect(hrefs).toEqual([
       '/app/tarefas/t1',
       '/app/projetos/p1',
       '/app/clientes/c1',
       '/app/clientes/c2',
+      '/app/prospeccao/leads/l1',
       '/app/reunioes/e1',
       '/app/agenda/e2',
     ])
@@ -35,13 +37,14 @@ describe('buildGroups', () => {
     expect(hits[1].subtitle).toBe('Em andamento')
     expect(hits[2].subtitle).toBe('Acme Ltda')
     expect(hits[3].subtitle).toBe('Cliente')
-    expect(hits[4].subtitle).toMatch(/^Reunião · /)
-    expect(hits[5].subtitle).toMatch(/^Evento · /)
+    expect(hits[4].subtitle).toBe('Maria · Respondeu')
+    expect(hits[5].subtitle).toMatch(/^Reunião · /)
+    expect(hits[6].subtitle).toMatch(/^Evento · /)
     expect(new Set(hits.map((h) => h.key)).size).toBe(hits.length)
   })
 
   it('omite grupos vazios', () => {
     expect(buildGroups({ tasks: [], projects: [], clients: [], events: [] })).toEqual([])
-    expect(buildGroups({ ...raw, tasks: [], events: [] }).map((g) => g.id)).toEqual(['projects', 'clients'])
+    expect(buildGroups({ ...raw, tasks: [], events: [] }).map((g) => g.id)).toEqual(['projects', 'clients', 'leads'])
   })
 })

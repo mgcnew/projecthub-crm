@@ -1,15 +1,17 @@
 import { projectStatuses } from '@/features/projects/schema'
 import { taskStatuses } from '@/features/tasks/schema'
+import { stages } from '@/features/leads/schema'
 import { formatDateTime } from '@/lib/format'
 
 const label = (map: Record<string, string>, key: string) => map[key] ?? key
 
 export type SearchHit = { id: string; key: string; title: string; subtitle: string; href: string }
-export type SearchGroup = { id: 'tasks' | 'projects' | 'clients' | 'events'; label: string; hits: SearchHit[] }
+export type SearchGroup = { id: 'tasks' | 'projects' | 'clients' | 'leads' | 'events'; label: string; hits: SearchHit[] }
 
 type TaskRow = { id: string; title: string; status: string }
 type ProjectRow = { id: string; name: string; status: string }
 type ClientRow = { id: string; name: string; company_name: string | null }
+type LeadRow = { id: string; company_name: string; contact_name: string | null; stage: string }
 type EventRow = { id: string; title: string; event_type: string; starts_at: string }
 
 /** Monta os grupos na ordem de exibição; grupos sem resultado não aparecem. */
@@ -17,6 +19,7 @@ export function buildGroups(raw: {
   tasks: TaskRow[]
   projects: ProjectRow[]
   clients: ClientRow[]
+  leads?: LeadRow[]
   events: EventRow[]
 }): SearchGroup[] {
   const groups: SearchGroup[] = [
@@ -51,6 +54,17 @@ export function buildGroups(raw: {
         title: c.name,
         subtitle: c.company_name ?? 'Cliente',
         href: `/app/clientes/${c.id}`,
+      })),
+    },
+    {
+      id: 'leads',
+      label: 'Leads',
+      hits: (raw.leads ?? []).map((l) => ({
+        id: l.id,
+        key: `lead-${l.id}`,
+        title: l.company_name,
+        subtitle: [l.contact_name, label(stages, l.stage)].filter(Boolean).join(' · '),
+        href: `/app/prospeccao/leads/${l.id}`,
       })),
     },
     {

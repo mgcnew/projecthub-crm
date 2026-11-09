@@ -517,3 +517,123 @@ export function useDueReminders(today: string, enabled: boolean) {
     },
   })
 }
+
+// ------------------------------------------------------------------- respostas
+export type InboxFilter = 'unread' | 'all'
+
+export function useInbox(filter: InboxFilter, enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'inbox', filter],
+    enabled,
+    placeholderData: (prev) => prev,
+    queryFn: async () => {
+      let q = supabase
+        .from('inbound_messages')
+        .select('id, lead_id, channel, from_address, body, received_at, read_at, leads(company_name, stage)')
+        .order('received_at', { ascending: false })
+        .limit(300)
+      if (filter === 'unread') q = q.is('read_at', null)
+      const { data, error } = await q
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}
+
+export function useUnreadInboundCount(enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'inbox-unread'],
+    enabled,
+    queryFn: async () => {
+      const { count, error } = await supabase.from('inbound_messages').select('id', { count: 'exact', head: true }).is('read_at', null)
+      if (error) throw error
+      return count ?? 0
+    },
+  })
+}
+
+export function useRegisterReply(orgId: string | undefined) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (input: { leadId: string; channel: Channel; body: string; receivedAt?: string }) => {
+      if (!orgId) throw new Error('Organização não carregada')
+      const { error } = await supabase.from('inbound_messages').insert({
+        organization_id: orgId,
+        lead_id: input.leadId,
+        channel: input.channel,
+        body: input.body,
+        ...(input.receivedAt ? { received_at: input.receivedAt } : {}),
+      })
+      if (error) throw error
+    },
+    // A resposta muda etapa, temperatura e campanhas do lead: recarrega o que depende disso.
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['outreach'] })
+      void qc.invalidateQueries({ queryKey: ['leads'] })
+    },
+  })
+}
+
+export function useMarkRead() {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (ids: string[]) => {
+      const { error } = await supabase.from('inbound_messages').update({ read_at: new Date().toISOString() }).in('id', ids)
+      if (error) throw error
+    },
+    onSuccess: () => qc.invalidateQueries({ queryKey: ['outreach'] }),
+  })
+}
+
+/** Linha do tempo do lead: o que foi enviado e o que ele respondeu, do mais novo para o mais antigo. */
+export function useLeadTimeline(leadId: string | undefined) {
+  return useQuery({
+    queryKey: ['outreach', 'timeline', leadId],
+    enabled: Boolean(leadId),
+    queryFn: async () => {
+      const [out, inn] = await Promise.all([
+        supabase.from('outbound_messages').select('id, channel, subject, body, status, created_at, sent_at').eq('lead_id', leadId!).order('created_at', { ascending: false }).limit(100),
+        supabase.from('inbound_messages').select('id, channel, body, received_at, read_at').eq('lead_id', leadId!).order('received_at', { ascending: false }).limit(100),
+      ])
+      if (out.error) throw out.error
+      if (inn.error) throw inn.error
+      return { outbound: out.data ?? [], inbound: inn.data ?? [] }
+    },
+  })
+}
+
+/** Clientes que parecem ser o mesmo do lead (mesmo e-mail ou mesmo nome), para vincular em vez de duplicar. */
+export function useClientMatches(lead: { email: string | null; company_name: string } | undefined, enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'client-matches', lead?.email, lead?.company_name],
+    enabled: enabled && Boolean(lead),
+    queryFn: async () => {
+      const filters = [`name.ilike.${sanitizeSearch(lead!.company_name)}`]
+      if (lead!.email) filters.push(`email.eq.${sanitizeSearch(lead!.email.toLowerCase())}`)
+      const { data, error } = await supabase.from('clients').select('id, name, email').is('archived_at', null).or(filters.join(',')).limit(5)
+      if (error) throw error
+      return data ?? []
+    },
+  })
+}
+
+export function useConvertLead(leadId: string) {
+  const qc = useQueryClient()
+  return useMutation({
+    mutationFn: async (input: { existingClientId?: string; projectName?: string }) => {
+      const { data, error } = await supabase.rpc('convert_lead', {
+        p_lead: leadId,
+        ...(input.existingClientId ? { p_existing_client: input.existingClientId } : {}),
+        ...(input.projectName ? { p_project_name: input.projectName } : {}),
+      })
+      if (error) throw error
+      return data as string
+    },
+    onSuccess: () => {
+      void qc.invalidateQueries({ queryKey: ['leads'] })
+      void qc.invalidateQueries({ queryKey: ['clients'] })
+      void qc.invalidateQueries({ queryKey: ['projects'] })
+      void qc.invalidateQueries({ queryKey: ['outreach'] })
+    },
+  })
+}

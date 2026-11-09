@@ -4,6 +4,7 @@ import { ConfirmDialog } from '@/components/ConfirmDialog'
 import { EntityView } from '@/components/entity/EntityView'
 import { ErrorState, LoadingState, StatusBadge } from '@/components/states'
 import { Button } from '@/components/ui/button'
+import { LeadConversation } from '@/features/outreach/LeadConversation'
 import { useCurrentWorkspace } from '@/features/workspace/useCurrentWorkspace'
 import { formatDate } from '@/lib/format'
 import { formatPhone } from '@/lib/phone'
@@ -133,6 +134,11 @@ export function LeadDetailPage() {
               />
             </>
           ),
+        },
+        {
+          id: 'conversa',
+          label: 'Conversa',
+          content: <LeadConversation lead={lead} />,
         },
       ]}
     >
