@@ -216,7 +216,7 @@ Formato de cada etapa: **Escopo · Fora de escopo · Critérios de aceite · Tes
   "Respostas novas", leads na busca global.
 - **Aceite:** converter não duplica cliente já existente com o mesmo e-mail (oferece vincular).
 
-### 7.9 Métricas (Codex)
+### 7.9 Métricas (Codex) — **feita aqui** (D142)
 - Taxa de resposta por campanha, modelo, canal e temperatura; leads por etapa; convertidos no mês.
 
 ### 7.10 Rascunho com IA, preparado e desligado (Aqui)

@@ -637,3 +637,40 @@ export function useConvertLead(leadId: string) {
     },
   })
 }
+
+// ------------------------------------------------------------------- métricas
+export function useMetricsData(enabled: boolean) {
+  return useQuery({
+    queryKey: ['outreach', 'metrics'],
+    enabled,
+    queryFn: async () => {
+      const [leads, sent, replies, queue] = await Promise.all([
+        supabase.from('leads').select('id, stage, converted_at').is('archived_at', null).limit(5000),
+        supabase
+          .from('outbound_messages')
+          .select('lead_id, sent_at, channel, template_id, campaign_id, leads(temperature), message_templates(name), campaigns(name)')
+          .eq('status', 'sent')
+          .not('sent_at', 'is', null)
+          .limit(5000),
+        supabase.from('inbound_messages').select('lead_id, received_at').not('lead_id', 'is', null).limit(5000),
+        supabase.from('outbound_messages').select('id', { count: 'exact', head: true }).in('status', ['draft', 'approved']),
+      ])
+      for (const r of [leads, sent, replies, queue]) if (r.error) throw r.error
+      return {
+        leads: leads.data ?? [],
+        sent: (sent.data ?? []).map((m) => ({
+          lead_id: m.lead_id,
+          sent_at: m.sent_at as string,
+          channel: m.channel,
+          temperature: m.leads?.temperature ?? 'cold',
+          template_id: m.template_id,
+          template_name: m.message_templates?.name ?? null,
+          campaign_id: m.campaign_id,
+          campaign_name: m.campaigns?.name ?? null,
+        })),
+        replies: (replies.data ?? []).map((r) => ({ lead_id: r.lead_id as string, received_at: r.received_at })),
+        queued: queue.count ?? 0,
+      }
+    },
+  })
+}

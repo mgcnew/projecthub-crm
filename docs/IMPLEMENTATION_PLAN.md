@@ -47,4 +47,4 @@ Parar e pedir revisão se houver: mudança de modelo de tenancy, relaxamento de 
 Pendências sem relação com a Vercel: ensaio real de backup/restauração contra o banco hospedado (RUNBOOK),
 política de senha/SMTP/Redirect URLs no painel do Supabase e ativação do MFA na conta.
 | 8 Cofre de senhas | 8.1 e 8.2 implementadas na branch `feat/cofre` (migração `20261107100000_vault`, pgTAP 015, E2E `vault`); hospedado só depois do merge |
-| 7 Prospecção e envio | Aprovada; 7.0, 7.1 (leads e supressão), 7.2 (importação) e 7.3 (sistemas e modelos) e 7.4 (fila e aprovação), 7.7 (campanhas) e 7.8 (respostas e conversão) feitas, 7.5, 7.6, 7.9 e 7.10 a implementar (`docs/PROSPECCAO_PLAN.md`) |
+| 7 Prospecção e envio | Aprovada; 7.0, 7.1 (leads e supressão), 7.2 (importação) e 7.3 (sistemas e modelos) e 7.4 (fila e aprovação), 7.7 (campanhas) e 7.8 (respostas e conversão) e 7.9 (métricas) feitas, 7.5, 7.6 e 7.10 a implementar (`docs/PROSPECCAO_PLAN.md`) |

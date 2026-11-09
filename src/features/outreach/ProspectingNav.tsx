@@ -9,6 +9,7 @@ const tabs = [
   { to: '/app/prospeccao/modelos', label: 'Modelos', end: false },
   { to: '/app/prospeccao/fila', label: 'Fila', end: false },
   { to: '/app/prospeccao/sistemas', label: 'Sistemas', end: false },
+  { to: '/app/prospeccao/metricas', label: 'Métricas', end: false },
 ] as const
 
 /** Abas da área de Prospecção (cada uma é uma página). */
