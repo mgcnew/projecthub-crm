@@ -35,6 +35,14 @@ test('acessos: cadastrar, copiar com 1 clique, ver no projeto, arquivar e exclui
   await expect(root.getByLabel(/senha$/i)).toHaveCount(0) // não existe campo de senha
   await expectNoViolations(page, 'novo acesso')
 
+  // Atalho: escolher um serviço comum preenche o nome, a categoria e o endereço.
+  await root.getByRole('group', { name: 'Escolher entre os mais usados' }).getByRole('button', { name: 'GitHub', exact: true }).click()
+  await expect(root.getByLabel('Serviço')).toHaveValue('GitHub')
+  await expect(root.getByRole('textbox', { name: 'Categoria' })).toHaveValue('Repositório')
+  await expect(root.getByLabel('Endereço (URL)')).toHaveValue('https://github.com')
+  await root.getByRole('textbox', { name: 'Categoria' }).fill('')
+  await root.getByLabel('Endereço (URL)').fill('')
+
   await root.getByLabel('Serviço').fill('Supabase — painel')
   await root.getByRole('textbox', { name: 'Categoria' }).fill('Banco de dados')
   await root.getByLabel('Usuário ou e-mail').fill('eu@exemplo.com')
@@ -49,6 +57,10 @@ test('acessos: cadastrar, copiar com 1 clique, ver no projeto, arquivar e exclui
   await root.getByLabel('Endereço (URL)').fill('https://supabase.com/dashboard')
   await root.getByRole('button', { name: 'Criar acesso' }).click()
   await expect(root.getByRole('heading', { name: 'Supabase — painel' })).toBeVisible()
+
+  // O serviço cadastrado vira atalho para os outros projetos.
+  await page.goto('/app/acessos/novo')
+  await expect((isMobile ? page : panel(page)).getByRole('group', { name: 'Escolher entre os mais usados' }).getByRole('button', { name: 'Supabase — painel', exact: true })).toBeVisible()
 
   // Lista: abrir (nova aba, sem opener) e copiar com 1 clique.
   await page.goto('/app/acessos')
